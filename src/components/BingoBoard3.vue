@@ -1,5 +1,7 @@
 <template>
-	<div class="BingoBoard3">
+	<transition-group class="BingoBoard3"
+				tag="div"
+				name="cell">
 		<div :class="{cell: true, '-selected': cell.selected}"
 		     v-for="(cell, i) in virtualCells"
 		     :key="'cell' + i"
@@ -7,7 +9,7 @@
 			<span v-if="i === 4" class="icon">★</span>
 			<span v-else class="text">{{ cell.text }}</span>
 		</div>
-	</div>
+	</transition-group>
 </template>
 
 
@@ -83,11 +85,16 @@ export default {
 .cell.-selected {
 	background-color: var(--color-theme-blue);
 }
-.cell.-selected:nth-child(5) {
+.cell:nth-child(5) {
 	background-color: var(--color-theme-red);
 }
 
+.cell-move {
+	transition: 0.25s ease;
+	transition-property: opacity, transform;
+}
+
 .icon {
-	font-size: 4rem;
+	font-size: 20vw;
 }
 </style>

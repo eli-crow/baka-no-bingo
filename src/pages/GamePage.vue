@@ -1,25 +1,27 @@
 <template>
 	<div class="GamePage">
 		<header class="header">
-			<router-link class="back" to="/"><span></span></router-link>
+			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
 			<div class="title">Anime Tropes</div>
 		</header>
 		<BingoBoard3 class="board"
 		             :cells="cells"
 				 :enabled="boardAccepted"
 				 @win="win"/>
-		<transition name="action">
+		<transition name="action" mode="out-in">
 			<div class="action"
-			     v-if="!boardAccepted">
+			     v-if="!boardAccepted"
+			     key="action">
 				<div class="action-title">選ぶ&nbsp;&nbsp;Pick a Board</div>
 				<div class="button-group">
-					<div class="button -red" @click="newBoard"><span class="button-icon"></span> New</div>
-					<div class="button -blue" @click="shuffleBoard"><span class="button-icon"></span> Shuffle</div>
-					<div class="button -green" @click="acceptBoard"><span class="button-icon"></span> Accept</div>
+					<div class="button -red" @click="newBoard"><Icon class="button-icon" icon="trash"/> New</div>
+					<div class="button -blue" @click="shuffleBoard"><Icon class="button-icon" icon="redo"/> Shuffle</div>
+					<div class="button -green" @click="acceptBoard"><Icon class="button-icon" icon="check"/> Accept</div>
 				</div>
 			</div>
 			<div class="score"
-			     v-else>
+			     v-else
+			     key="score">
 			     <div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
 			     <div class="score-count">{{ score }} Board{{ score === 0 || score > 1 ? "s" : ''}}</div>
 			</div>
@@ -123,6 +125,9 @@ export default {
 	flex: 0 0 2.25rem;
 	width: 2.25rem;
 	height: 2.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin-right: 0.75rem;
 	border-radius: 99999px;
 	background-color: var(--color-theme-gray);
@@ -154,6 +159,18 @@ export default {
 .score-count {
 	font-family: "Hiragino Kaku Gothic StdN";
 	font-size: 2rem;
+}
+
+
+.action-enter-active,
+.action-leave-active {
+	transition: 250ms ease;
+	transition-property: opacity, transform;
+}
+.action-enter,
+.action-leave-to {
+	opacity: 0;
+	transform: translateY(1rem);
 }
 
 .action-title {
@@ -188,6 +205,7 @@ export default {
 .button-icon {
 	width: 2.5rem;
 	height: 2.5rem;
+	padding: 0.7rem;
 	margin-bottom: 0.5rem;
 	background-color: var(--color);
 	border-radius: 99999px;
