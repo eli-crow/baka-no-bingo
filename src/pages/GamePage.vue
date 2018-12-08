@@ -130,8 +130,7 @@ export default {
 }
 .title {
 	flex: 1 1 auto;
-	font-family: "Hiragino Kaku Gothic StdN";
-	font-size: 1.25rem;
+	font: var(--font-title);
 }
 
 .score {
@@ -144,13 +143,17 @@ export default {
 }
 .score-title {
 	margin-bottom: 0.5rem;
+	font: var(--font-title);
+	font-size: 1rem;
+	color: var(--color-theme-gray);
 }
 .score-title-japanese {
-	font-family: "Hiragino Kaku Gothic StdN";
+	color: var(--color-text-dark);
+	font-size: 1.25rem;
 }
 .score-count {
 	font-family: "Hiragino Kaku Gothic StdN";
-	font-size: 1.5rem;
+	font-size: 2rem;
 }
 
 .action-title {

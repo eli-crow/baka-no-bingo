@@ -54,8 +54,8 @@ export default {
 	border-right: var(--line-groove);
 	margin-bottom: -2px;
 	margin-right: -2px;
+	font: var(--font-title);
 	font-size: 20vw;
-	font-family: "Hiragino Kaku Gothic StdN";
 	color: var(--color-text-dark);
 	text-decoration: inherit;
 }

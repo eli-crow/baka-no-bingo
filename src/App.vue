@@ -24,9 +24,9 @@ export default {
     --color-text-dark: hsl(0, 0%, 5%);
     --color-text-default: hsl(0, 0%, 13%);
 
-    --font-family-hiragino: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
-    --font-family-hiragino-bold: "Hiragino Kaku Gothic StdN", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
-    --font-title: var(--font-family-hiragino-bold);
+    --font-family-hiragino: "Hiragino Sans", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+    --font-title: 800 1.25rem / 1.3 var(--font-family-hiragino);
+    --font-default: 400 1rem / 1.5 var(--font-family-hiragino);
 
     --line-groove: solid 2px hsl(0, 0%, 98%);
   }
@@ -46,7 +46,7 @@ export default {
     margin: 0;
     padding: 0;
     min-height: 100%;
-    font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+    font: var(--font-default);
     color: var(--color-text-default);
   }
 </style>
