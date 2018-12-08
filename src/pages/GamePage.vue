@@ -157,7 +157,7 @@ export default {
 	font-size: 1.25rem;
 }
 .score-count {
-	font-family: "Hiragino Kaku Gothic StdN";
+	font: var(--font-title);
 	font-size: 2rem;
 }
 
@@ -174,7 +174,7 @@ export default {
 }
 
 .action-title {
-	font-family: "Hiragino Kaku Gothic StdN";
+	font: var(--font-title);
 	background: var(--color-theme-blue);
 	color: white;
 	height: 3rem;
@@ -197,7 +197,8 @@ export default {
 	justify-content: center;
 	--color: green;
 	color: var(--color);
-	font-family: "Hiragino Kaku Gothic StdN";
+	font: var(--font-title);
+	font-size: 1rem;
 }
 .button.-red { --color: var(--color-theme-red) }
 .button.-blue { --color: var(--color-theme-blue) }
