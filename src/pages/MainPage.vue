@@ -1,20 +1,29 @@
 <template>
 	<div class="MainPage">
-		<BingoBoard3/>
+		<div class="cell-group">
+			<div class="cell -blue">バ</div>
+			<div class="cell -blue">カ</div>
+			<div class="cell -small -gray-light">の</div>
+			<router-link to="/game" class="cell -text -blue-light">Start</router-link>
+			<div class="cell -star -red">★</div>
+			<router-link to="/game" class="cell -text -yellow-light">Start</router-link>
+			<div class="cell -yellow">ビ</div>
+			<div class="cell -yellow">ン</div>
+			<div class="cell -yellow">ゴ</div>
+		</div>
 	</div>
 </template>
 
 
 
 <script>
-import BingoBoard3 from '@/components/BingoBoard3'
 export default {
 	name: 'MainPage',
 	components: {
-		BingoBoard3
 	},
-	props: {
-
+	data () {
+		return {
+		}
 	}
 }
 </script>
@@ -23,6 +32,60 @@ export default {
 
 <style scoped>
 .MainPage {
+	padding-top: 5rem;
+}
 
+.cell-group {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: repeat(3, 33.33333vw);
+	overflow: hidden;
+	border-top: var(--line-groove);
+	border-bottom: var(--line-groove);
+}
+
+.cell {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding: 8px;
+	border-bottom: var(--line-groove);
+	border-right: var(--line-groove);
+	margin-bottom: -2px;
+	margin-right: -2px;
+	font-size: 20vw;
+	font-family: "Hiragino Kaku Gothic StdN";
+	color: var(--color-text-dark);
+	text-decoration: inherit;
+}
+.cell.-small {
+	font-size: 12vw;
+}
+.cell.-text {
+	font-size: 4vw;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+}
+.cell.-blue {
+	background-color: var(--color-theme-blue);
+}
+.cell.-green {
+	background-color: var(--color-theme-green);
+}
+.cell.-red {
+	background-color: var(--color-theme-red);
+}
+.cell.-yellow {
+	background-color: var(--color-theme-yellow);
+}
+.cell.-gray-light {
+	background-color: var(--color-theme-gray-light);
+}
+.cell.-blue-light {
+	background-color: var(--color-theme-blue-light);
+}
+.cell.-yellow-light {
+	background-color: var(--color-theme-yellow-light);
 }
 </style>

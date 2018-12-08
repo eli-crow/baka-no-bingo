@@ -1,6 +1,12 @@
 <template>
 	<div class="BingoBoard3">
-		this is the bingo board
+		<div :class="{cell: true, '-selected': cell.selected}"
+		     v-for="(cell, i) in virtualCells"
+		     :key="'cell' + i"
+		     @click="toggleCell(cell, i)">
+			<span v-if="i === 4" class="icon">★</span>
+			<span v-else class="text">{{ cell.text }}</span>
+		</div>
 	</div>
 </template>
 
@@ -9,9 +15,44 @@
 <script>
 export default {
 	name: 'BingoBoard3',
+	computed: {
+		virtualCells () {
+			const result = this.cells.slice()
+			result[4].selected = true
+			return result
+		},
+		isWinner () {
+			const c = this.virtualCells.map(({selected}) => selected)
+			return c[0] && c[1] && c[2]
+			    || c[0] && c[4] && c[8]
+			    || c[0] && c[3] && c[6]
+			    || c[1] && c[4] && c[7]
+			    || c[2] && c[5] && c[8]
+			    || c[3] && c[4] && c[5]
+			    || c[6] && c[7] && c[8]
+			    || c[2] && c[4] && c[6]
+		}
+	},
 	props: {
-
-	}
+		cells: Array,
+		enabled: {
+			type: Boolean,
+			default: true,
+		},
+	},
+	watch: {
+		isWinner (newValue) {
+			if (newValue) {
+				this.$emit('win')
+			}
+		}
+	},
+	methods: {
+		toggleCell(cell, i) {
+			if (!this.enabled || i === 4) return
+			cell.selected = !cell.selected
+		}
+	},
 }
 </script>
 
@@ -19,6 +60,34 @@ export default {
 
 <style scoped>
 .BingoBoard3 {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: repeat(3, 33.33333vw);
+	overflow: hidden;
+	border-top: var(--line-groove);
+	border-bottom: var(--line-groove);
+}
 
+.cell {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding: 8px;
+	border-bottom: var(--line-groove);
+	border-right: var(--line-groove);
+	margin-bottom: -2px;
+	margin-right: -2px;
+	font-size: 3.25vw;
+}
+.cell.-selected {
+	background-color: var(--color-theme-blue);
+}
+.cell.-selected:nth-child(5) {
+	background-color: var(--color-theme-red);
+}
+
+.icon {
+	font-size: 4rem;
 }
 </style>
