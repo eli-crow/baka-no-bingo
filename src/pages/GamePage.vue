@@ -52,7 +52,7 @@ const TROPES = [
 	"Geometric patterns when a character is casting magic",
 	"Female is introduced with a camera pan from feet to head",
 	"Male deliberately keeps important info from female to protect them",
-	"Main character has big, brightly colored hair to distinguish them from background characters",
+	"Main character with big, colorful hair to distinguish them from background characters",
 	"Character is odd-eyed, or has special eye pattern / color",
 	"Blood spurts from nose profusely",
 	"Something is called Kawaii",
