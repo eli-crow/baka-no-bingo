@@ -5,7 +5,7 @@
 			<div class="title">Anime Tropes</div>
 		</header>
 		<BingoBoard3 class="board"
-		             :cells="cells"
+		             :cells="playerData.cells"
 				 :enabled="boardAccepted"
 				 @win="win"/>
 		<transition name="action" mode="out-in">
@@ -23,7 +23,7 @@
 			     v-else
 			     key="score">
 			     <div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
-			     <div class="score-count">{{ score }} Board{{ score === 0 || score > 1 ? "s" : ''}}</div>
+			     <div class="score-count">{{ playerData.score }} Board{{ scorePlural }}</div>
 			</div>
 		</transition>
 	</div>
@@ -34,6 +34,8 @@
 <script>
 import * as Lodash from 'lodash'
 import BingoBoard3 from '@/components/BingoBoard3'
+
+const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
 const TROPES = [
 	"Female dies for male backstory",
@@ -70,18 +72,27 @@ export default {
 		BingoBoard3
 	},
 	data () {
+		const lsData = localStorage.getItem(LS_PLAYER_DATA)
+		const playerData = JSON.parse(lsData) || {
+			score: 0,
+			cells: Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
+		}
 		return {
 			boardAccepted: false,
-			score: 0,
-			cells: Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) ),
+			playerData,
+		}
+	},
+	computed: {
+		scorePlural () {
+			return this.playerData.score === 1 ? '' : 's'
 		}
 	},
 	methods: {
 		newBoard () {
-			this.cells = Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
+			this.playerData.cells = Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
 		},
 		shuffleBoard () {
-			const c = this.cells.slice()
+			const c = this.playerData.cells.slice()
 			const temp = c[0]
 			c[0] = c[3]
 			c[3] = c[6]
@@ -91,15 +102,23 @@ export default {
 			c[5] = c[2]
 			c[2] = c[1]
 			c[1] = temp
-			this.cells = c //bump reactive
+			this.playerData.cells = c //bump reactive
 		},
 		acceptBoard () {
 			this.boardAccepted = true
 		},
 		win () {
-			this.score = this.score + 1
+			this.playerData.score = this.playerData.score + 1
 			this.boardAccepted = false
 			this.newBoard()
+		}
+	},
+	watch: {
+		playerData : {
+			handler (newValue, oldValue) {
+				localStorage.setItem(LS_PLAYER_DATA, JSON.stringify(this.playerData))
+			},
+			deep: true,
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition name="wipe" mode="out-in">
+    <transition name="wipe">
       <router-view/>
     </transition>
   </div>
@@ -55,9 +55,13 @@ export default {
 
   .wipe-enter-active,
   .wipe-leave-active {
-    position: relative;
-    transition: .125s ease;
+    transition: .125s linear;
     transition-property: opacity, transform;
+  }
+
+  .wipe-leave-active {
+    position: absolute;
+    width: 100%;
   }
 
   .wipe-enter,
