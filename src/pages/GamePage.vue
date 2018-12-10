@@ -13,6 +13,18 @@
 			     v-if="!boardAccepted"
 			     key="action">
 				<div class="action-title">選ぶ&nbsp;&nbsp;Pick a Board</div>
+				<PatternIcon type="012"/>
+				<PatternIcon type="345"/>
+				<PatternIcon type="678"/>
+				<PatternIcon type="036"/>
+				<PatternIcon type="147"/>
+				<PatternIcon type="258"/>
+				<PatternIcon type="048"/>
+				<PatternIcon type="246"/>
+				<PatternIcon type="x"/>
+				<PatternIcon type="+"/>
+				<PatternIcon type="012345678"/>
+				<PatternIcon type="all"/>
 				<div class="button-group">
 					<div class="button -red" @click="newBoard"><Icon class="button-icon" icon="trash"/> New</div>
 					<div class="button -blue" @click="shuffleBoard"><Icon class="button-icon" icon="redo"/> Shuffle</div>
@@ -34,6 +46,7 @@
 <script>
 import * as Lodash from 'lodash'
 import BingoBoard3 from '@/components/BingoBoard3'
+import PatternIcon from '@/components/PatternIcon'
 
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
@@ -69,7 +82,8 @@ const TROPES = [
 export default {
 	name: 'GamePage',
 	components : {
-		BingoBoard3
+		BingoBoard3,
+		PatternIcon,
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
