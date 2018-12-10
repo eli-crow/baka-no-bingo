@@ -19,7 +19,7 @@
 
 <script>
 const PATHS = {
-	"012345678": "M 0,0  L 0,1  L 1,1  L 1,0  Z",
+	"01235678": "M 0,0  L 0,1  L 1,1  L 1,0  Z",
 	"012": "M 0,0  L 1,0",
 	"345": "M 0,0.5  L 1,0.5",
 	"678": "M 0,1  L 1,1",
@@ -34,15 +34,11 @@ export default {
 	name: 'PatternIcon',
 	computed: {
 		topLines () {
-			switch (this.type) {
-				case 'all':
-					return [PATHS['012345678'], PATHS['345'], PATHS['147'], PATHS['048'], PATHS['246']]
-				case 'x':
-					return [PATHS['048'], PATHS['246']]
-				case '+':
-					return [PATHS['345'], PATHS['147']]
-				default:
-					return [PATHS[this.type]] || []
+			switch (this.pattern) {
+				case '012345678': return [PATHS['01235678'], PATHS['345'], PATHS['147'], PATHS['048'], PATHS['246']]
+				case '02468':     return [PATHS['048'], PATHS['246']]
+				case '13457':     return [PATHS['345'], PATHS['147']]
+				default:          return [PATHS[this.pattern]] || []
 			}
 		},
 		bottomLines () {
@@ -50,8 +46,8 @@ export default {
 		},
 	},
 	props: {
-		type: String,
-	}
+		pattern: String,
+	},
 }
 </script>
 
