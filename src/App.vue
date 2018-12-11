@@ -16,10 +16,11 @@ export default {
   :root {
     --color-theme-black: hsl(0, 0%, 5%);
     --color-theme-gray: hsl(0, 0%, 67%);
-    --color-theme-gray-light: hsl(0, 0%, 97%);
+    --color-theme-gray-light: hsl(0, 0%, 95%);
     --color-theme-blue: hsl(204, 100%, 50%);
     --color-theme-blue-light: hsl(204, 100%, 78%);
     --color-theme-red: hsl(0, 100%, 64%);
+    --color-theme-red-dark: hsl(0, 71%, 51%);
     --color-theme-green: hsl(146, 97%, 35%);
     --color-theme-green-light: hsl(146, 90%, 44%);
     --color-theme-yellow: hsl(54, 100%, 50%);
