@@ -1,5 +1,9 @@
 <template>
 	<div class="MainPage">
+		<div class="title-container">
+			<div class="title">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
+			<div class="title title-duplicate">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
+		</div>
 		<div class="cell-group">
 			<div class="cell -blue">バ</div>
 			<div class="cell -blue">カ</div>
@@ -23,6 +27,8 @@ export default {
 	},
 	data () {
 		return {
+			//TODO: refactor
+			version: 2
 		}
 	}
 }
@@ -32,7 +38,37 @@ export default {
 
 <style scoped>
 .MainPage {
-	padding-top: 5rem;
+}
+
+.title-container {
+	height: 33.33333vw;
+	display: flex;
+	padding-left: 1rem;
+	align-items: center;
+}
+
+@keyframes title {
+	0% { transform: none; }
+	100% { transform: translateX(-100%); }
+}
+.title {
+	white-space: nowrap;
+	font: var(--font-title);
+	font-size: 20vw;
+	padding-right: 1rem;
+	animation-name: title;
+	animation-duration: 4s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+.title-version {
+	position: absolute;
+	color: white;
+	top: 53%;
+	right: 2.2rem;
+	font-size: 1.25rem;
+	transform: translate(-50%, -50%);
 }
 
 .cell-group {
