@@ -14,19 +14,6 @@
 			<div class="action"
 			     v-if="!boardAccepted"
 			     key="action">
-				<div class="action-title">選ぶ&nbsp;&nbsp;Pick a Board</div>
-				<PatternIcon pattern="012"/>
-				<PatternIcon pattern="345"/>
-				<PatternIcon pattern="678"/>
-				<PatternIcon pattern="036"/>
-				<PatternIcon pattern="147"/>
-				<PatternIcon pattern="258"/>
-				<PatternIcon pattern="048"/>
-				<PatternIcon pattern="246"/>
-				<PatternIcon pattern="02468"/>
-				<PatternIcon pattern="13457"/>
-				<PatternIcon pattern="012345678"/>
-				<PatternIcon pattern="all"/>
 				<div class="button-group">
 					<div class="button -red" @click="newBoard"><Icon class="button-icon" icon="trash"/> New</div>
 					<div class="button -blue" @click="shuffleBoard"><Icon class="button-icon" icon="redo"/> Shuffle</div>
@@ -117,7 +104,7 @@ export default {
 	computed: {
 		scorePlural () {
 			return this.playerData.score === 1 ? '' : 's'
-	},
+		},
 		sellablePatterns () {
 			// clone patterns
 			const patterns = JSON.parse(JSON.stringify(PATTERNS))
@@ -165,8 +152,8 @@ export default {
 				localStorage.setItem(LS_PLAYER_DATA, JSON.stringify(this.playerData))
 			},
 			deep: true,
-		}
-	}
+		},
+	},
 }
 </script>
 
