@@ -31,8 +31,8 @@ export default {
 
     --font-family-hiragino: "Hiragino Sans", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
     --font-family-noto: "Noto Sans", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
-    --font-title: 800 1.5rem / 1.3 var(--font-family-noto);
-    --font-default: 400 1rem / 1.5 var(--font-family-noto);
+    --font-title: 800 1.5rem / 1.2 var(--font-family-noto);
+    --font-default: 400 1rem / 1.3 var(--font-family-noto);
 
     --line-groove: solid 2px hsl(0, 0%, 98%);
   }
