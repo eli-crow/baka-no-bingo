@@ -8,10 +8,13 @@
 			<div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
 			<div class="score-count">{{ playerData.score }}</div>
 		</div>
-		<BingoBoard3 class="board"
-		             :cells="playerData.cells"/>
+		<div class="board-container">
+			<BingoBoard3 class="board"
+					:cells="playerData.cells"/>
+		</div>
 		<transition name="patterns">
-			<PatternSellBar :patterns="sellablePatterns" @sell="sell"/>
+			<PatternSellBar v-if="sellablePatterns.length" :patterns="sellablePatterns" @sell="sell"/>
+			<PatternLegend v-else/>
 		</transition>
 		<transition name="actions">
 
@@ -26,6 +29,7 @@ import * as Lodash from 'lodash'
 import BingoBoard3 from '@/components/BingoBoard3'
 import PatternIcon from '@/components/PatternIcon'
 import PatternSellBar from '@/components/PatternSellBar'
+import PatternLegend from '@/components/PatternLegend'
 import TROPES from '@/data/tropes'
 
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
@@ -50,6 +54,7 @@ export default {
 		BingoBoard3,
 		PatternIcon,
 		PatternSellBar,
+		PatternLegend,
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
@@ -132,7 +137,7 @@ export default {
 	height: 16.6666666vw;
 	background: white;
 	position: relative;
-	z-index: 1;
+	z-index: 2;
 	background: var(--color-theme-yellow);
 }
 .back {
@@ -144,8 +149,8 @@ export default {
 	justify-content: center;
 	margin-right: 0.75rem;
 	border-radius: 99999px;
-	background-color: var(--color-theme-gray);
-	color: white;
+	background-color: rgba(0, 0, 0, 0.1);
+	color: var(--color-theme-black);
 }
 .title {
 	flex: 1 1 auto;
@@ -175,6 +180,12 @@ export default {
 .score-count {
 	font: var(--font-title);
 	font-size: 2rem;
+}
+
+
+.board-container {
+	background-color: var(--color-theme-gray-light);
+	padding: 1rem;
 }
 
 
