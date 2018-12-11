@@ -18,12 +18,12 @@ export default {
     --color-theme-gray: hsl(0, 0%, 67%);
     --color-theme-gray-light: hsl(0, 0%, 97%);
     --color-theme-blue: hsl(204, 100%, 50%);
-    --color-theme-blue-light: hsl(204, 100%, 94%);
+    --color-theme-blue-light: hsl(204, 100%, 78%);
     --color-theme-red: hsl(0, 100%, 64%);
     --color-theme-green: hsl(146, 97%, 35%);
     --color-theme-green-light: hsl(146, 90%, 44%);
     --color-theme-yellow: hsl(54, 100%, 50%);
-    --color-theme-yellow-light: hsl(54, 100%, 90%);
+    --color-theme-yellow-light: hsl(54, 100%, 89%);
 
     --color-text-dark: var(--color-theme-black);
     --color-text-default: hsl(0, 0%, 13%);
