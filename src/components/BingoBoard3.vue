@@ -83,7 +83,7 @@ export default {
 	font-size: 3.25vw;
 }
 .cell.-selected {
-	background-color: var(--color-theme-blue);
+	background-color: var(--color-theme-red);
 }
 .cell:nth-child(5) {
 	background-color: var(--color-theme-red);
