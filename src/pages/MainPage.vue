@@ -55,9 +55,9 @@ export default {
 	white-space: nowrap;
 	font: var(--font-title);
 	font-size: 20vw;
-	padding-right: 1rem;
+	padding-right: 5vw;
 	animation-name: title;
-	animation-duration: 4s;
+	animation-duration: 6s;
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
 }
@@ -66,7 +66,7 @@ export default {
 	position: absolute;
 	color: white;
 	top: 53%;
-	right: 2.2rem;
+	right: 9.5vw;
 	font-size: 1.25rem;
 	transform: translate(-50%, -50%);
 }
