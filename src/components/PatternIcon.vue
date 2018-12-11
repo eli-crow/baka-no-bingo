@@ -4,12 +4,14 @@
 	     height="1px"
 	     viewBox="0 0 1 1"
 	     xmlns="http://www.w3.org/2000/svg" >
-		<path v-for="(path, i) in bottomLines"
-		      :d="path"
-			:key="i"
-			class="line"/>
+		<g class="grid">
+			<path v-for="(path, i) in bottomLines"
+				:d="path"
+				:key="i"
+				class="line"/>
+		</g>
 		<path v-for="(path, i) in topLines"
-		      :d="path"
+			:d="path"
 			:key="'active'+i"
 			class="line-active"/>
 	</svg>
@@ -42,7 +44,7 @@ export default {
 			}
 		},
 		bottomLines () {
-			return [PATHS['012345678'], PATHS['345'], PATHS['147'], PATHS['048'], PATHS['246']]
+			return [PATHS['01235678'], PATHS['345'], PATHS['147'], PATHS['048'], PATHS['246']]
 		},
 	},
 	props: {
@@ -55,12 +57,12 @@ export default {
 
 <style scoped>
 .PatternIcon {
-	--grid-color: rgb(201, 201, 201);
+	--grid-color: var(--color-theme-black);
 	--active-color: var(--color-text-dark);
 	overflow: visible;
 	display: inline-block;
-	width: 1.75rem;
-	height: 1.75rem;
+	width: 1.33333rem;
+	height: 1.33333rem;
 }
 
 .line {
@@ -72,9 +74,13 @@ export default {
 	vector-effect: non-scaling-stroke;
 }
 
+.grid {
+	opacity: 0.08;
+}
+
 .line-active {
 	fill: none;
-	stroke-width: 3px;
+	stroke-width: 3.5px;
 	stroke-linecap: round;
 	stroke-linejoin: round;
 	stroke: var(--active-color);
