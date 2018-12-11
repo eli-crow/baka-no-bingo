@@ -33,7 +33,7 @@ export default {
 			    || c[3] && c[4] && c[5]
 			    || c[6] && c[7] && c[8]
 			    || c[2] && c[4] && c[6]
-		}
+		},
 	},
 	props: {
 		cells: Array,
@@ -50,7 +50,7 @@ export default {
 		}
 	},
 	methods: {
-		toggleCell(cell, i) {
+		toggleCell (cell, i) {
 			if (!this.enabled || i === 4) return
 			cell.selected = !cell.selected
 		}
@@ -62,11 +62,14 @@ export default {
 
 <style scoped>
 .BingoBoard3 {
+	position: relative;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: repeat(3, 33.33333vw);
-	overflow: hidden;
 	padding-bottom: 0.5rem;
+	box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+	border-radius: 10px;
 }
 
 .cell {
@@ -76,7 +79,7 @@ export default {
 	text-align: center;
 	padding: 8px;
 	border: solid 1px var(--color-theme-gray-light);
-	font-size: 3.25vw;
+	font-size: 3.35vw;
 	background-color: white;
 	box-shadow: 0 0.5rem 0 0 var(--color-theme-gray-light);
 }
@@ -86,9 +89,23 @@ export default {
 	box-shadow: 0 0.5rem 0 0 var(--color-theme-red-dark);
 	color: white;
 }
+/* star */
 .cell:nth-child(5) {
 	color: inherit;
 	background-color: var(--color-theme-red);
+}
+/*rounded-corners*/
+.cell:nth-child(1) {
+	border-top-left-radius: inherit;
+}
+.cell:nth-child(3) {
+	border-top-right-radius: inherit;
+}
+.cell:nth-child(7) {
+	border-bottom-left-radius: inherit;
+}
+.cell:nth-child(9) {
+	border-bottom-right-radius: inherit;
 }
 
 .cell-move {
