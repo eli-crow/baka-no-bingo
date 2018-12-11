@@ -4,28 +4,17 @@
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
 			<div class="title">Anime Tropes</div>
 		</header>
+		<div class="score">
+			<div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
+			<div class="score-count">{{ playerData.score }}</div>
+		</div>
 		<BingoBoard3 class="board"
-		             :cells="playerData.cells"
-				 :enabled="boardAccepted"/>
+		             :cells="playerData.cells"/>
 		<transition name="patterns">
 			<PatternSellBar :patterns="sellablePatterns" @sell="sell"/>
 		</transition>
-		<transition name="action" mode="out-in">
-			<div class="action"
-			     v-if="!boardAccepted"
-			     key="action">
-				<div class="button-group">
-					<div class="button -red" @click="newBoard"><Icon class="button-icon" icon="trash"/> New</div>
-					<div class="button -blue" @click="shuffleBoard"><Icon class="button-icon" icon="redo"/> Shuffle</div>
-					<div class="button -green" @click="acceptBoard"><Icon class="button-icon" icon="check"/> Accept</div>
-				</div>
-			</div>
-			<div class="score"
-			     v-else
-			     key="score">
-			     <div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
-			     <div class="score-count">{{ playerData.score }} Board{{ scorePlural }}</div>
-			</div>
+		<transition name="actions">
+
 		</transition>
 	</div>
 </template>
@@ -42,7 +31,7 @@ import TROPES from '@/data/tropes'
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
 const PATTERNS = [
-	{pattern: [0,1,2,3,4,5,6,7,8], score: 200},
+	{pattern: [0,1,2,3,4,5,6,7,8], score: 250},
 	{pattern: [0,2,4,6,8], score: 100},
 	{pattern: [1,3,4,5,7], score: 100},
 	{pattern: [0,1,2], score: 50},
@@ -112,8 +101,9 @@ export default {
 		sell ({pattern, score}) {
 			this.playerData.score += score
 			const cells = JSON.parse(JSON.stringify(this.playerData.cells))
-			pattern.forEach(patternIndex => {
-				cells[patternIndex] = {text: Lodash.sample(TROPES), selected: false}
+			const sample = Lodash.sampleSize(TROPES, pattern.length)
+			pattern.forEach((patternIndex, i) => {
+				cells[patternIndex] = {text: sample[i], selected: false}
 			})
 			this.playerData.cells = cells
 		}
@@ -139,11 +129,11 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: 12px 16px;
-	height: 5rem;
+	height: 16.6666666vw;
 	background: white;
-	box-shadow: 0 8px 0 0 rgba(0, 0, 0, 0.048);
 	position: relative;
 	z-index: 1;
+	background: var(--color-theme-yellow);
 }
 .back {
 	flex: 0 0 2.25rem;
@@ -163,15 +153,17 @@ export default {
 }
 
 .score {
+	position: relative;
+	z-index: 1;
 	text-align: center;
-	height: 33.333333vw;
+	height: 16.666666vw;
 	display: flex;
-	align-content: center;
-	justify-content: center;
-	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: 0 8px 0 0 rgba(0, 0, 0, 0.048);
+	padding: 0 1rem;
 }
 .score-title {
-	margin-bottom: 0.5rem;
 	font: var(--font-title);
 	font-size: 1rem;
 	color: var(--color-theme-gray);
