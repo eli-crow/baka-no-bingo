@@ -6,8 +6,10 @@
 		</header>
 		<BingoBoard3 class="board"
 		             :cells="playerData.cells"
-				 :enabled="boardAccepted"
-				 @win="win"/>
+				 :enabled="boardAccepted"/>
+		<transition name="patterns">
+			<PatternSellBar :patterns="sellablePatterns" @sell="sell"/>
+		</transition>
 		<transition name="action" mode="out-in">
 			<div class="action"
 			     v-if="!boardAccepted"
@@ -47,6 +49,7 @@
 import * as Lodash from 'lodash'
 import BingoBoard3 from '@/components/BingoBoard3'
 import PatternIcon from '@/components/PatternIcon'
+import PatternSellBar from '@/components/PatternSellBar'
 
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
@@ -79,11 +82,26 @@ const TROPES = [
 	"Glasses sheen when a character pushes them back into place",
 ]
 
+const PATTERNS = [
+	{pattern: [0,1,2,3,4,5,6,7,8], score: 200},
+	{pattern: [0,2,4,6,8], score: 100},
+	{pattern: [1,3,4,5,7], score: 100},
+	{pattern: [0,1,2], score: 50},
+	{pattern: [6,7,8], score: 50},
+	{pattern: [0,3,6], score: 50},
+	{pattern: [2,5,8], score: 50},
+	{pattern: [3,4,5], score: 20},
+	{pattern: [1,4,7], score: 20},
+	{pattern: [0,4,8], score: 20},
+	{pattern: [2,4,6], score: 20},
+]
+
 export default {
 	name: 'GamePage',
 	components : {
 		BingoBoard3,
 		PatternIcon,
+		PatternSellBar,
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
@@ -99,7 +117,13 @@ export default {
 	computed: {
 		scorePlural () {
 			return this.playerData.score === 1 ? '' : 's'
-		}
+	},
+		sellablePatterns () {
+			// clone patterns
+			const patterns = JSON.parse(JSON.stringify(PATTERNS))
+			// filter all patterns by whether each pattern matches the current board
+			return patterns.filter(p => p.pattern.every(patternIndex => this.playerData.cells[patternIndex].selected))
+		},
 	},
 	methods: {
 		newBoard () {
@@ -125,6 +149,14 @@ export default {
 			this.playerData.score = this.playerData.score + 1
 			this.boardAccepted = false
 			this.newBoard()
+		},
+		sell ({pattern, score}) {
+			this.playerData.score += score
+			const cells = JSON.parse(JSON.stringify(this.playerData.cells))
+			pattern.forEach(patternIndex => {
+				cells[patternIndex] = {text: Lodash.sample(TROPES), selected: false}
+			})
+			this.playerData.cells = cells
 		}
 	},
 	watch: {
