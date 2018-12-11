@@ -37,37 +37,9 @@ import * as Lodash from 'lodash'
 import BingoBoard3 from '@/components/BingoBoard3'
 import PatternIcon from '@/components/PatternIcon'
 import PatternSellBar from '@/components/PatternSellBar'
+import TROPES from '@/data/tropes'
 
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
-
-const TROPES = [
-	"Female dies for male backstory",
-	"Laying on back with legs up, twitching",
-	"Male accidentally gropes female",
-	"Unneccesary grunting",
-	"Echoey aside where character explains exactly how they are feeling",
-	"Interruption with awkward pause",
-	"A masked villain is revealed",
-	"Studious main character wistfully stares out the window",
-	"75%+ of females have unusually large breasts",
-	"Villain is brother/father of main character",
-	"Surpassing limits of strength when friends cheer them on",
-	"Shouting and flexing to power up",
-	"Camera pans across a buffet of food. Characters audibly gasp",
-	"Geometric patterns when a character is casting magic",
-	"Female is introduced with a camera pan from feet to head",
-	"Male deliberately keeps important info from female to protect them",
-	"Main character with big, colorful hair to distinguish them from background characters",
-	"Character is odd-eyed, or has special eye pattern / color",
-	"Blood spurts from nose profusely",
-	"Something is called Kawaii",
-	"Someone says Senpai",
-	"Someone is secretly into senpai but acts mean to them",
-	"Someone says BAKA",
-	"Someone goes into Chibi form",
-	"Character explains something obvious or recent to the audience",
-	"Glasses sheen when a character pushes them back into place",
-]
 
 const PATTERNS = [
 	{pattern: [0,1,2,3,4,5,6,7,8], score: 200},
