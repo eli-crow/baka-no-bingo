@@ -24,14 +24,14 @@ export default {
     --color-theme-green: hsl(146, 97%, 35%);
     --color-theme-green-light: hsl(146, 90%, 44%);
     --color-theme-yellow: hsl(54, 100%, 50%);
-    --color-theme-yellow-light: hsl(54, 100%, 89%);
+    --color-theme-yellow-light: hsl(54, 100%, 85%);
 
     --color-text-dark: var(--color-theme-black);
     --color-text-default: hsl(0, 0%, 13%);
 
     --font-family-hiragino: "Hiragino Sans", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
     --font-family-noto: "Noto Sans", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
-    --font-title: 800 1.25rem / 1.3 var(--font-family-noto);
+    --font-title: 800 1.5rem / 1.3 var(--font-family-noto);
     --font-default: 400 1rem / 1.5 var(--font-family-noto);
 
     --line-groove: solid 2px hsl(0, 0%, 98%);
