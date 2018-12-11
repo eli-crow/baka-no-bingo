@@ -67,8 +67,6 @@ export default {
 	grid-template-rows: repeat(3, 33.33333vw);
 	overflow: hidden;
 	padding-bottom: 0.5rem;
-	border-top: var(--line-groove);
-	border-bottom: var(--line-groove);
 }
 
 .cell {
@@ -86,8 +84,10 @@ export default {
 	background-color: var(--color-theme-red);
 	border: solid 1px var(--color-theme-red-dark);
 	box-shadow: 0 0.5rem 0 0 var(--color-theme-red-dark);
+	color: white;
 }
 .cell:nth-child(5) {
+	color: inherit;
 	background-color: var(--color-theme-red);
 }
 
