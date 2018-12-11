@@ -76,14 +76,12 @@ export default {
 	align-items: center;
 	text-align: center;
 	padding: 8px;
-	border-bottom: var(--line-groove);
-	border-right: var(--line-groove);
-	margin-bottom: -2px;
-	margin-right: -2px;
+	border: solid 1px var(--color-theme-gray-light);
 	font-size: 3.25vw;
 }
 .cell.-selected {
 	background-color: var(--color-theme-red);
+	border: solid 1px var(--color-theme-red-dark);
 }
 .cell:nth-child(5) {
 	background-color: var(--color-theme-red);
