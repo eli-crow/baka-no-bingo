@@ -72,6 +72,8 @@ export default {
 }
 
 .cell-group {
+	padding: 1rem;
+	border-radius: 10px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: repeat(3, 33.33333vw);
@@ -95,6 +97,19 @@ export default {
 	color: var(--color-text-dark);
 	text-decoration: inherit;
 }
+.cell:nth-child(1) {
+	border-top-left-radius: inherit;
+}
+.cell:nth-child(3) {
+	border-top-right-radius: inherit;
+}
+.cell:nth-child(7) {
+	border-bottom-left-radius: inherit;
+}
+.cell:nth-child(9) {
+	border-bottom-right-radius: inherit;
+}
+
 .cell.-small {
 	font-size: 12vw;
 }
