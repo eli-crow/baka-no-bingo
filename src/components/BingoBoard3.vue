@@ -78,10 +78,10 @@ export default {
 	align-items: center;
 	text-align: center;
 	padding: 8px;
-	border: solid 1px var(--color-theme-gray-light);
+	border: solid 1px var(--color-theme-gray-lightest);
 	font-size: 3.35vw;
 	background-color: white;
-	box-shadow: 0 0.5rem 0 0 var(--color-theme-gray-light);
+	box-shadow: 0 0.5rem 0 0 var(--color-theme-gray-lightest);
 }
 .cell.-selected {
 	background-color: var(--color-theme-red);
