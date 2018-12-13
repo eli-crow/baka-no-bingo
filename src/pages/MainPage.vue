@@ -67,7 +67,7 @@ export default {
 	color: white;
 	top: 53%;
 	right: 9.5vw;
-	font-size: 1.25rem;
+	font-size: 5vw;
 	transform: translate(-50%, -50%);
 }
 
@@ -83,19 +83,19 @@ export default {
 }
 
 .cell {
+	position: relative;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
 	padding: 8px;
-	border-bottom: var(--line-groove);
-	border-right: var(--line-groove);
-	margin-bottom: -2px;
-	margin-right: -2px;
 	font: var(--font-title);
 	font-size: 20vw;
 	color: var(--color-text-dark);
 	text-decoration: inherit;
+	background-color: var(--light);
+	box-shadow: 0 0.5rem 0 0 var(--dark);
+	border: solid 1px var(--dark);
 }
 .cell:nth-child(1) {
 	border-top-left-radius: inherit;
@@ -111,32 +111,51 @@ export default {
 }
 
 .cell.-small {
-	font-size: 12vw;
+	font-size: 14vw;
 }
 .cell.-text {
+	position: relative;
 	font-size: 4vw;
 	text-transform: uppercase;
-	letter-spacing: 0.2em;
+	letter-spacing: 0.1em;
+	font-weight: 700;
+}
+.cell.-text::after {
+	position: absolute;
+	content: '';
+	left: 50%;
+	top: 50%;
+	width: 16vw;
+	height: 16vw;
+	transform: translate(-50%,-50%);
+	background-color: var(--dark);
+	border-radius: 99999px;
+	pointer-events: none;
+	/* HACK: you can do better than this */
+	mix-blend-mode: darken;
 }
 .cell.-blue {
-	background-color: var(--color-theme-blue);
-}
-.cell.-green {
-	background-color: var(--color-theme-green);
+	--light: var(--color-theme-blue);
+	--dark: var(--color-theme-blue-dark);
 }
 .cell.-red {
-	background-color: var(--color-theme-red);
+	--light: var(--color-theme-red);
+	--dark: var(--color-theme-red-dark);
 }
 .cell.-yellow {
-	background-color: var(--color-theme-yellow);
+	--light: var(--color-theme-yellow);
+	--dark: var(--color-theme-yellow-dark);
 }
 .cell.-gray-light {
-	background-color: var(--color-theme-gray-light);
+	--light: var(--color-theme-gray-lightest);
+	--dark: var(--color-theme-gray-light);
 }
 .cell.-blue-light {
-	background-color: var(--color-theme-blue-light);
+	--light: var(--color-theme-blue-light);
+	--dark: var(--color-theme-blue);
 }
 .cell.-yellow-light {
-	background-color: var(--color-theme-yellow-light);
+	--light: var(--color-theme-yellow-light);
+	--dark: var(--color-theme-yellow);
 }
 </style>
