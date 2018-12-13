@@ -10,14 +10,38 @@
 		</div>
 		<div class="board-container">
 			<BingoBoard3 class="board"
-					:cells="playerData.cells"/>
+					 :cells="playerData.cells"/>
 		</div>
 		<transition name="patterns">
-			<PatternSellBar v-if="sellablePatterns.length" :patterns="sellablePatterns" @sell="sell"/>
+			<PatternSellBar v-if="sellablePatterns.length"
+			                :patterns="sellablePatterns"
+			                @sell="sell"/>
 			<PatternLegend v-else/>
 		</transition>
-		<transition name="actions">
-
+		<transition name="action-group">
+			<div class="action-group">
+				<ActionButton class="action"
+					        icon="action-buy"
+						  label="Buy"
+						  color="green"
+						  cost="5"
+						  :enabled="playerData.score >= 5"
+				              @select="buy"/>
+				<ActionButton class="action"
+					        icon="action-shuffle"
+						  label="Shuffle"
+						  color="blue"
+						  cost="10"
+						  :enabled="playerData.score >= 10"
+				              @select="shuffle"/>
+				<ActionButton class="action"
+					        icon="action-reset"
+						  label="Reset"
+						  color="red"
+						  cost="20"
+						  :enabled="playerData.score >= 20"
+				              @select="reset"/>
+			</div>
 		</transition>
 	</div>
 </template>
@@ -26,15 +50,19 @@
 
 <script>
 import * as Lodash from 'lodash'
+import deepFreeze from 'deep-freeze'
+
 import BingoBoard3 from '@/components/BingoBoard3'
 import PatternIcon from '@/components/PatternIcon'
 import PatternSellBar from '@/components/PatternSellBar'
 import PatternLegend from '@/components/PatternLegend'
+import ActionButton from '@/components/ActionButton'
+
 import TROPES from '@/data/tropes'
 
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
-const PATTERNS = [
+const PATTERNS = deepFreeze([
 	{pattern: [0,1,2,3,4,5,6,7,8], score: 250},
 	{pattern: [0,2,4,6,8], score: 100},
 	{pattern: [1,3,4,5,7], score: 100},
@@ -46,7 +74,18 @@ const PATTERNS = [
 	{pattern: [1,4,7], score: 20},
 	{pattern: [0,4,8], score: 20},
 	{pattern: [2,4,6], score: 20},
-]
+]);
+
+function getRandomCell () {
+	return {
+		text: Lodash.sample(TROPES),
+		selected: false,
+	}
+}
+
+function getRandomCellArray(n) {
+	return Lodash.sampleSize(TROPES, n).map(text => ({text, selected: false}))
+}
 
 export default {
 	name: 'GamePage',
@@ -55,6 +94,7 @@ export default {
 		PatternIcon,
 		PatternSellBar,
 		PatternLegend,
+		ActionButton,
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
@@ -63,14 +103,11 @@ export default {
 			cells: Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
 		}
 		return {
-			boardAccepted: false,
+			boughtCard: null,
 			playerData,
 		}
 	},
 	computed: {
-		scorePlural () {
-			return this.playerData.score === 1 ? '' : 's'
-		},
 		sellablePatterns () {
 			// clone patterns
 			const patterns = JSON.parse(JSON.stringify(PATTERNS))
@@ -82,25 +119,8 @@ export default {
 		newBoard () {
 			this.playerData.cells = Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
 		},
-		shuffleBoard () {
-			const c = this.playerData.cells.slice()
-			const temp = c[0]
-			c[0] = c[3]
-			c[3] = c[6]
-			c[6] = c[7]
-			c[7] = c[8]
-			c[8] = c[5]
-			c[5] = c[2]
-			c[2] = c[1]
-			c[1] = temp
-			this.playerData.cells = c //bump reactive
-		},
-		acceptBoard () {
-			this.boardAccepted = true
-		},
 		win () {
 			this.playerData.score = this.playerData.score + 1
-			this.boardAccepted = false
 			this.newBoard()
 		},
 		sell ({pattern, score}) {
@@ -111,7 +131,30 @@ export default {
 				cells[patternIndex] = {text: sample[i], selected: false}
 			})
 			this.playerData.cells = cells
-		}
+		},
+		buy () {
+			if (this.playerData.score < 5) return
+			this.playerData.score -= 5
+			this.boughtCard = getRandomCell()
+		},
+		shuffle () {
+			if (this.playerData.score < 10) return
+			this.playerData.score -= 10
+			//shuffle and make sure the center doesn't move, kinda hacky.
+			let cells = this.playerData.cells.slice()
+			const center = cells[4]
+			cells = Lodash.shuffle(cells)
+			const centerNewIdx = cells.indexOf(center)
+			const newCenter = cells[4]
+			cells[4] = center
+			cells[centerNewIdx] = newCenter
+			this.playerData.cells = cells
+		},
+		reset () {
+			if (this.playerData.score < 20) return
+			this.playerData.score -= 20
+			this.newBoard()
+		},
 	},
 	watch: {
 		playerData : {
@@ -184,33 +227,29 @@ export default {
 
 
 .board-container {
-	background-color: var(--color-theme-gray-light);
+	background-image: linear-gradient(to top, var(--color-theme-blue), var(--color-theme-gray-lightest) 66.66666vw);
 	padding: 1rem;
 }
 
 
-.action-enter-active,
-.action-leave-active {
+.action-group {
+	display: flex;
+	justify-content: space-around;
+}
+.action {
+	flex: 0 1 auto;
+}
+.action-group-enter-active,
+.action-group-leave-active {
 	transition: 250ms ease;
 	transition-property: opacity, transform;
 }
-.action-enter,
-.action-leave-to {
+.action-group-enter,
+.action-group-leave-to {
 	opacity: 0;
 	transform: translateY(1rem);
 }
 
-.action-title {
-	font: var(--font-title);
-	background: var(--color-theme-blue);
-	color: white;
-	height: 3rem;
-	display: flex;
-	align-items: center;
-	padding-left: 16px;
-	padding-right: 16px;
-	font-size: 1.25rem;
-}
 
 .button-group {
 	display: flex;
