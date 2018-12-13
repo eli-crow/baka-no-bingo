@@ -40,7 +40,7 @@ export default {
 <style scoped>
 .PatternLegend {
 	display: flex;
-	background-color: var(--color-theme-gray-light);
+	background-color: var(--color-theme-gray-lightest);
 	height: 3.5rem;
 	justify-content: space-between;
 	padding: 0 1rem;
@@ -57,5 +57,7 @@ export default {
 
 .pattern-score {
 	padding-left: 0.5rem;
+	font-weight: 700;
+	color: var(--color-text-light);
 }
 </style>
