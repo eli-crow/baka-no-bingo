@@ -39,6 +39,9 @@ export default {
     --font-title: 800 1.5rem / 1.2 var(--font-family-noto);
     --font-default: 400 1rem / 1.3 var(--font-family-noto);
 
+    --radius-small: 5px;
+    --radius-medium: 10px;
+
     --line-groove: solid 2px hsl(0, 0%, 98%);
   }
 
