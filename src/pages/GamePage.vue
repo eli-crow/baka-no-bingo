@@ -8,16 +8,22 @@
 			<div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
 			<div class="score-count">{{ playerData.score }}</div>
 		</div>
-		<div class="board-container">
+		<div class="board-container"
+		     :style="boardContainerStyle">
 			<BingoBoard3 class="board"
 					 :cells="playerData.cells"/>
 		</div>
-			<PatternSellBar v-if="sellablePatterns.length"
-			                :patterns="sellablePatterns"
-			                @sell="sell"/>
-			<PatternLegend v-else/>
+		<PatternSellBar v-if="sellablePatterns.length"
+					:patterns="sellablePatterns"
+					@sell="sell"/>
+		<PatternLegend v-else/>
 		<transition name="action-group">
-			<div class="action-group">
+			<TheBuyMenu v-if="boughtCell"
+			             :cell="boughtCell"
+					 @buy="buy"
+					 @close="boughtCell = null"/>
+			<div class="action-group"
+			     v-else>
 				<ActionButton class="action"
 					        icon="action-buy"
 						  label="Buy"
@@ -55,6 +61,7 @@ import PatternIcon from '@/components/PatternIcon'
 import PatternSellBar from '@/components/PatternSellBar'
 import PatternLegend from '@/components/PatternLegend'
 import ActionButton from '@/components/ActionButton'
+import TheBuyMenu from '@/components/TheBuyMenu'
 
 import TROPES from '@/data/tropes'
 
@@ -93,6 +100,7 @@ export default {
 		PatternSellBar,
 		PatternLegend,
 		ActionButton,
+		TheBuyMenu,
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
@@ -101,7 +109,7 @@ export default {
 			cells: Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
 		}
 		return {
-			boughtCard: null,
+			boughtCell: null,
 			playerData,
 		}
 	},
@@ -111,6 +119,13 @@ export default {
 			const patterns = JSON.parse(JSON.stringify(PATTERNS))
 			// filter all patterns by whether each pattern matches the current board
 			return patterns.filter(p => p.pattern.every(patternIndex => this.playerData.cells[patternIndex].selected))
+		},
+		boardContainerStyle () {
+			return `--color: var(--color-theme-${
+				this.boughtCell ? 'green' :
+				this.sellablePatterns.length ? 'blue' :
+				'gray-lightest'
+			});`
 		},
 	},
 	methods: {
@@ -133,7 +148,7 @@ export default {
 		buy () {
 			if (this.playerData.score < 5) return
 			this.playerData.score -= 5
-			this.boughtCard = getRandomCell()
+			this.boughtCell = getRandomCell()
 		},
 		shuffle () {
 			if (this.playerData.score < 10) return
@@ -225,8 +240,13 @@ export default {
 
 
 .board-container {
-	background-image: linear-gradient(to top, var(--color-theme-blue), var(--color-theme-gray-lightest) 66.66666vw);
-	padding: 1rem;
+	/* --color defined in computed property */
+	background-image: linear-gradient(
+		to top,
+		var(--color),
+		var(--color-theme-gray-lightest) 66.66666vw
+	);
+	padding: 1rem 1rem 0;
 }
 
 
@@ -241,6 +261,10 @@ export default {
 .action-group-leave-active {
 	transition: 250ms ease;
 	transition-property: opacity, transform;
+}
+.action-group-leave-active {
+	position: absolute;
+	width: 100%;
 }
 .action-group-enter,
 .action-group-leave-to {
