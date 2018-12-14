@@ -73,7 +73,7 @@ export default {
 
 .cell-group {
 	padding: 1rem;
-	border-radius: 10px;
+	border-radius: var(--radius-medium);
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: repeat(3, 33.33333vw);
