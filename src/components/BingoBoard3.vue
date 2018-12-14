@@ -108,6 +108,17 @@ export default {
 	border-bottom-right-radius: inherit;
 }
 
+.cell-enter-active
+.cell-leave-active {
+	transition: 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transition-property: opacity, transform;
+}
+.cell-enter,
+.cell-leave-to {
+	transform: scale(0.4);
+	opacity: 0;
+}
+
 .cell-move {
 	transition: 0.25s ease;
 	transition-property: opacity, transform;
