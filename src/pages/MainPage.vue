@@ -15,6 +15,10 @@
 			<div class="cell -yellow">ン</div>
 			<div class="cell -yellow">ゴ</div>
 		</div>
+		<div class="credits">
+			<p class="byline">A game by Eli Crow</p>
+			<p class="special-thanks">Special thanks to: {{ speciaThanks }}.</p>
+		</div>
 	</div>
 </template>
 
@@ -27,10 +31,16 @@ export default {
 	},
 	data () {
 		return {
-			//TODO: refactor
-			version: 2
+			//TODO: refactor all data
+			version: 2,
+			playTesters: ["Danni Kane", "Rachel Dause", "Zac Lester", "Travis Tornquist", "Sean Yager"]
 		}
-	}
+	},
+	computed: {
+		speciaThanks () {
+			return this.playTesters.join(', ')
+		},
+	},
 }
 </script>
 
@@ -157,5 +167,19 @@ export default {
 .cell.-yellow-light {
 	--light: var(--color-theme-yellow-light);
 	--dark: var(--color-theme-yellow);
+}
+
+
+.credits {
+	padding: 0 1rem;
+}
+
+.byline {
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+}
+
+.special-thanks {
+	margin-top: 0;
 }
 </style>
