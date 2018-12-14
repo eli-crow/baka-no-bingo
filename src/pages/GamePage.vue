@@ -12,12 +12,10 @@
 			<BingoBoard3 class="board"
 					 :cells="playerData.cells"/>
 		</div>
-		<transition name="patterns">
 			<PatternSellBar v-if="sellablePatterns.length"
 			                :patterns="sellablePatterns"
 			                @sell="sell"/>
 			<PatternLegend v-else/>
-		</transition>
 		<transition name="action-group">
 			<div class="action-group">
 				<ActionButton class="action"
