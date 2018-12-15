@@ -11,7 +11,8 @@
 		<div class="board-container"
 		     :style="boardContainerStyle">
 			<BingoBoard3 class="board"
-					 :cells="playerData.cells"/>
+					 :cells="playerData.cells"
+					 @select="handleCellSelect"/>
 		</div>
 		<PatternSellBar v-if="sellablePatterns.length"
 					:patterns="sellablePatterns"
@@ -55,6 +56,8 @@
 <script>
 import * as Lodash from 'lodash'
 import deepFreeze from 'deep-freeze'
+import uid from 'uuid'
+import Vue from 'vue'
 
 import BingoBoard3 from '@/components/BingoBoard3'
 import PatternIcon from '@/components/PatternIcon'
@@ -85,11 +88,16 @@ function getRandomCell () {
 	return {
 		text: Lodash.sample(TROPES),
 		selected: false,
+		id: uid(),
 	}
 }
 
 function getRandomCellArray(n) {
-	return Lodash.sampleSize(TROPES, n).map(text => ({text, selected: false}))
+	return Lodash.sampleSize(TROPES, n).map(text => ({
+		text: text,
+		selected: false,
+		id: uid(),
+	}))
 }
 
 export default {
@@ -104,9 +112,11 @@ export default {
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
+		const newCells = getRandomCellArray(9)
+		newCells[4].selected = true
 		const playerData = JSON.parse(lsData) || {
 			score: 0,
-			cells: Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
+			cells: newCells,
 		}
 		return {
 			boughtCell: null,
@@ -127,10 +137,33 @@ export default {
 				'gray-lightest'
 			});`
 		},
+		mode () {
+			if (this.boughtCell) {
+				return 'bought-cell'
+			}
+			else {
+				return 'playing'
+			}
+		},
 	},
 	methods: {
+		handleCellSelect (i) {
+			switch (this.mode) {
+				case 'bought-cell':
+					if (i === 4) return
+					Vue.set(this.playerData.cells, i, this.boughtCell)
+					this.boughtCell = null
+					break;
+				case 'playing':
+					if (i === 4) return
+					this.playerData.cells[i].selected = ! this.playerData.cells[i].selected
+					break;
+			}
+		},
 		newBoard () {
-			this.playerData.cells = Lodash.sampleSize(TROPES, 9).map(trope => ({text: trope, selected: false}) )
+			const newCells = getRandomCellArray(9)
+			newCells[4].selected = true
+			this.playerData.cells = newCells
 		},
 		win () {
 			this.playerData.score = this.playerData.score + 1
@@ -139,10 +172,11 @@ export default {
 		sell ({pattern, score}) {
 			this.playerData.score += score
 			const cells = JSON.parse(JSON.stringify(this.playerData.cells))
-			const sample = Lodash.sampleSize(TROPES, pattern.length)
+			const sample = getRandomCellArray(pattern.length)
 			pattern.forEach((patternIndex, i) => {
-				cells[patternIndex] = {text: sample[i], selected: false}
+				cells[patternIndex] = sample[i]
 			})
+			cells[4].selected = true
 			this.playerData.cells = cells
 		},
 		buy () {
