@@ -285,6 +285,7 @@ export default {
 
 
 .action-group {
+	padding-top: 1rem;
 	display: flex;
 	justify-content: space-around;
 }
