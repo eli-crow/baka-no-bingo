@@ -1,11 +1,17 @@
 <template>
 	<transition-group class="BingoBoard3"
 				tag="div"
-				name="cell">
-		<div :class="{cell: true, '-selected': cell.selected}"
-		     v-for="(cell, i) in virtualCells"
-		     :key="'cell' + i"
-		     @click="toggleCell(cell, i)">
+				name="cell"
+				mode="out-in">
+		<div :class="{
+		         cell: true,
+			   '-selected': cell.selected,
+			   '-star': i === 4,
+		     }"
+		     v-for="(cell, i) in cells"
+		     :key="cell.id"
+		     @click="$emit('select', i)"
+		     :style="{zIndex: i}">
 			<span v-if="i === 4" class="icon">★</span>
 			<span v-else class="text">{{ cell.text }}</span>
 		</div>
@@ -17,43 +23,12 @@
 <script>
 export default {
 	name: 'BingoBoard3',
-	computed: {
-		virtualCells () {
-			const result = this.cells.slice()
-			result[4].selected = true
-			return result
-		},
-		isWinner () {
-			const c = this.virtualCells.map(({selected}) => selected)
-			return c[0] && c[1] && c[2]
-			    || c[0] && c[4] && c[8]
-			    || c[0] && c[3] && c[6]
-			    || c[1] && c[4] && c[7]
-			    || c[2] && c[5] && c[8]
-			    || c[3] && c[4] && c[5]
-			    || c[6] && c[7] && c[8]
-			    || c[2] && c[4] && c[6]
-		},
-	},
 	props: {
 		cells: Array,
 		enabled: {
 			type: Boolean,
 			default: true,
 		},
-	},
-	watch: {
-		isWinner (newValue) {
-			if (newValue) {
-				this.$emit('win')
-			}
-		}
-	},
-	methods: {
-		toggleCell (cell, i) {
-			if (!this.enabled || i === 4) return
-			cell.selected = !cell.selected
-		}
 	},
 }
 </script>
@@ -79,7 +54,7 @@ export default {
 	text-align: center;
 	padding: 8px;
 	border: solid 1px var(--color-theme-gray-lightest);
-	font-size: 3.35vw;
+	font-size: 3.75vw;
 	background-color: white;
 	box-shadow: 0 0.5rem 0 0 var(--color-theme-gray-lightest);
 }
@@ -89,10 +64,9 @@ export default {
 	box-shadow: 0 0.5rem 0 0 var(--color-theme-red-dark);
 	color: white;
 }
-/* star */
-.cell:nth-child(5) {
-	color: inherit;
+.cell.-star {
 	background-color: var(--color-theme-red);
+	color: inherit;
 }
 /*rounded-corners*/
 .cell:nth-child(1) {
@@ -110,16 +84,22 @@ export default {
 
 .cell-enter-active
 .cell-leave-active {
-	transition: 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	transition-property: opacity, transform;
+}
+.cell-leave-active {
+	position: absolute;
 }
 .cell-enter,
 .cell-leave-to {
-	transform: scale(0.4);
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(1.2);
 	opacity: 0;
 }
 
 .cell-move {
+	z-index: 1;
 	transition: 0.25s ease;
 	transition-property: opacity, transform;
 }
