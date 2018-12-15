@@ -80,7 +80,7 @@ export default {
 	box-shadow: 0 0.5rem 0 0 var(--color-theme-gray-lightest);
 	display: flex;
 	align-items: center;
-	padding: 0.25rem;
+	padding: 0.5rem;
 	text-align: center;
 }
 
@@ -94,8 +94,15 @@ export default {
 	display: flex;
 	height: 3rem;
 	align-items: center;
+	justify-content: space-between;
 	background: var(--color);
 	border-top-right-radius: var(--radius-small);
+	border-bottom-right-radius: var(--radius-small);
+	box-shadow: 0 0.25rem 0 0 rgba(0,0,0,0.07);
+	font-weight: 700;
+	color: var(--color-theme-white);
+	padding-left: 1rem;
+	padding-right: 1rem;
 }
 .button:not(:last-child) {
 	margin-bottom: 0.5rem;
