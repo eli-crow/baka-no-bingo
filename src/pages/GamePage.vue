@@ -19,12 +19,12 @@
 		<PatternSellBar v-if="sellablePatterns.length"
 					:patterns="sellablePatterns"
 					@sell="sell"/>
-		<PatternLegend v-else/>
+		<PatternLegend v-else-if="!boughtCell"/>
 		<transition name="action-group">
 			<TheBuyMenu v-if="boughtCell"
-			             :cell="boughtCell"
-					 @buy="buy"
-					 @close="boughtCell = null"/>
+			            :cell="boughtCell"
+					@buy="buy"
+					@close="boughtCell = null"/>
 			<div class="action-group"
 			     v-else>
 				<ActionButton class="action"
