@@ -2,51 +2,60 @@
 	<div class="GamePage">
 		<GlobalEvents @keydown.space="cheat"
 		              @keydown.esc="anticheat"/>
+
 		<header class="header">
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
 			<div class="title">Anime Tropes</div>
 		</header>
+
 		<div class="score">
 			<div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
 			<div class="score-count">{{ playerData.score }}</div>
 		</div>
+
 		<div class="board-container"
 		     :style="boardContainerStyle">
 			<BingoBoard3 class="board"
-					 :cells="playerData.cells"
-					 @select="handleCellSelect"/>
+					     :cells="playerData.cells"
+					     @select="handleCellSelect"/>
 		</div>
+
 		<PatternSellBar v-if="sellablePatterns.length"
-					:patterns="sellablePatterns"
-					@sell="sell"/>
+					    :patterns="sellablePatterns"
+					    @sell="sell"/>
+
 		<PatternLegend v-else-if="!boughtCell"/>
+
 		<transition name="action-group">
 			<TheBuyMenu v-if="boughtCell"
 			            :cell="boughtCell"
-					@buy="buy"
-					@close="boughtCell = null"/>
+					    @buy="buy"
+					    @close="boughtCell = null"/>
+
 			<div class="action-group"
 			     v-else>
 				<ActionButton class="action"
-					        icon="action-buy"
-						  label="Buy"
-						  color="green"
-						  cost="5"
-						  :enabled="playerData.score >= 5"
+					          icon="action-buy"
+						      label="Buy"
+						      color="green"
+						      cost="5"
+						      :enabled="playerData.score >= 5"
 				              @select="buy"/>
+
 				<ActionButton class="action"
-					        icon="action-shuffle"
-						  label="Shuffle"
-						  color="blue"
-						  cost="10"
-						  :enabled="playerData.score >= 10"
+				              icon="action-shuffle"
+				              label="Shuffle"
+				              color="blue"
+				              cost="10"
+				              :enabled="playerData.score >= 10"
 				              @select="shuffle"/>
+
 				<ActionButton class="action"
-					        icon="action-reset"
-						  label="Reset"
-						  color="red"
-						  cost="20"
-						  :enabled="playerData.score >= 20"
+					          icon="action-reset"
+						      label="Reset"
+						      color="red"
+						      cost="20"
+						      :enabled="playerData.score >= 20"
 				              @select="reset"/>
 			</div>
 		</transition>
@@ -136,7 +145,7 @@ export default {
 			return patterns.filter(p => p.pattern.every(patternIndex => this.playerData.cells[patternIndex].selected))
 		},
 		boardContainerStyle () {
-			return `--color: var(--${
+			return `--color: var(--color-theme-${
 				this.boughtCell ? 'green' :
 				this.sellablePatterns.length ? 'blue' :
 				'gray-lightest'
@@ -239,7 +248,7 @@ export default {
 	background: white;
 	position: relative;
 	z-index: 2;
-	background: var(--yellow);
+	background: var(--color-theme-yellow);
 }
 .back {
 	flex: 0 0 2.25rem;
@@ -251,7 +260,7 @@ export default {
 	margin-right: 0.75rem;
 	border-radius: 99999px;
 	background-color: rgba(0, 0, 0, 0.1);
-	color: var(--black);
+	color: var(--color-theme-black);
 }
 .title {
 	flex: 1 1 auto;
@@ -272,7 +281,7 @@ export default {
 .score-title {
 	font: var(--font-title);
 	font-size: 1rem;
-	color: var(--gray);
+	color: var(--color-theme-gray);
 }
 .score-title-japanese {
 	color: var(--color-text-dark);
@@ -289,7 +298,7 @@ export default {
 	background-image: linear-gradient(
 		to top,
 		var(--color),
-		var(--gray-lightest) 66.66666vw
+		var(--color-theme-gray-lightest) 66.66666vw
 	);
 	padding: 1rem 1rem 0;
 }
@@ -334,9 +343,9 @@ export default {
 	font: var(--font-title);
 	font-size: 1rem;
 }
-.button.-red { --color: var(--red) }
-.button.-blue { --color: var(--blue) }
-.button.-green { --color: var(--green) }
+.button.-red { --color: var(--color-theme-red) }
+.button.-blue { --color: var(--color-theme-blue) }
+.button.-green { --color: var(--color-theme-green) }
 .button-icon {
 	width: 2.5rem;
 	height: 2.5rem;
