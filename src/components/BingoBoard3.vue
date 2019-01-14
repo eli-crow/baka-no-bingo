@@ -1,8 +1,5 @@
 <template>
-	<transition-group class="BingoBoard3"
-				tag="div"
-				name="cell"
-				mode="out-in">
+	<TransitionList class="BingoBoard3">
 		<div :class="{
 		         cell: true,
 			   '-selected': cell.selected,
@@ -10,19 +7,24 @@
 		     }"
 		     v-for="(cell, i) in cells"
 		     :key="cell.id"
-		     @click="$emit('select', i)"
-		     :style="{zIndex: i}">
+		     :style="{zIndex: i}"
+		     @click="$emit('select', i)">
 			<span v-if="i === 4" class="icon">★</span>
 			<span v-else class="text">{{ cell.text }}</span>
 		</div>
-	</transition-group>
+	</TransitionList>
 </template>
 
 
 
 <script>
+import TransitionList from '@/components/TransitionList'
+
 export default {
 	name: 'BingoBoard3',
+	components: {
+		TransitionList,
+	},
 	props: {
 		cells: Array,
 		enabled: {
@@ -80,28 +82,6 @@ export default {
 }
 .cell:nth-child(9) {
 	border-bottom-right-radius: inherit;
-}
-
-.cell-enter-active
-.cell-leave-active {
-	transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	transition-property: opacity, transform;
-}
-.cell-leave-active {
-	position: absolute;
-}
-.cell-enter,
-.cell-leave-to {
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%) scale(1.2);
-	opacity: 0;
-}
-
-.cell-move {
-	z-index: 1;
-	transition: 0.25s ease;
-	transition-property: opacity, transform;
 }
 
 .icon {
