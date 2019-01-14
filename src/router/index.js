@@ -15,6 +15,7 @@ export default new Router({
     {
       path: '/game',
       name: 'Game',
+      props: true,
       component: GamePage,
     }
   ]

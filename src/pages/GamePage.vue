@@ -124,6 +124,9 @@ export default {
 		TheBuyMenu,
 		GlobalEvents,
 	},
+	props: {
+		resetGameOnMount: Boolean,
+	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
 		const newCells = getRandomCellArray(9)
@@ -179,6 +182,10 @@ export default {
 			newCells[4].selected = true
 			this.playerData.cells = newCells
 		},
+		resetGame () {
+			this.playerData.score = 20
+			this.newBoard()
+		},
 		win () {
 			this.playerData.score = this.playerData.score + 1
 			this.newBoard()
@@ -230,6 +237,11 @@ export default {
 			},
 			deep: true,
 		},
+	},
+	mounted () {
+		if (this.resetGameOnMount) {
+			this.resetGame()
+		}
 	},
 }
 </script>
