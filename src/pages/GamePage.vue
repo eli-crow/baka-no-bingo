@@ -79,7 +79,7 @@ import PatternLegend from '@/components/PatternLegend'
 import ActionButton from '@/components/ActionButton'
 import TheBuyMenu from '@/components/TheBuyMenu'
 
-import TROPES from '@/data/tropes'
+import DATA from '@/data/tropes'
 
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
@@ -98,15 +98,17 @@ const PATTERNS = deepFreeze([
 ]);
 
 function getRandomCell () {
+	const tropes = DATA.tropes.allIds.map(id => DATA.tropes.byId[id])
 	return {
-		text: Lodash.sample(TROPES),
+		text: Lodash.sample(tropes),
 		selected: false,
 		id: uid(),
 	}
 }
 
 function getRandomCellArray(n) {
-	return Lodash.sampleSize(TROPES, n).map(text => ({
+	const tropes = DATA.tropes.allIds.map(id => DATA.tropes.byId[id])
+	return Lodash.sampleSize(tropes, n).map(text => ({
 		text: text,
 		selected: false,
 		id: uid(),
@@ -132,7 +134,7 @@ export default {
 		const newCells = getRandomCellArray(9)
 		newCells[4].selected = true
 		const playerData = JSON.parse(lsData) || {
-			score: 0,
+			score: 20,
 			cells: newCells,
 		}
 		return {
@@ -192,13 +194,15 @@ export default {
 		},
 		sell ({pattern, score}) {
 			this.playerData.score += score
-			const cells = JSON.parse(JSON.stringify(this.playerData.cells))
-			const sample = getRandomCellArray(pattern.length)
+			// copy cells to prevent mutation
+			const resultCells = JSON.parse(JSON.stringify(this.playerData.cells))
+			const sampleCells = getRandomCellArray(pattern.length)
 			pattern.forEach((patternIndex, i) => {
-				cells[patternIndex] = sample[i]
+				//replace the sold cells
+				resultCells[patternIndex] = sampleCells[i]
 			})
-			cells[4].selected = true
-			this.playerData.cells = cells
+			resultCells[4].selected = true
+			this.playerData.cells = resultCells
 		},
 		buy () {
 			if (this.playerData.score < 5) return
