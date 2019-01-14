@@ -82,6 +82,7 @@ export default {
 }
 
 .cell-group {
+	position: relative;
 	padding: 1rem;
 	border-radius: var(--radius-medium);
 	display: grid;
@@ -90,6 +91,19 @@ export default {
 	overflow: hidden;
 	border-top: var(--line-groove);
 	border-bottom: var(--line-groove);
+}
+.cell-group::after {
+	position: absolute;
+	content: '';
+	top: 1rem;
+	left: 1rem;
+	width: calc(100% - 2rem);
+	height: calc(100% - 1.5rem);
+	background-image: linear-gradient(to bottom, white, 30%, black);
+	opacity: 0.25;
+	mix-blend-mode: overlay;
+	pointer-events: none;
+	border-radius: inherit;
 }
 
 .cell {
