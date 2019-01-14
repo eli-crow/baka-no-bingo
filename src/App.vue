@@ -14,23 +14,23 @@ export default {
 
 <style>
   :root {
-    --color-theme-white: hsl(0, 0%, 100%);
-    --color-theme-black: hsl(0, 0%, 5%);
-    --color-theme-gray: hsl(0, 0%, 67%);
-    --color-theme-gray-light: hsl(0, 0%, 83%);
-    --color-theme-gray-lightest: hsl(0, 0%, 95%);
-    --color-theme-blue: hsl(204, 100%, 50%);
-    --color-theme-blue-dark: hsl(212, 100%, 50%);
-    --color-theme-blue-light: hsl(204, 100%, 78%);
-    --color-theme-red: hsl(0, 100%, 64%);
-    --color-theme-red-dark: hsl(0, 71%, 51%);
-    --color-theme-green: hsl(146, 97%, 35%);
-    --color-theme-green-light: hsl(146, 90%, 44%);
-    --color-theme-yellow: hsl(52, 100%, 50%);
-    --color-theme-yellow-dark: hsl(46, 100%, 50%);
-    --color-theme-yellow-light: hsl(54, 100%, 85%);
+    --white: hsl(0, 0%, 100%);
+    --black: hsl(0, 0%, 5%);
+    --gray: hsl(0, 0%, 67%);
+    --gray-light: hsl(0, 0%, 83%);
+    --gray-lightest: hsl(0, 0%, 95%);
+    --blue: hsl(204, 100%, 50%);
+    --blue-dark: hsl(212, 100%, 50%);
+    --blue-light: hsl(204, 100%, 78%);
+    --red: hsl(0, 100%, 64%);
+    --red-dark: hsl(0, 71%, 51%);
+    --green: hsl(146, 97%, 35%);
+    --green-light: hsl(146, 90%, 44%);
+    --yellow: hsl(52, 100%, 50%);
+    --yellow-dark: hsl(46, 100%, 50%);
+    --yellow-light: hsl(54, 100%, 85%);
 
-    --color-text-dark: var(--color-theme-black);
+    --color-text-dark: var(--black);
     --color-text-default: hsl(0, 0%, 13%);
     --color-text-light: hsl(0, 0%, 42%);
 

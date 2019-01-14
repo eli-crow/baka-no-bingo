@@ -57,7 +57,7 @@ export default {
 
 <style scoped>
 .PatternIcon {
-	--grid-color: var(--color-theme-black);
+	--grid-color: var(--black);
 	--active-color: var(--color-text-dark);
 	overflow: visible;
 	display: inline-block;

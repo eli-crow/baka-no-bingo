@@ -1,6 +1,6 @@
 <template>
 	<div :class="{ActionButton: true, 'disabled': !enabled}"
-	     :style="{'--bg-color': `var(--color-theme-${color})` }"
+	     :style="{'--bg-color': `var(--${color})` }"
 	     @click="$emit('select')">
 		<div class="button">
 			<img class="icon" :src="iconSrc"/>
@@ -32,15 +32,15 @@ export default {
 
 <style scoped>
 .ActionButton {
-	--bg-color: var(--color-theme-gray-dark);
-	--text-color: var(--color-theme-white);
+	--bg-color: var(--gray-dark);
+	--text-color: var(--white);
 	--border: 0;
 	text-align: center;
 }
 .ActionButton.disabled {
-	--bg-color: var(--color-theme-gray-lightest) !important;
-	--border: solid 1px var(--color-theme-gray-light) !important;
-	--text-color: var(--color-theme-gray) !important;
+	--bg-color: var(--gray-lightest) !important;
+	--border: solid 1px var(--gray-light) !important;
+	--text-color: var(--gray) !important;
 }
 .button {
 	padding: 0.5rem 1rem;

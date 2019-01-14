@@ -145,28 +145,28 @@ export default {
 	mix-blend-mode: darken;
 }
 .cell.-blue {
-	--light: var(--color-theme-blue);
-	--dark: var(--color-theme-blue-dark);
+	--light: var(--blue);
+	--dark: var(--blue-dark);
 }
 .cell.-red {
-	--light: var(--color-theme-red);
-	--dark: var(--color-theme-red-dark);
+	--light: var(--red);
+	--dark: var(--red-dark);
 }
 .cell.-yellow {
-	--light: var(--color-theme-yellow);
-	--dark: var(--color-theme-yellow-dark);
+	--light: var(--yellow);
+	--dark: var(--yellow-dark);
 }
 .cell.-gray-light {
-	--light: var(--color-theme-gray-lightest);
-	--dark: var(--color-theme-gray-light);
+	--light: var(--gray-lightest);
+	--dark: var(--gray-light);
 }
 .cell.-blue-light {
-	--light: var(--color-theme-blue-light);
-	--dark: var(--color-theme-blue);
+	--light: var(--blue-light);
+	--dark: var(--blue);
 }
 .cell.-yellow-light {
-	--light: var(--color-theme-yellow-light);
-	--dark: var(--color-theme-yellow);
+	--light: var(--yellow-light);
+	--dark: var(--yellow);
 }
 
 

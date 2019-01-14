@@ -55,19 +55,19 @@ export default {
 	align-items: center;
 	text-align: center;
 	padding: 8px;
-	border: solid 1px var(--color-theme-gray-lightest);
+	border: solid 1px var(--gray-lightest);
 	font-size: 3.75vw;
 	background-color: white;
-	box-shadow: 0 0.5rem 0 0 var(--color-theme-gray-lightest);
+	box-shadow: 0 0.5rem 0 0 var(--gray-lightest);
 }
 .cell.-selected {
-	background-color: var(--color-theme-red);
-	border: solid 1px var(--color-theme-red-dark);
-	box-shadow: 0 0.5rem 0 0 var(--color-theme-red-dark);
+	background-color: var(--red);
+	border: solid 1px var(--red-dark);
+	box-shadow: 0 0.5rem 0 0 var(--red-dark);
 	color: white;
 }
 .cell.-star {
-	background-color: var(--color-theme-red);
+	background-color: var(--red);
 	color: inherit;
 }
 /*rounded-corners*/

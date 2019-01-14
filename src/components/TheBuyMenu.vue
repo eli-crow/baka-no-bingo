@@ -11,13 +11,13 @@
 			</div>
 			<div class="button-group">
 				<div class="button"
-				     style="--color: var(--color-theme-green-light)"
+				     style="--color: var(--green-light)"
 				     @click="$emit('buy')">
 					Try another
 					<span class="button-cost">-5</span>
 				</div>
 				<div class="button"
-				     style="--color: var(--color-theme-red)"
+				     style="--color: var(--red)"
 				     @click="$emit('close')">
 					Discard
 				</div>
@@ -48,7 +48,7 @@ export default {
 		"body body body";
 	align-items: center;
 	padding: 1rem;
-	background-color: var(--color-theme-green);
+	background-color: var(--green);
 }
 
 .icon {
@@ -58,7 +58,7 @@ export default {
 .title {
 	grid-area: title;
 	font: var(--font-title);
-	color: var(--color-theme-white);
+	color: var(--white);
 }
 
 .x {
@@ -80,9 +80,9 @@ export default {
 .cell {
 	width: 33.3333vw;
 	height: 33.3333vw;
-	background: var(--color-theme-white);
+	background: var(--white);
 	border-radius: var(--radius-medium);
-	box-shadow: 0 0.5rem 0 0 var(--color-theme-gray-lightest);
+	box-shadow: 0 0.5rem 0 0 var(--gray-lightest);
 	display: flex;
 	align-items: center;
 	padding: 0.5rem;
@@ -105,7 +105,7 @@ export default {
 	border-bottom-right-radius: var(--radius-small);
 	box-shadow: 0 0.25rem 0 0 rgba(0,0,0,0.07);
 	font-weight: 700;
-	color: var(--color-theme-white);
+	color: var(--white);
 	padding-left: 1rem;
 	padding-right: 1rem;
 }

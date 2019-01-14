@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
 .PatternSellBar {
-	background: var(--color-theme-blue);
+	background: var(--blue);
 	display: flex;
 	align-items: center;
 	font: var(--font-title);
@@ -66,12 +66,12 @@ export default {
 }
 
 .pattern-icon {
-	--active-color: var(--color-theme-green-light) !important;
+	--active-color: var(--green-light) !important;
 	margin-right: 0.5rem;
 }
 
 .pattern-score {
-	color: var(--color-theme-green-light);
+	color: var(--green-light);
 	font-weight: 700;
 }
 </style>
