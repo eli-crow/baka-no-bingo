@@ -145,7 +145,7 @@ export default {
 			return patterns.filter(p => p.pattern.every(patternIndex => this.playerData.cells[patternIndex].selected))
 		},
 		boardContainerStyle () {
-			return `--color: var(--color-theme-${
+			return `--color: var(--${
 				this.boughtCell ? 'green' :
 				this.sellablePatterns.length ? 'blue' :
 				'gray-lightest'
@@ -248,7 +248,7 @@ export default {
 	background: white;
 	position: relative;
 	z-index: 2;
-	background: var(--color-theme-yellow);
+	background: var(--yellow);
 }
 .back {
 	flex: 0 0 2.25rem;
@@ -260,7 +260,7 @@ export default {
 	margin-right: 0.75rem;
 	border-radius: 99999px;
 	background-color: rgba(0, 0, 0, 0.1);
-	color: var(--color-theme-black);
+	color: var(--black);
 }
 .title {
 	flex: 1 1 auto;
@@ -281,7 +281,7 @@ export default {
 .score-title {
 	font: var(--font-title);
 	font-size: 1rem;
-	color: var(--color-theme-gray);
+	color: var(--gray);
 }
 .score-title-japanese {
 	color: var(--color-text-dark);
@@ -298,7 +298,7 @@ export default {
 	background-image: linear-gradient(
 		to top,
 		var(--color),
-		var(--color-theme-gray-lightest) 66.66666vw
+		var(--gray-lightest) 66.66666vw
 	);
 	padding: 1rem 1rem 0;
 }
@@ -343,9 +343,9 @@ export default {
 	font: var(--font-title);
 	font-size: 1rem;
 }
-.button.-red { --color: var(--color-theme-red) }
-.button.-blue { --color: var(--color-theme-blue) }
-.button.-green { --color: var(--color-theme-green) }
+.button.-red { --color: var(--red) }
+.button.-blue { --color: var(--blue) }
+.button.-green { --color: var(--green) }
 .button-icon {
 	width: 2.5rem;
 	height: 2.5rem;
