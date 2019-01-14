@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div class="App" id="app">
     <transition name="wipe">
-      <router-view/>
+      <router-view class="view"/>
     </transition>
   </div>
 </template>
@@ -64,6 +64,8 @@ export default {
     min-height: 100%;
     font: var(--font-default);
     color: var(--color-text-default);
+    display: flex;
+    flex-direction: column;
   }
 
   .wipe-enter-active,
@@ -81,4 +83,18 @@ export default {
   .wipe-leave-to {
     opacity: 0;
   }
+</style>
+
+
+
+<style scoped>
+.App {
+  flex: 1 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.view {
+  flex: 1 0 auto;
+}
 </style>

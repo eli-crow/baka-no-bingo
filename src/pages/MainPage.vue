@@ -46,6 +46,7 @@ export default {
 
 <style scoped>
 .MainPage {
+	background: var(--yellow);
 }
 
 .title-container {
@@ -74,7 +75,7 @@ export default {
 	position: absolute;
 	color: white;
 	top: 53%;
-	right: 9.5vw;
+	right: 8.8vw;
 	font-size: 5vw;
 	transform: translate(-50%, -50%);
 }
@@ -89,16 +90,18 @@ export default {
 	overflow: hidden;
 	border-top: var(--line-groove);
 	border-bottom: var(--line-groove);
+	border-color: transparent;
 }
 .cell-group::after {
 	position: absolute;
 	content: '';
-	top: 1rem;
-	left: 1rem;
-	width: calc(100% - 2rem);
-	height: calc(100% - 1.5rem);
+	top: calc(1rem + 1px);
+	left: calc(1rem + 1px);
+	width: calc(100% - 2rem - 2px);
+	height: calc(100% - 1.5rem - 2px);
 	background-image: linear-gradient(to bottom, white, 30%, black);
 	opacity: 0.25;
+	border: solid 2px var(--yellow);
 	mix-blend-mode: overlay;
 	pointer-events: none;
 	border-radius: inherit;
