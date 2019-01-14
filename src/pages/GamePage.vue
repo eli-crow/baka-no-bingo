@@ -6,6 +6,9 @@
 		<header class="header">
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
 			<div class="title">Anime Tropes</div>
+			<Icon class="info-button" 
+			      icon="clipboard"
+				  @click="copySessionData"/>
 		</header>
 
 		<div class="score">
@@ -170,6 +173,9 @@ export default {
 		},
 	},
 	methods: {
+		copySessionData () {
+			this.$copyText(JSON.stringify(this.playerData))
+		},
 		handleCellSelect (i) {
 			switch (this.mode) {
 				case 'bought-cell':
@@ -190,6 +196,7 @@ export default {
 		},
 		resetGame () {
 			this.playerData.score = 20
+			this.playerData.soldCellIds = []
 			this.newBoard()
 		},
 		win () {
@@ -377,4 +384,14 @@ export default {
 	border-radius: 99999px;
 	color: white;
 }
+
+.info-button {
+	border: solid 1px var(--gray-light);
+	padding: .25rem;
+	width: 1.75rem;
+	height: 1.75rem;
+	border-radius: 2px;
+	color: var(--gray-light);
+	mix-blend-mode: multiply;
+} 
 </style>
