@@ -63,6 +63,11 @@ export default {
 
 .x {
 	grid-area: x;
+	width: 1.75rem;
+	height: 1.75rem;
+	padding: 0.45rem;
+	background-color: rgba(0,0,0,0.13);
+	border-radius: 99999px;
 }
 
 .body {
