@@ -1,8 +1,8 @@
 <template>
 	<transition-group class="TransitionList"
-				name="TransitionList"
+	                  name="TransitionList"
 	                  tag="div"
-				mode="out-in">
+	                  mode="out-in">
 		<slot/>
 	</transition-group>
 </template>
