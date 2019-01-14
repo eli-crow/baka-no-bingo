@@ -27,8 +27,6 @@
 <script>
 export default {
 	name: 'MainPage',
-	components: {
-	},
 	data () {
 		return {
 			//TODO: refactor all data
