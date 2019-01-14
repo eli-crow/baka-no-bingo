@@ -43,7 +43,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/baka-no-bingo',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps
