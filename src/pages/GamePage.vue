@@ -1,5 +1,7 @@
 <template>
 	<div class="GamePage">
+		<GlobalEvents @keydown.space="cheat"
+		              @keydown.esc="anticheat"/>
 		<header class="header">
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
 			<div class="title">Anime Tropes</div>
@@ -59,6 +61,8 @@ import deepFreeze from 'deep-freeze'
 import uid from 'uuid'
 import Vue from 'vue'
 
+import GlobalEvents from 'vue-global-events'
+
 import BingoBoard3 from '@/components/BingoBoard3'
 import PatternIcon from '@/components/PatternIcon'
 import PatternSellBar from '@/components/PatternSellBar'
@@ -109,6 +113,7 @@ export default {
 		PatternLegend,
 		ActionButton,
 		TheBuyMenu,
+		GlobalEvents,
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
@@ -201,6 +206,12 @@ export default {
 			if (this.playerData.score < 20) return
 			this.playerData.score -= 20
 			this.newBoard()
+		},
+		cheat () {
+			this.playerData.score += 99999
+		},
+		anticheat () {
+			this.playerData.score = Math.max(0, this.playerData.score - 99999 )
 		},
 	},
 	watch: {
