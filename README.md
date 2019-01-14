@@ -22,3 +22,8 @@
 
 ## Ideas
 - Create a session between players. Have other players ratify the bingo. Identify a means of incentivizing players to ratify honestly.
+- Additional spells:
+- - _*Duplicate:*_ Duplicate a favorable cell (-10pts)
+- - _*Upgrade:*_ Generalize a too-specific tile (-10pts)
+- - _*Challenge:*_ Make a cell more specific, but multiply the score gained (-5pts)
+- - _*Curse:*_ Upgrade the difficulty of an opponent's cell and lock it (it cannot be cleared except through matching). (-20pts)
