@@ -6,7 +6,7 @@
 			   '-star': i === 4,
 		     }"
 		     v-for="(cell, i) in cells"
-		     :key="cell.id"
+		     :key="cell.key"
 		     :style="{zIndex: i}"
 		     @click="$emit('select', i)">
 			<span v-if="i === 4" class="icon">★</span>

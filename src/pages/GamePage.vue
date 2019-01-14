@@ -81,6 +81,7 @@ import TheBuyMenu from '@/components/TheBuyMenu'
 
 import DATA from '@/data/tropes'
 
+const TROPES = DATA.tropes.allIds.map(id => ({id: id, text: DATA.tropes.byId[id]}) )
 const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
 const PATTERNS = deepFreeze([
@@ -98,20 +99,21 @@ const PATTERNS = deepFreeze([
 ]);
 
 function getRandomCell () {
-	const tropes = DATA.tropes.allIds.map(id => DATA.tropes.byId[id])
+	const trope = Lodash.sample(TROPES)
 	return {
-		text: Lodash.sample(tropes),
+		text: trope.text,
 		selected: false,
-		id: uid(),
+		id: trope.id,
+		key: uid(),
 	}
 }
 
 function getRandomCellArray(n) {
-	const tropes = DATA.tropes.allIds.map(id => DATA.tropes.byId[id])
-	return Lodash.sampleSize(tropes, n).map(text => ({
-		text: text,
+	return Lodash.sampleSize(TROPES, n).map(trope => ({
+		text: trope.text,
 		selected: false,
-		id: uid(),
+		id: trope.id,
+		key: uid(),
 	}))
 }
 
@@ -133,10 +135,12 @@ export default {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
 		const newCells = getRandomCellArray(9)
 		newCells[4].selected = true
-		const playerData = JSON.parse(lsData) || {
+		const playerDataDefaults = {
 			score: 20,
 			cells: newCells,
+			soldCellIds: [],
 		}
+		const playerData = Object.assign({}, playerDataDefaults, JSON.parse(lsData) || {})
 		return {
 			boughtCell: null,
 			playerData,
@@ -198,8 +202,10 @@ export default {
 			const resultCells = JSON.parse(JSON.stringify(this.playerData.cells))
 			const sampleCells = getRandomCellArray(pattern.length)
 			pattern.forEach((patternIndex, i) => {
+				const toReplace = resultCells[patternIndex]
 				//replace the sold cells
 				resultCells[patternIndex] = sampleCells[i]
+				this.playerData.soldCellIds.push(toReplace.id)
 			})
 			resultCells[4].selected = true
 			this.playerData.cells = resultCells
