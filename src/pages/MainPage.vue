@@ -4,16 +4,18 @@
 			<div class="title">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
 			<div class="title title-duplicate">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
 		</div>
-		<div class="cell-group">
-			<div class="cell -blue">バ</div>
-			<div class="cell -blue">カ</div>
-			<div class="cell -small -gray-light">の</div>
-			<router-link :to="{name: 'Game', params: {resetGameOnMount: true} }" class="cell -text -blue-light">New</router-link>
-			<div class="cell -star -red">★</div>
-			<router-link to="/game" class="cell -text -yellow-light">Continue</router-link>
-			<div class="cell -yellow">ビ</div>
-			<div class="cell -yellow">ン</div>
-			<div class="cell -yellow">ゴ</div>
+		<div class="cell-group-container">
+			<div class="cell-group">
+				<div class="cell -blue">バ</div>
+				<div class="cell -blue">カ</div>
+				<div class="cell -small -gray-light">の</div>
+				<router-link :to="{name: 'Game', params: {resetGameOnMount: true} }" class="cell -text -blue-light">New</router-link>
+				<div class="cell -star -red">★</div>
+				<router-link to="/game" class="cell -text -yellow-light">Continue</router-link>
+				<div class="cell -yellow">ビ</div>
+				<div class="cell -yellow">ン</div>
+				<div class="cell -yellow">ゴ</div>
+			</div>
 		</div>
 		<div class="credits">
 			<p class="byline">A game by Eli Crow</p>
@@ -80,9 +82,15 @@ export default {
 	transform: translate(-50%, -50%);
 }
 
+.cell-group-container {
+	padding: 1rem 1rem 0.5rem 1rem;
+	background-image: 
+		linear-gradient(to bottom, var(--yellow-dark), 10%, var(--yellow) ),
+		radial-gradient(circle closest-side, var(--yellow-dark), 40%, var(--yellow) );
+}
 .cell-group {
 	position: relative;
-	padding: 1rem;
+	padding-bottom: 0.5rem;
 	border-radius: var(--radius-medium);
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
@@ -95,13 +103,12 @@ export default {
 .cell-group::after {
 	position: absolute;
 	content: '';
-	top: calc(1rem + 1px);
-	left: calc(1rem + 1px);
-	width: calc(100% - 2rem - 2px);
-	height: calc(100% - 1.5rem - 2px);
-	background-image: linear-gradient(to bottom, white, 30%, black);
+	top: 1px;
+	left: 1px;
+	width: calc(100% - 2px);
+	height: calc(100% - 2px);
+	background-image: linear-gradient(to bottom, white, 50%, black);
 	opacity: 0.25;
-	border: solid 2px var(--yellow);
 	mix-blend-mode: overlay;
 	pointer-events: none;
 	border-radius: inherit;
@@ -120,19 +127,21 @@ export default {
 	text-decoration: inherit;
 	background-color: var(--light);
 	box-shadow: 0 0.5rem 0 0 var(--dark);
-	border: solid 1px var(--dark);
+	border-radius: 16px;
+	border: solid 2px var(--dark);
+	border-top: solid 2px var(--lighter);
 }
-.cell:nth-child(1) {
-	border-top-left-radius: inherit;
-}
-.cell:nth-child(3) {
-	border-top-right-radius: inherit;
-}
-.cell:nth-child(7) {
-	border-bottom-left-radius: inherit;
-}
-.cell:nth-child(9) {
-	border-bottom-right-radius: inherit;
+.cell::before {
+	position: absolute;
+	content: '';
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: calc(100% + 0.5rem);
+	border: solid 2px var(--light);
+	opacity: 0.4;
+	border-radius: inherit;
+	mix-blend-mode: screen;
 }
 
 .cell.-small {
@@ -161,14 +170,17 @@ export default {
 }
 .cell.-blue {
 	--light: var(--blue);
+	--lighter: var(--blue-light);
 	--dark: var(--blue-dark);
 }
 .cell.-red {
 	--light: var(--red);
+	--lighter: var(--red-light);
 	--dark: var(--red-dark);
 }
 .cell.-yellow {
 	--light: var(--yellow);
+	--lighter: var(--yellow-light);
 	--dark: var(--yellow-dark);
 }
 .cell.-gray-light {

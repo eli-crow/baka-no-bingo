@@ -160,7 +160,7 @@ export default {
 			return `--color: var(--${
 				this.boughtCell ? 'green' :
 				this.sellablePatterns.length ? 'blue' :
-				'gray-lightest'
+				'blue-gray-light'
 			});`
 		},
 		mode () {
@@ -304,7 +304,6 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	box-shadow: 0 8px 0 0 rgba(0, 0, 0, 0.048);
 	padding: 0 1rem;
 }
 .score-title {
@@ -327,7 +326,7 @@ export default {
 	background-image: linear-gradient(
 		to top,
 		var(--color),
-		var(--gray-lightest) 66.66666vw
+		var(--blue-gray-light) 66.66666vw
 	);
 	padding: 1rem 1rem 0;
 }
