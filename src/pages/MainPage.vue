@@ -33,7 +33,7 @@ export default {
 		return {
 			//TODO: refactor all data
 			version: 2,
-			playTesters: ["Danni Kane", "Rachel Dause", "Zac Lester", "Travis Tornquist", "Sean Yager"]
+			playTesters: ["Danni Kane", "Rachel Dause", "Maria “Labqi Airam” Iqbal", "Zaq Lester", "Travis Tornquist", "Sean Yager"]
 		}
 	},
 	computed: {
