@@ -17,18 +17,21 @@ export default {
     --white: hsl(0, 0%, 100%);
     --black: hsl(0, 0%, 5%);
     --gray: hsl(0, 0%, 67%);
+    --gray-dark: hsl(0, 0%, 54%);
     --gray-light: hsl(0, 0%, 83%);
     --gray-lightest: hsl(0, 0%, 95%);
+    --blue-gray-light: hsl(219, 33%, 92%);
     --blue: hsl(204, 100%, 50%);
     --blue-dark: hsl(212, 100%, 50%);
-    --blue-light: hsl(204, 100%, 78%);
+    --blue-light: hsl(194, 100%, 76%);
     --red: hsl(0, 100%, 64%);
-    --red-dark: hsl(0, 71%, 51%);
+    --red-dark: hsl(352, 83%, 49%);
+    --red-light: hsl(0, 100%, 73%);
     --green: hsl(146, 97%, 35%);
     --green-light: hsl(146, 90%, 44%);
     --yellow: hsl(52, 100%, 50%);
-    --yellow-dark: hsl(46, 100%, 50%);
-    --yellow-light: hsl(54, 100%, 85%);
+    --yellow-dark: hsl(44, 100%, 50%);
+    --yellow-light: hsl(54, 100%, 78%);
 
     --color-text-dark: var(--black);
     --color-text-default: hsl(0, 0%, 13%);
