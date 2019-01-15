@@ -66,6 +66,7 @@ export default {
     color: var(--color-text-default);
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
 
   .wipe-enter-active,
@@ -96,5 +97,6 @@ export default {
 }
 .view {
   flex: 1 0 auto;
+  padding-bottom: 1rem;
 }
 </style>
