@@ -2,7 +2,8 @@
 	<transition-group class="TransitionList"
 	                  name="TransitionList"
 	                  tag="div"
-	                  mode="out-in">
+	                  mode="out-in"
+					  @before-leave="beforeLeave">
 		<slot/>
 	</transition-group>
 </template>
@@ -12,15 +13,17 @@
 <script>
 export default {
 	name: 'TransitionList',
-	beforeUpdate () {
-		Array.from(this.$el.children).forEach(el => {
-			const {marginLeft, marginTop, width, height} = window.getComputedStyle(el)
-			el.style.width = width
-			el.style.height = height
-			el.style.left = `${el.offsetLeft - window.parseFloat(marginLeft)}px`
-			el.style.top = `${el.offsetTop - window.parseFloat(marginTop)}px`
-		})
-	},
+	methods: {
+		beforeLeave (el) {
+			const docRect = document.body.getBoundingClientRect() // TODO: should be cached somehow.
+			const elRect = el.getBoundingClientRect()
+			el.style.width = elRect.width + 'px'
+			el.style.height = elRect.height + 'px'
+			el.style.left = `${elRect.left - docRect.left}px`
+			el.style.top = `${elRect.top - docRect.top}px`
+			document.body.appendChild(el)
+		}, 
+	}
 }
 </script>
 
@@ -36,11 +39,16 @@ export default {
 	top: auto !important;
 }
 
-.TransitionList-enter-active,
+.TransitionList-enter-active {
+	transition:
+		opacity 0.25s ease,
+		transform 0.35s ease 0.25s;
+	transform-origin: center;
+}
 .TransitionList-leave-active {
-	transition-property: opacity, transform;
-	transition-duration: 0.8s;
-	transition-timing-function: ease;
+	transition:
+		opacity 0.25s ease 0.35s,
+		transform 0.35s ease;
 	transform-origin: center;
 }
 
@@ -52,7 +60,7 @@ export default {
 .TransitionList-enter,
 .TransitionList-leave-to {
 	opacity: 0;
-	transform: scale(0.95);
+	transform: translateY(-8rem);
 }
 
 .TransitionList-move {
