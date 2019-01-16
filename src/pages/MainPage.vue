@@ -67,6 +67,7 @@ export default {
 	font: var(--font-title);
 	font-size: 20vw;
 	padding-right: 5vw;
+	will-change: transform;
 	animation-name: title;
 	animation-duration: 6s;
 	animation-iteration-count: infinite;
