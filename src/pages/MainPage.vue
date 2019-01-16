@@ -19,7 +19,7 @@
 		</div>
 		<div class="credits">
 			<p class="byline">A game by Eli Crow</p>
-			<p class="special-thanks">Special thanks to: {{ speciaThanks }}.</p>
+			<p class="special-thanks">Special thanks to: {{ specialThanks }}.</p>
 		</div>
 	</div>
 </template>
@@ -37,7 +37,7 @@ export default {
 		}
 	},
 	computed: {
-		speciaThanks () {
+		specialThanks () {
 			return this.playTesters.join(', ')
 		},
 	},
