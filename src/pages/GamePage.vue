@@ -132,7 +132,7 @@ export default {
 		GlobalEvents,
 	},
 	props: {
-		resetGameOnMount: Boolean,
+		resetGameOnLoad: Boolean,
 	},
 	data () {
 		const lsData = localStorage.getItem(LS_PLAYER_DATA)
@@ -255,8 +255,8 @@ export default {
 			deep: true,
 		},
 	},
-	mounted () {
-		if (this.resetGameOnMount) {
+	created () {
+		if (this.resetGameOnLoad) {
 			this.resetGame()
 		}
 	},
