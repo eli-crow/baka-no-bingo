@@ -3,7 +3,9 @@
 	                  name="TransitionList"
 	                  tag="div"
 	                  mode="out-in"
-					  @before-leave="beforeLeave">
+					  @before-leave="beforeLeave"
+					  @leave="leave"
+					  @after-leave="afterLeave">
 		<slot/>
 	</transition-group>
 </template>
@@ -13,6 +15,11 @@
 <script>
 export default {
 	name: 'TransitionList',
+	data () {
+		return {
+			leaveIndex: 0,
+		}
+	},
 	methods: {
 		beforeLeave (el) {
 			const docRect = document.body.getBoundingClientRect() // TODO: should be cached somehow.
@@ -21,8 +28,15 @@ export default {
 			el.style.height = elRect.height + 'px'
 			el.style.left = `${elRect.left - docRect.left}px`
 			el.style.top = `${elRect.top - docRect.top}px`
-			document.body.appendChild(el)
+			el.style['--stagger-delay'] = `${this.leaveIndex * 500}ms`
+			this.leaveIndex++
 		}, 
+		leave (el) {
+			document.body.appendChild(el)
+		},
+		afterLeave () {
+			this.leaveIndex--
+		},
 	}
 }
 </script>
@@ -47,8 +61,8 @@ export default {
 }
 .TransitionList-leave-active {
 	transition:
-		opacity 0.25s ease 0.35s,
-		transform 0.35s ease;
+		opacity 0.25s ease calc(0.35s + var(--stager-delay, 0s)),
+		transform 0.35s ease var(--stager-delay, 0s);
 	transform-origin: center;
 }
 
