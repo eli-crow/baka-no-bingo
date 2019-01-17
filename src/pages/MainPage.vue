@@ -86,8 +86,8 @@ export default {
 .cell-group-container {
 	padding: 1rem 1rem 0.5rem 1rem;
 	background-image: 
-		linear-gradient(to bottom, var(--yellow-dark), 10%, var(--yellow) ),
-		radial-gradient(circle closest-side, var(--yellow-dark), 40%, var(--yellow) );
+		radial-gradient(circle closest-side, var(--yellow-dark), 60%, transparent ),
+		linear-gradient(to bottom, var(--yellow-dark), 10%, var(--yellow) );
 }
 .cell-group {
 	position: relative;
