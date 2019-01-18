@@ -23,17 +23,11 @@
 					     @select="handleCellSelect"/>
 		</div>
 
-		<PatternSellBar v-if="sellablePatterns.length"
-					    :patterns="sellablePatterns"
-					    @sell="sell"/>
-
+		<PatternSellBar v-if="sellablePatterns.length"/>
 		<PatternLegend v-else-if="!boughtCell"/>
 
 		<transition name="action-group">
-			<TheBuyMenu v-if="boughtCell"
-			            :cell="boughtCell"
-					    @buy="buy"
-					    @close="boughtCell = null"/>
+			<TheBuyMenu v-if="boughtCell"/>
 
 			<div class="action-group"
 			     v-else>
@@ -43,15 +37,7 @@
 						      color="green"
 						      cost="5"
 						      :enabled="playerData.score >= 5"
-				              @select="buy"/>
-
-				<ActionButton class="action"
-				              icon="action-shuffle"
-				              label="Shuffle"
-				              color="blue"
-				              cost="10"
-				              :enabled="playerData.score >= 10"
-				              @select="shuffle"/>
+				              @select="$store.dispatch('SPELL_BUY')"/>
 
 				<ActionButton class="action"
 					          icon="action-reset"
@@ -59,7 +45,7 @@
 						      color="red"
 						      cost="20"
 						      :enabled="playerData.score >= 20"
-				              @select="reset"/>
+				              @select="$store.dispatch('SPELL_RESET_BOARD')"/>
 			</div>
 		</transition>
 	</div>
@@ -72,6 +58,7 @@ import * as Lodash from 'lodash'
 import deepFreeze from 'deep-freeze'
 import uid from 'uuid'
 import Vue from 'vue'
+import { mapGetters, mapState } from 'vuex'
 
 import GlobalEvents from 'vue-global-events'
 
@@ -81,44 +68,6 @@ import PatternSellBar from '@/components/PatternSellBar'
 import PatternLegend from '@/components/PatternLegend'
 import ActionButton from '@/components/ActionButton'
 import TheBuyMenu from '@/components/TheBuyMenu'
-
-import DATA from '@/data/tropes'
-
-const TROPES = DATA.tropes.allIds.map(id => ({id: id, text: DATA.tropes.byId[id]}) )
-const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
-
-const PATTERNS = deepFreeze([
-	{pattern: [0,1,2,3,4,5,6,7,8], score: 250},
-	{pattern: [0,2,4,6,8], score: 100},
-	{pattern: [1,3,4,5,7], score: 100},
-	{pattern: [0,1,2], score: 50},
-	{pattern: [6,7,8], score: 50},
-	{pattern: [0,3,6], score: 50},
-	{pattern: [2,5,8], score: 50},
-	{pattern: [3,4,5], score: 20},
-	{pattern: [1,4,7], score: 20},
-	{pattern: [0,4,8], score: 20},
-	{pattern: [2,4,6], score: 20},
-]);
-
-function getRandomCell () {
-	const trope = Lodash.sample(TROPES)
-	return {
-		text: trope.text,
-		selected: false,
-		id: trope.id,
-		key: uid(),
-	}
-}
-
-function getRandomCellArray(n) {
-	return Lodash.sampleSize(TROPES, n).map(trope => ({
-		text: trope.text,
-		selected: false,
-		id: trope.id,
-		key: uid(),
-	}))
-}
 
 export default {
 	name: 'GamePage',
@@ -134,28 +83,9 @@ export default {
 	props: {
 		resetGameOnLoad: Boolean,
 	},
-	data () {
-		const lsData = localStorage.getItem(LS_PLAYER_DATA)
-		const newCells = getRandomCellArray(9)
-		newCells[4].selected = true
-		const playerDataDefaults = {
-			score: 20,
-			cells: newCells,
-			soldCellIds: [],
-		}
-		const playerData = Object.assign({}, playerDataDefaults, JSON.parse(lsData) || {})
-		return {
-			boughtCell: null,
-			playerData,
-		}
-	},
 	computed: {
-		sellablePatterns () {
-			// clone patterns
-			const patterns = JSON.parse(JSON.stringify(PATTERNS))
-			// filter all patterns by whether each pattern matches the current board
-			return patterns.filter(p => p.pattern.every(patternIndex => this.playerData.cells[patternIndex].selected))
-		},
+		...mapGetters(['sellablePatterns']),
+		...mapState(['boughtCell', 'playerData']),
 		boardContainerStyle () {
 			return `--color: var(--${
 				this.boughtCell ? 'green' :
@@ -180,85 +110,20 @@ export default {
 			switch (this.mode) {
 				case 'bought-cell':
 					if (i === 4) return
-					Vue.set(this.playerData.cells, i, this.boughtCell)
-					this.boughtCell = null
+					this.$store.commit('PLACE_REPLACEMENT', i)
 					break;
 				case 'playing':
 					if (i === 4) return
-					this.playerData.cells[i].selected = ! this.playerData.cells[i].selected
+					this.$store.commit('TOGGLE_CELL', i)
 					break;
 			}
 		},
-		newBoard () {
-			const newCells = getRandomCellArray(9)
-			newCells[4].selected = true
-			this.playerData.cells = newCells
-		},
-		resetGame () {
-			this.playerData.score = 20
-			this.playerData.soldCellIds = []
-			this.newBoard()
-		},
-		win () {
-			this.playerData.score = this.playerData.score + 1
-			this.newBoard()
-		},
-		sell ({pattern, score}) {
-			this.playerData.score += score
-			// copy cells to prevent mutation
-			const resultCells = JSON.parse(JSON.stringify(this.playerData.cells))
-			const sampleCells = getRandomCellArray(pattern.length)
-			pattern.forEach((patternIndex, i) => {
-				const toReplace = resultCells[patternIndex]
-				//replace the sold cells
-				resultCells[patternIndex] = sampleCells[i]
-				this.playerData.soldCellIds.push(toReplace.id)
-			})
-			resultCells[4].selected = true
-			this.playerData.cells = resultCells
-		},
-		buy () {
-			if (this.playerData.score < 5) return
-			this.playerData.score -= 5
-			this.boughtCell = getRandomCell()
-		},
-		shuffle () {
-			if (this.playerData.score < 10) return
-			this.playerData.score -= 10
-			//shuffle and make sure the center doesn't move, kinda hacky.
-			let cells = this.playerData.cells.slice()
-			const center = cells[4]
-			cells = Lodash.shuffle(cells)
-			const centerNewIdx = cells.indexOf(center)
-			const newCenter = cells[4]
-			cells[4] = center
-			cells[centerNewIdx] = newCenter
-			this.playerData.cells = cells
-		},
-		reset () {
-			if (this.playerData.score < 20) return
-			this.playerData.score -= 20
-			this.newBoard()
-		},
 		cheat () {
-			this.playerData.score += 99999
+			this.$store.commit('ADJUST_SCORE', 99999)
 		},
 		anticheat () {
-			this.playerData.score = Math.max(0, this.playerData.score - 99999 )
+			this.$store.commit('ADJUST_SCORE', -99999)
 		},
-	},
-	watch: {
-		playerData : {
-			handler (newValue, oldValue) {
-				localStorage.setItem(LS_PLAYER_DATA, JSON.stringify(this.playerData))
-			},
-			deep: true,
-		},
-	},
-	created () {
-		if (this.resetGameOnLoad) {
-			this.resetGame()
-		}
 	},
 }
 </script>

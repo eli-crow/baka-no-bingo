@@ -9,9 +9,12 @@
 				<div class="cell -blue">バ</div>
 				<div class="cell -blue">カ</div>
 				<div class="cell -small -gray-light">の</div>
-				<router-link :to="{name: 'Game', params: {resetGameOnLoad: true} }" class="cell -text -blue-light">New</router-link>
+				<router-link to="/game" 
+				             class="cell -text -blue-light"
+							 @click.native="$store.dispatch('RESET_GAME')">New</router-link>
 				<div class="cell -star -red">★</div>
-				<router-link to="/game" class="cell -text -yellow-light">Continue</router-link>
+				<router-link to="/game" 
+				             class="cell -text -yellow-light">Continue</router-link>
 				<div class="cell -yellow">ビ</div>
 				<div class="cell -yellow">ン</div>
 				<div class="cell -yellow">ゴ</div>

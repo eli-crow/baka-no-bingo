@@ -4,21 +4,21 @@
 		<div class="title">Tap a tile to replace it.</div>
 		<Icon class="x"
 		      icon="times"
-		      @click="$emit('close')"/>
+		      @click="$store.commit('DISCARD_REPLACEMENT')"/>
 		<div class="body">
 			<div class="cell">
-				{{ cell.text }}
+				{{ boughtCell.text }}
 			</div>
 			<div class="button-group">
 				<div class="button"
 				     style="--color: var(--green-light)"
-				     @click="$emit('buy')">
+				     @click="$store.commit('BUY_REPLACEMENT')">
 					Try another
 					<span class="button-cost">-5</span>
 				</div>
 				<div class="button"
 				     style="--color: var(--red)"
-				     @click="$emit('close')">
+				     @click="$store.commit('DISCARD_REPLACEMENT')">
 					Discard
 				</div>
 			</div>
@@ -29,10 +29,11 @@
 
 
 <script>
+import { mapState } from "vuex";
 export default {
 	name: 'TheBuyMenu',
-	props: {
-		cell: Object,
+	computed: {
+		...mapState(['boughtCell']),
 	}
 }
 </script>
