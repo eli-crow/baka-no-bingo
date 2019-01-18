@@ -1,0 +1,888 @@
+{
+    "episodesWatched": [
+        {
+            "series": "Chrome Shelled Regios",
+            "season": 1,
+            "episode": 20
+        },
+        {
+            "series": "Soul Eater",
+            "season": 2,
+            "episode": -1
+        },
+        {
+            "series": "Death Note",
+            "season": 1,
+            "episode": 7
+        }
+    ],
+    "playerData": [
+        {
+            "score": 210,
+            "cells": [
+                {
+                    "text": "“Mary Sue” character, or male's perfect crush",
+                    "selected": false,
+                    "id": 59,
+                    "key": "062fccea-b3d8-4e49-a491-70ea7135a341"
+                },
+                {
+                    "text": "Special pose",
+                    "selected": true,
+                    "id": 82,
+                    "key": "63c104ad-a6a4-4978-8668-44936e11722b"
+                },
+                {
+                    "text": "Background characters don't move",
+                    "selected": false,
+                    "id": 86,
+                    "key": "9c5f70a9-8e2d-4d0b-ac6c-6808533c9110"
+                },
+                {
+                    "text": "Character has shadows instead of eyes",
+                    "selected": false,
+                    "id": 30,
+                    "key": "6c2a1dd2-0b68-4320-b8f5-e1443c6fa754"
+                },
+                {
+                    "text": "Transform sequence",
+                    "selected": true,
+                    "id": 72,
+                    "key": "459d5a9b-93a2-4395-ae15-cd396ae00075"
+                },
+                {
+                    "text": "Withholding important info to protect someone",
+                    "selected": false,
+                    "id": 17,
+                    "key": "c9a12533-6a63-41d2-a5e5-823035cc47c6"
+                },
+                {
+                    "text": "Confession interrupted by random bullshit",
+                    "selected": false,
+                    "id": 75,
+                    "key": "24dbc9cb-e010-40da-80ff-d7564d110085"
+                },
+                {
+                    "text": "Glasses glint when pushed back into place",
+                    "selected": false,
+                    "id": 27,
+                    "key": "7cb93d21-78ac-4df7-82b9-d8631faf5801"
+                },
+                {
+                    "text": "Title sequence is longer than a minute",
+                    "selected": false,
+                    "id": 39,
+                    "key": "4e8cbcd3-d60e-47f1-8e23-848c018cad77"
+                }
+            ],
+            "soldCellIds": [
+                16,
+                38,
+                26,
+                71,
+                43,
+                84,
+                11,
+                72,
+                26,
+                23,
+                81,
+                15,
+                19,
+                53,
+                16,
+                5,
+                35,
+                74,
+                29
+            ]
+        },
+        {
+            "score": 385,
+            "cells": [
+                {
+                    "text": "Accidental groping",
+                    "selected": false,
+                    "id": 2,
+                    "key": "1ed1d1bf-7006-48aa-85e3-377d46e1dc29"
+                },
+                {
+                    "text": "Audible unsheathing of a weapon",
+                    "selected": false,
+                    "id": 50,
+                    "key": "3f077066-e0eb-4c68-a760-ce19b4f9ad30"
+                },
+                {
+                    "text": "Vending machine",
+                    "selected": false,
+                    "id": 85,
+                    "key": "a131dfd1-0583-49e0-aad3-7001435e2b6d"
+                },
+                {
+                    "text": "Perverted act",
+                    "selected": false,
+                    "id": 34,
+                    "key": "a019c174-e947-422b-8407-02c4b68c856b"
+                },
+                {
+                    "text": "Unnecessary grunting",
+                    "selected": true,
+                    "id": 3,
+                    "key": "340cd842-345f-467a-a8f7-ee2e6c7770ff"
+                },
+                {
+                    "text": "What in the literal fuck?",
+                    "selected": false,
+                    "id": 56,
+                    "key": "6bd48957-1b48-411d-aec9-48b893afdef7"
+                },
+                {
+                    "text": "Text-heavy screen in between chapters / scenes",
+                    "selected": false,
+                    "id": 29,
+                    "key": "aac992ba-dacc-4e56-a77a-2ef12039141b"
+                },
+                {
+                    "text": "Text-heavy screen in between chapters / scenes",
+                    "selected": false,
+                    "id": 29,
+                    "key": "6344367d-22c4-4a60-92e6-4af109292b93"
+                },
+                {
+                    "text": "Character is a whiny-ass idiot",
+                    "selected": true,
+                    "id": 46,
+                    "key": "9e2e4b7d-d759-4582-987c-75a233aa4940"
+                }
+            ],
+            "soldCellIds": [
+                27,
+                21,
+                81,
+                48,
+                56,
+                46,
+                41,
+                42,
+                1,
+                15,
+                29,
+                58,
+                50,
+                5,
+                22,
+                0,
+                57,
+                33,
+                83,
+                34,
+                8,
+                11,
+                46,
+                11,
+                19,
+                55,
+                30,
+                83,
+                86,
+                76,
+                47,
+                31,
+                16,
+                36,
+                21,
+                18
+            ]
+        },
+        {
+            "score": 150,
+            "cells": [
+                {
+                    "text": "😅 Nervous sweat drop",
+                    "selected": false,
+                    "id": 52,
+                    "key": "3714d908-a893-4031-b088-45fe52d279d3"
+                },
+                {
+                    "text": "Nosebleed or spit take",
+                    "selected": true,
+                    "id": 20,
+                    "key": "f51cd0ef-52c8-480a-a6dc-054ab3dcb3b4"
+                },
+                {
+                    "text": "Facepalm or rhetorical headache}",
+                    "selected": false,
+                    "id": 87,
+                    "key": "9c41cb2f-acd1-4fcc-b729-734f35410f86"
+                },
+                {
+                    "text": "Sad soundtrack",
+                    "selected": false,
+                    "id": 37,
+                    "key": "4196d877-b61d-4442-96ab-d8a5173cfcc5"
+                },
+                {
+                    "text": "Character has shadows instead of eyes",
+                    "selected": true,
+                    "id": 30,
+                    "key": "e0d8b482-c279-4e7b-b905-019eafb9eb36"
+                },
+                {
+                    "text": "Villain is brother/father of main character",
+                    "selected": false,
+                    "id": 10,
+                    "key": "c2cb07b0-c1e8-4c58-8959-3a805662904d"
+                },
+                {
+                    "text": "Transform sequence",
+                    "selected": false,
+                    "id": 72,
+                    "key": "1bf177be-06b6-459a-8fcd-b0a5190e03bb"
+                },
+                {
+                    "text": "Massive appitite",
+                    "selected": false,
+                    "id": 77,
+                    "key": "8f0c44e5-da35-45ba-85a9-ee1b5b7c2319"
+                },
+                {
+                    "text": "Face reveal",
+                    "selected": true,
+                    "id": 57,
+                    "key": "2932767d-4dda-4cd1-a6c8-464e53b0be6c"
+                }
+            ],
+            "soldCellIds": [
+                13,
+                16,
+                76,
+                44,
+                14,
+                23,
+                16,
+                43,
+                40,
+                76,
+                26,
+                47,
+                28,
+                13,
+                14,
+                83,
+                86,
+                6
+            ]
+        },
+        {
+            "score": 865,
+            "cells": [
+                {
+                    "text": "Someone goes into “chibi” form",
+                    "selected": false,
+                    "id": 25,
+                    "key": "6fe5800a-f72b-4229-8909-915c7019acab"
+                },
+                {
+                    "text": "Geometric patterns when using magic or special skills",
+                    "selected": false,
+                    "id": 15,
+                    "key": "685dbc10-6a71-4464-9284-b0dc99520c9e"
+                },
+                {
+                    "text": "A masked villain appears",
+                    "selected": false,
+                    "id": 7,
+                    "key": "21473d94-5f7e-4b2d-a2b8-318183e36036"
+                },
+                {
+                    "text": "Rival",
+                    "selected": false,
+                    "id": 11,
+                    "key": "8baf91a0-1441-4452-8508-0e3254f9e1e5"
+                },
+                {
+                    "text": "Character introduced with a camera pan from feet to head",
+                    "selected": true,
+                    "id": 16,
+                    "key": "dad36d45-dfdc-462c-8b85-18b5916cca7a"
+                },
+                {
+                    "text": "Characters' parents dead or absent",
+                    "selected": false,
+                    "id": 70,
+                    "key": "dd6e47cf-23c7-49f1-a433-2a5d6fc08e10"
+                },
+                {
+                    "text": "Character has no nose",
+                    "selected": false,
+                    "id": 51,
+                    "key": "9dbd7013-8d64-4b16-a474-9524bc2e63a2"
+                },
+                {
+                    "text": "Title sequence features an electric guitar riff",
+                    "selected": false,
+                    "id": 40,
+                    "key": "6d308918-68ed-48d7-9447-ab91b96dc181"
+                },
+                {
+                    "text": "Laying on back with legs up, twitching",
+                    "selected": false,
+                    "id": 1,
+                    "key": "0016c8a4-1c73-4ad6-a86e-97a6aa35d885"
+                }
+            ],
+            "soldCellIds": [
+                76,
+                70,
+                20,
+                45,
+                41,
+                24,
+                28,
+                13,
+                46,
+                38,
+                16,
+                53,
+                75,
+                24,
+                43,
+                23,
+                8,
+                17,
+                40,
+                39,
+                28,
+                43,
+                49,
+                9,
+                20,
+                4,
+                2,
+                27,
+                81,
+                26,
+                26,
+                86,
+                48,
+                30,
+                3,
+                18,
+                72,
+                42,
+                5,
+                5,
+                60,
+                6,
+                1,
+                47,
+                35,
+                21,
+                83,
+                11,
+                54,
+                26
+            ]
+        },
+        {
+            "score": 70,
+            "cells": [
+                {
+                    "text": "Someone goes into “chibi” form",
+                    "selected": false,
+                    "id": 25,
+                    "key": "e8f79b7e-2196-4257-ab94-159735feaa44"
+                },
+                {
+                    "text": "Text-heavy screen in between chapters / scenes",
+                    "selected": false,
+                    "id": 29,
+                    "key": "79c095ef-5062-445f-97e5-b92cfeb4e313"
+                },
+                {
+                    "text": "Hot spring or bath house",
+                    "selected": false,
+                    "id": 78,
+                    "key": "13dc951b-9cf3-44d0-bd41-d3879338803c"
+                },
+                {
+                    "text": "Character has no nose",
+                    "selected": false,
+                    "id": 51,
+                    "key": "62e2b52e-c8c8-452b-a6d7-c6da333de345"
+                },
+                {
+                    "text": "Overreaction",
+                    "selected": true,
+                    "id": 74,
+                    "key": "1db93b64-0cab-42af-9a8e-76116d53fc3c"
+                },
+                {
+                    "text": "Massive appitite",
+                    "selected": false,
+                    "id": 77,
+                    "key": "6020e59e-1cd6-482f-a7de-1d3cb24a6a26"
+                },
+                {
+                    "text": "Transform sequence",
+                    "selected": false,
+                    "id": 72,
+                    "key": "5f7b5457-902a-43c2-abe1-6e246b53a7fd"
+                },
+                {
+                    "text": "Accidental groping",
+                    "selected": false,
+                    "id": 2,
+                    "key": "e590636d-3a3b-4c6e-8476-a480b06b8349"
+                },
+                {
+                    "text": "Perverted act",
+                    "selected": false,
+                    "id": 34,
+                    "key": "fe1245f7-7232-440e-aeff-ebe2e8e11bbd"
+                }
+            ],
+            "soldCellIds": [
+                21,
+                10,
+                76,
+                55,
+                17,
+                1,
+                71,
+                56,
+                24,
+                4,
+                86,
+                30,
+                76,
+                59,
+                9,
+                30,
+                83,
+                5,
+                19,
+                31,
+                30,
+                71,
+                76,
+                28,
+                76,
+                34,
+                60,
+                22,
+                20,
+                22
+            ]
+        },
+        {
+            "score": 230,
+            "cells": [
+                {
+                    "text": "💢 Veins on the head when annoyed",
+                    "selected": false,
+                    "id": 55,
+                    "key": "82509c55-2fc8-4e4f-b726-9ca797cf2c3a"
+                },
+                {
+                    "text": "Character introduced with a camera pan from feet to head",
+                    "selected": false,
+                    "id": 16,
+                    "key": "0098c806-513d-4980-8216-c87f0dc3259b"
+                },
+                {
+                    "text": "Face reveal",
+                    "selected": false,
+                    "id": 57,
+                    "key": "f0da8f8d-8d42-49d8-9d75-2a2c012e9ff5"
+                },
+                {
+                    "text": "Angry with flames in backdrop",
+                    "selected": false,
+                    "id": 53,
+                    "key": "c2d10508-3e1d-4257-95cc-c3d4c20a6916"
+                },
+                {
+                    "text": "Monologue",
+                    "selected": true,
+                    "id": 71,
+                    "key": "7e524bb4-acca-42e6-a52f-a9246884cb3d"
+                },
+                {
+                    "text": "Mysterious eye scar",
+                    "selected": false,
+                    "id": 28,
+                    "key": "40ecfda1-b6a9-4ba4-b352-03fc2052e8ff"
+                },
+                {
+                    "text": "“Tsundere”, or cold person warming up over time",
+                    "selected": false,
+                    "id": 84,
+                    "key": "5d6911ba-6bc4-4e9f-932d-7806490e2b59"
+                },
+                {
+                    "text": "Character uses a catch phrase",
+                    "selected": false,
+                    "id": 32,
+                    "key": "fe8baf7e-8359-475b-ae4a-1281bcb9847a"
+                },
+                {
+                    "text": "Monologue",
+                    "selected": false,
+                    "id": 71,
+                    "key": "f3d53097-7f0f-4e72-89e4-7b639fb54a4e"
+                }
+            ],
+            "soldCellIds": [
+                46,
+                3,
+                8,
+                9,
+                33,
+                27,
+                59,
+                83,
+                20,
+                41,
+                58,
+                18,
+                41,
+                20,
+                21,
+                3,
+                76,
+                41,
+                19,
+                48,
+                83,
+                47,
+                20,
+                52,
+                38,
+                31,
+                6,
+                17,
+                37,
+                5
+            ]
+        },
+        {
+            "score": 475,
+            "cells": [
+                {
+                    "text": "Interrupti--",
+                    "selected": false,
+                    "id": 6,
+                    "key": "0eb43313-d8b1-4a44-b2cd-cc31781603ef"
+                },
+                {
+                    "text": "Title sequence features characters running",
+                    "selected": false,
+                    "id": 41,
+                    "key": "347b7004-84b1-48fc-99ee-94e7a84d3e35"
+                },
+                {
+                    "text": "Explaining something obvious or recent",
+                    "selected": true,
+                    "id": 26,
+                    "key": "3fe5f69a-94e9-429e-a244-3a8ac0ba743f"
+                },
+                {
+                    "text": "Flashback",
+                    "selected": false,
+                    "id": 44,
+                    "key": "a79c6b26-2857-4368-a87d-e5942cae5aca"
+                },
+                {
+                    "text": "Overreaction",
+                    "selected": true,
+                    "id": 74,
+                    "key": "802ae776-43dd-4f0e-a076-e3bd8926f6fb"
+                },
+                {
+                    "text": "Title sequence is longer than a minute",
+                    "selected": false,
+                    "id": 39,
+                    "key": "df953454-6f73-482e-bf9f-18934e796a1d"
+                },
+                {
+                    "text": "Overreaction",
+                    "selected": false,
+                    "id": 74,
+                    "key": "8ea8337c-cc8e-4677-a479-b5decab51fd2"
+                },
+                {
+                    "text": "Withholding important info to protect someone",
+                    "selected": false,
+                    "id": 17,
+                    "key": "dac66d17-44a8-43f4-841a-5703ae42628a"
+                },
+                {
+                    "text": "Geometric patterns when using magic or special skills",
+                    "selected": false,
+                    "id": 15,
+                    "key": "d1ce22b3-fa2f-43d9-a80f-08ace9b6014a"
+                }
+            ],
+            "soldCellIds": [
+                49,
+                9,
+                70,
+                17,
+                86,
+                13,
+                15,
+                74,
+                15,
+                26,
+                47,
+                25,
+                75,
+                81,
+                73,
+                13,
+                83,
+                20,
+                48,
+                28,
+                33,
+                81,
+                81,
+                43,
+                33,
+                5,
+                82,
+                77,
+                46,
+                5,
+                71,
+                11,
+                19,
+                6,
+                76,
+                46,
+                37,
+                47,
+                19,
+                53,
+                4
+            ]
+        },
+        {
+            "score": 695,
+            "cells": [
+                {
+                    "text": "Sad soundtrack",
+                    "selected": false,
+                    "id": 37,
+                    "key": "5bbfeca6-b412-440f-a4f0-1b7d9810b474"
+                },
+                {
+                    "text": "Delicious anime food",
+                    "selected": false,
+                    "id": 14,
+                    "key": "3daf3a12-8548-423c-8cb7-c07d739babea"
+                },
+                {
+                    "text": "An animation is reused",
+                    "selected": true,
+                    "id": 47,
+                    "key": "b5e632a1-d4d1-4842-ba31-eed28bc5b55d"
+                },
+                {
+                    "text": "Overreaction",
+                    "selected": false,
+                    "id": 74,
+                    "key": "e36af83b-4829-4a44-aaa8-a92d5a241cc4"
+                },
+                {
+                    "text": "Delicious anime food",
+                    "selected": true,
+                    "id": 14,
+                    "key": "7fbc1f5e-d443-438c-a140-f1c9c1766027"
+                },
+                {
+                    "text": "Mega explosion or destroyed landscape",
+                    "selected": false,
+                    "id": 33,
+                    "key": "c0c75b8b-ac7c-4d88-8ce8-7bbae63e3c0c"
+                },
+                {
+                    "text": "Nosebleed or spit take",
+                    "selected": false,
+                    "id": 20,
+                    "key": "a0774b16-c6d6-4c0d-9db8-c69239e15995"
+                },
+                {
+                    "text": "Mysterious eye scar",
+                    "selected": false,
+                    "id": 28,
+                    "key": "d112a980-a486-4ffb-a6e7-aa74b4e77fcb"
+                },
+                {
+                    "text": "Mega explosion or destroyed landscape",
+                    "selected": false,
+                    "id": 33,
+                    "key": "487878d4-d2c5-49de-ae80-6d9a758b1ef3"
+                }
+            ],
+            "soldCellIds": [
+                42,
+                15,
+                9,
+                41,
+                43,
+                37,
+                72,
+                26,
+                53,
+                19,
+                16,
+                18,
+                18,
+                70,
+                9,
+                47,
+                45,
+                3,
+                22,
+                41,
+                41,
+                43,
+                47,
+                76,
+                37,
+                72,
+                7,
+                18,
+                28,
+                15,
+                30,
+                13,
+                82,
+                51,
+                22,
+                18,
+                48,
+                57,
+                52,
+                39,
+                81,
+                22,
+                16,
+                33,
+                9,
+                4,
+                43,
+                4,
+                81,
+                18,
+                5,
+                18,
+                47,
+                11,
+                82,
+                5,
+                10,
+                76,
+                6,
+                83,
+                35,
+                39,
+                13,
+                5
+            ]
+        },
+        {
+            "score": 230,
+            "cells": [
+                {
+                    "text": "Character uses a catch phrase",
+                    "selected": false,
+                    "id": 32,
+                    "key": "af48cc74-f3fa-4215-8401-dab3f898f1dc"
+                },
+                {
+                    "text": "Upskirt camera angle, or wind-blown dress",
+                    "selected": false,
+                    "id": 21,
+                    "key": "bef24002-46e7-45aa-9737-a2780e6fc109"
+                },
+                {
+                    "text": "Alternating two-frame animation",
+                    "selected": true,
+                    "id": 31,
+                    "key": "4023e7c4-f9e1-4323-b0ef-2e43fdbe2861"
+                },
+                {
+                    "text": "A masked villain appears",
+                    "selected": false,
+                    "id": 7,
+                    "key": "7dd0100d-03e9-4bef-8582-055ea2de86e2"
+                },
+                {
+                    "text": "Monologue",
+                    "selected": true,
+                    "id": 71,
+                    "key": "9a40ef8a-6856-4088-8b17-f7b023c16538"
+                },
+                {
+                    "text": "Sad soundtrack",
+                    "selected": true,
+                    "id": 37,
+                    "key": "a3262297-7edf-4708-a943-ac8d766e2d9a"
+                },
+                {
+                    "text": "Face reveal",
+                    "selected": false,
+                    "id": 57,
+                    "key": "11e5088f-2af7-4923-b304-7390bc5bce70"
+                },
+                {
+                    "text": "Character introduced with a camera pan from feet to head",
+                    "selected": true,
+                    "id": 16,
+                    "key": "729e80a6-3123-4689-ae2a-78b80b9aaab2"
+                },
+                {
+                    "text": "Glasses glint when pushed back into place",
+                    "selected": false,
+                    "id": 27,
+                    "key": "77141828-deb1-48c7-9c38-45b1941a2cdc"
+                }
+            ],
+            "soldCellIds": [
+                8,
+                58,
+                46,
+                38,
+                35,
+                4,
+                48,
+                57,
+                76,
+                28,
+                24,
+                18,
+                16,
+                35,
+                30,
+                14,
+                19,
+                56,
+                44,
+                29,
+                75,
+                43,
+                49,
+                76,
+                71,
+                47,
+                74,
+                50,
+                46,
+                30
+            ]
+        }
+    ]
+}
