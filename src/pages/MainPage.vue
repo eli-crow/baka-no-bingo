@@ -20,6 +20,7 @@
 		<div class="credits">
 			<p class="byline">A game by Eli Crow</p>
 			<p class="special-thanks">Special thanks to: {{ specialThanks }}.</p>
+			<router-link to="/data" class="button">Stats</router-link>
 		</div>
 	</div>
 </template>
@@ -209,5 +210,18 @@ export default {
 
 .special-thanks {
 	margin-top: 0;
+}
+
+.button {
+	display: flex;
+	width: min-content;
+	margin-top: 1.5rem;
+	margin-bottom: 1rem;
+	padding: 0.25rem 1rem;
+	border-radius: 2px; 
+	background-color: var(--yellow-dark);
+	font-weight: 700;
+	color: inherit;
+	text-decoration: inherit;
 }
 </style>
