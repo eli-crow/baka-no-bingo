@@ -23,16 +23,16 @@ export default {
     --gray-light: hsl(0, 0%, 83%);
     --gray-lightest: hsl(0, 0%, 95%);
     --blue-gray-light: hsl(219, 33%, 92%);
-    --blue: hsl(204, 100%, 50%);
-    --blue-dark: hsl(212, 100%, 50%);
-    --blue-light: hsl(194, 100%, 76%);
-    --red: hsl(0, 100%, 64%);
-    --red-dark: hsl(352, 83%, 49%);
+    --blue: hsl(204, 100%, 51%);
+    --blue-dark: hsl(224, 100%, 55%);
+    --blue-light: hsl(195, 99%, 89%);
+    --red: HSL(0, 100%, 60%);
+    --red-dark: HSL(350, 100%, 44%);
     --red-light: hsl(0, 100%, 73%);
     --green: hsl(146, 97%, 35%);
     --green-light: hsl(146, 90%, 44%);
-    --yellow: hsl(52, 100%, 50%);
-    --yellow-dark: hsl(44, 100%, 50%);
+    --yellow: hsl(49, 100%, 54%);
+    --yellow-dark: hsl(30, 96%, 48%);
     --yellow-light: hsl(54, 100%, 78%);
 
     --color-text-dark: var(--black);
@@ -99,6 +99,19 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+.App::after {
+	position: absolute;
+  z-index: 1000;
+	content: '';
+	top: 1px;
+	left: 1px;
+	width: calc(100% - 2px);
+	height: calc(100% - 2px);
+	background-image: linear-gradient(to bottom, rgba(0,0,0,0), 50%, black);
+	opacity: 0.25;
+	mix-blend-mode: overlay;
+	pointer-events: none;
 }
 .view {
   flex: 1 0 auto;
