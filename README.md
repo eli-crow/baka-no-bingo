@@ -20,12 +20,12 @@
 - Stored player data in localStorage to prevent issues
 - Upgraded design and animations throughout
 - Added several new tropes, generalized others
-- Kept track of which cells gott cleared most frequently via copy-pasteable data
+- Kept track of which tiles gott cleared most frequently via copy-pasteable data
 
 ## Ideas
 - Different sets for specific genres. (avoid getting stuck with slice of life anime tropes during a action anime)
 - Additional spells:
-  - _*Duplicate:*_ Duplicate a favorable cell (-10pts)
+  - _*Duplicate:*_ Duplicate a favorable tile (-10pts)
   - _*Upgrade:*_ Generalize a too-specific tile (-10pts)
-  - _*Challenge:*_ Make a cell more specific, but multiply the score gained (-5pts)
-  - _*Curse:*_ Upgrade the difficulty of an opponent's cell and lock it (it cannot be cleared except through matching). (-20pts)
+  - _*Challenge:*_ Make a tile more specific, but multiply the score gained (-5pts)
+  - _*Curse:*_ Upgrade the difficulty of an opponent's tile and lock it (it cannot be cleared except through matching). (-20pts)

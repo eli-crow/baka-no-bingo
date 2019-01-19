@@ -4,20 +4,22 @@
 			<div class="title">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
 			<div class="title title-duplicate">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
 		</div>
-		<div class="cell-group-container">
-			<div class="cell-group">
-				<div class="cell -blue">バ</div>
-				<div class="cell -blue">カ</div>
-				<div class="cell -small -gray-light">の</div>
-				<router-link to="/game" 
-				             class="cell -text -blue-light"
-							 @click.native="$store.dispatch('RESET_GAME')">New</router-link>
-				<div class="cell -star -red">★</div>
-				<router-link to="/game" 
-				             class="cell -text -yellow-light">Continue</router-link>
-				<div class="cell -yellow">ビ</div>
-				<div class="cell -yellow">ン</div>
-				<div class="cell -yellow">ゴ</div>
+		<div class="tile-group-container">
+			<div class="tile-group-aspect-ratio">
+				<div class="tile-group">
+					<div class="tile -blue">ば</div>
+					<div class="tile -blue">か</div>
+					<div class="tile -small -white">の</div>
+					<router-link to="/game" 
+								class="tile -text -blue-light"
+								@click.native="$store.dispatch('RESET_GAME')">New</router-link>
+					<div class="tile -star -red">★</div>
+					<router-link to="/game" 
+								class="tile -text -yellow-light">Continue</router-link>
+					<div class="tile -yellow">ビ</div>
+					<div class="tile -yellow">ン</div>
+					<div class="tile -yellow">ゴ</div>
+				</div>
 			</div>
 		</div>
 		<div class="credits">
@@ -56,9 +58,10 @@ export default {
 }
 
 .title-container {
-	height: 33.33333vw;
+	height: 84px;
 	display: flex;
 	padding-left: 1rem;
+	padding-top: 2rem;
 	align-items: center;
 }
 
@@ -69,8 +72,9 @@ export default {
 .title {
 	white-space: nowrap;
 	font: var(--font-title);
-	font-size: 20vw;
-	padding-right: 5vw;
+	font-size: 8rem;
+	letter-spacing: -0.03em;
+	padding-right: 2rem;
 	will-change: transform;
 	animation-name: title;
 	animation-duration: 6s;
@@ -82,123 +86,120 @@ export default {
 	position: absolute;
 	color: white;
 	top: 53%;
-	right: 8.8vw;
-	font-size: 5vw;
+	right: 4.5rem;
+	font-size: 1.25rem;
+	letter-spacing: 0;
 	transform: translate(-50%, -50%);
 }
 
-.cell-group-container {
-	padding: 1rem 1rem 0.5rem 1rem;
-	background-image: 
-		radial-gradient(circle closest-side, var(--yellow-dark), 60%, transparent ),
-		linear-gradient(to bottom, var(--yellow-dark), 10%, var(--yellow) );
+.tile-group-container {
+	--border-scale: 0.85;
+	--tile-padding: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem 1rem calc(var(--border-scale) * 14.88px) 1rem;
 }
-.cell-group {
+.tile-group-aspect-ratio {
 	position: relative;
-	padding-bottom: 0.5rem;
-	border-radius: var(--radius-medium);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	max-width: 25rem;
+	box-sizing: content-box;
+}
+.tile-group-aspect-ratio::before {
+	content: '';
+	width: 0;
+	height: 0;
+	padding-bottom: 100%;
+}
+.tile-group {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	padding-bottom: var(--border-scale) * 14.88px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: repeat(3, 33.33333vw);
-	overflow: hidden;
+	grid-template-rows: 1fr 1fr 1fr;
 	border-top: var(--line-groove);
 	border-bottom: var(--line-groove);
 	border-color: transparent;
 }
-.cell-group::after {
-	position: absolute;
-	content: '';
-	top: 1px;
-	left: 1px;
-	width: calc(100% - 2px);
-	height: calc(100% - 2px);
-	background-image: linear-gradient(to bottom, white, 50%, black);
-	opacity: 0.25;
-	mix-blend-mode: overlay;
-	pointer-events: none;
-	border-radius: inherit;
-}
-
-.cell {
+.tile {
+	/* 
+	set min-width and -height to override default tile sizing behavior
+	allowing consistently sized tiles.
+	*/
+	min-width: 0;
+	min-height: 0;
 	position: relative;
+	border-image-slice: 36% 36% 50% 36% fill;
+	border-image-width: calc(var(--border-scale) * 36px) calc(var(--border-scale) * 36px) calc(var(--border-scale) * 50px) calc(var(--border-scale) * 36px);
+	border-image-repeat: stretch;
+	border-style: solid;
+	padding: var(--tile-padding);
+	margin-bottom: calc(var(--border-scale) * -14.88px);
+	padding-bottom: calc(var(--border-scale) * 14.88px + var(--tile-padding));
 	display: flex;
-	justify-content: center;
 	align-items: center;
+	justify-content: center;
 	text-align: center;
-	padding: 8px;
-	font: var(--font-title);
-	font-size: 20vw;
-	color: var(--color-text-dark);
-	text-decoration: inherit;
-	background-color: var(--light);
-	box-shadow: 0 0.5rem 0 0 var(--dark);
-	border-radius: 16px;
-	border: solid 2px var(--dark);
-	border-top: solid 2px var(--lighter);
+	font-weight: 700;
+	font-size: 4rem;
 }
-.cell::before {
-	position: absolute;
-	content: '';
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: calc(100% + 0.5rem);
-	border: solid 2px var(--light);
-	opacity: 0.4;
-	border-radius: inherit;
-	mix-blend-mode: screen;
+.tile.-small {
+	font-size: 2rem;
 }
-
-.cell.-small {
-	font-size: 14vw;
-}
-.cell.-text {
+.tile.-text {
 	position: relative;
-	font-size: 4vw;
+	font-size: 1rem;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	font-weight: 700;
+	color: black;
+	text-decoration: none;
 }
-.cell.-text::after {
+.tile.-text::after {
 	position: absolute;
 	content: '';
 	left: 50%;
 	top: 50%;
-	width: 16vw;
-	height: 16vw;
+	width: 4rem;
+	height: 4rem;
 	transform: translate(-50%,-50%);
-	background-color: var(--dark);
+	background-color: var(--circle);
 	border-radius: 99999px;
 	pointer-events: none;
 	/* HACK: you can do better than this */
 	mix-blend-mode: darken;
 }
-.cell.-blue {
-	--light: var(--blue);
-	--lighter: var(--blue-light);
-	--dark: var(--blue-dark);
+.tile.-blue {
+	--circle: var(--blue);
+	border-image-source: url('../assets/images/tile-blue.svg');
 }
-.cell.-red {
-	--light: var(--red);
-	--lighter: var(--red-light);
-	--dark: var(--red-dark);
+.tile.-red {
+	--circle: var(--red);
+	border-image-source: url('../assets/images/tile-red.svg');
 }
-.cell.-yellow {
-	--light: var(--yellow);
-	--lighter: var(--yellow-light);
-	--dark: var(--yellow-dark);
+.tile.-yellow {
+	--circle: var(--yellow);
+	border-image-source: url('../assets/images/tile-yellow.svg');
 }
-.cell.-gray-light {
-	--light: var(--gray-lightest);
-	--dark: var(--gray-light);
+.tile.-white {
+	--circle: var(--white);
+	border-image-source: url('../assets/images/tile-white.svg');
 }
-.cell.-blue-light {
-	--light: var(--blue-light);
-	--dark: var(--blue);
+.tile.-blue-light {
+	--circle: var(--blue);
+	border-image-source: url('../assets/images/tile-light-blue.svg');
 }
-.cell.-yellow-light {
-	--light: var(--yellow-light);
-	--dark: var(--yellow);
+.tile.-yellow-light {
+	--circle: var(--yellow);
+	border-image-source: url('../assets/images/tile-light-yellow.svg');
 }
 
 

@@ -19,7 +19,7 @@
     "playerData": [
         {
             "score": 210,
-            "cells": [
+            "tiles": [
                 {
                     "text": "“Mary Sue” character, or male's perfect crush",
                     "selected": false,
@@ -75,7 +75,7 @@
                     "key": "4e8cbcd3-d60e-47f1-8e23-848c018cad77"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 16,
                 38,
                 26,
@@ -99,7 +99,7 @@
         },
         {
             "score": 385,
-            "cells": [
+            "tiles": [
                 {
                     "text": "Accidental groping",
                     "selected": false,
@@ -155,7 +155,7 @@
                     "key": "9e2e4b7d-d759-4582-987c-75a233aa4940"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 27,
                 21,
                 81,
@@ -196,7 +196,7 @@
         },
         {
             "score": 150,
-            "cells": [
+            "tiles": [
                 {
                     "text": "😅 Nervous sweat drop",
                     "selected": false,
@@ -252,7 +252,7 @@
                     "key": "2932767d-4dda-4cd1-a6c8-464e53b0be6c"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 13,
                 16,
                 76,
@@ -275,7 +275,7 @@
         },
         {
             "score": 865,
-            "cells": [
+            "tiles": [
                 {
                     "text": "Someone goes into “chibi” form",
                     "selected": false,
@@ -331,7 +331,7 @@
                     "key": "0016c8a4-1c73-4ad6-a86e-97a6aa35d885"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 76,
                 70,
                 20,
@@ -386,7 +386,7 @@
         },
         {
             "score": 70,
-            "cells": [
+            "tiles": [
                 {
                     "text": "Someone goes into “chibi” form",
                     "selected": false,
@@ -442,7 +442,7 @@
                     "key": "fe1245f7-7232-440e-aeff-ebe2e8e11bbd"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 21,
                 10,
                 76,
@@ -477,7 +477,7 @@
         },
         {
             "score": 230,
-            "cells": [
+            "tiles": [
                 {
                     "text": "💢 Veins on the head when annoyed",
                     "selected": false,
@@ -533,7 +533,7 @@
                     "key": "f3d53097-7f0f-4e72-89e4-7b639fb54a4e"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 46,
                 3,
                 8,
@@ -568,7 +568,7 @@
         },
         {
             "score": 475,
-            "cells": [
+            "tiles": [
                 {
                     "text": "Interrupti--",
                     "selected": false,
@@ -624,7 +624,7 @@
                     "key": "d1ce22b3-fa2f-43d9-a80f-08ace9b6014a"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 49,
                 9,
                 70,
@@ -670,7 +670,7 @@
         },
         {
             "score": 695,
-            "cells": [
+            "tiles": [
                 {
                     "text": "Sad soundtrack",
                     "selected": false,
@@ -726,7 +726,7 @@
                     "key": "487878d4-d2c5-49de-ae80-6d9a758b1ef3"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 42,
                 15,
                 9,
@@ -795,7 +795,7 @@
         },
         {
             "score": 230,
-            "cells": [
+            "tiles": [
                 {
                     "text": "Character uses a catch phrase",
                     "selected": false,
@@ -851,7 +851,7 @@
                     "key": "77141828-deb1-48c7-9c38-45b1941a2cdc"
                 }
             ],
-            "soldCellIds": [
+            "soldTileIds": [
                 8,
                 58,
                 46,

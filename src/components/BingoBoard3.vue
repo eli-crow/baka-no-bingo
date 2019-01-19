@@ -4,18 +4,18 @@
 	                  name="BingoBoard3"
 	                  tag="div"
 					  @before-leave="beforeLeave">
-		<div class="cell-container"
-		      v-for="(cell, i) in cells"
-		      :key="cell.key"
+		<div class="tile-container"
+		      v-for="(tile, i) in tiles"
+		      :key="tile.key"
 			  :style="{zIndex: i}">
 			<div :class="{
-				     cell: true,
-				     '-selected': cell.selected,
+				     tile: true,
+				     '-selected': tile.selected,
 				     '-star': i === 4,
 				  }"
 				  @click="$emit('select', i)">
 				<span v-if="i === 4" class="icon">★</span>
-				<span v-else class="text">{{ cell.text }}</span>
+				<span v-else class="text">{{ tile.text }}</span>
 			</div>
 		</div>
 	</transition-group>
@@ -27,7 +27,7 @@
 export default {
 	name: 'BingoBoard3',
 	props: {
-		cells: Array,
+		tiles: Array,
 		enabled: {
 			type: Boolean,
 			default: true,
@@ -77,10 +77,10 @@ export default {
 	z-index: 1;
 }
 
-.cell-container {
+.tile-container {
 }
 
-.cell {
+.tile {
 	height: 100%;
 	position: relative;
 	display: flex;
@@ -95,7 +95,7 @@ export default {
 	border: solid 2px var(--dark, var(--gray-lightest));
 	border-top: solid 2px var(--lighter, white);
 }
-.cell::before {
+.tile::before {
 	position: absolute;
 	content: '';
 	left: 0;
@@ -107,13 +107,13 @@ export default {
 	border-radius: inherit;
 	mix-blend-mode: screen;
 }
-.cell.-selected {
+.tile.-selected {
 	--light: var(--red);
 	--lighter: var(--red-light);
 	--dark: var(--red-dark);
 	color: white;
 }
-.cell.-star {
+.tile.-star {
 	background-color: var(--red);
 	color: inherit;
 }
@@ -150,7 +150,7 @@ export default {
 	z-index: 100 !important;
 }
 .BingoBoard3 > *:not(.BingoBoard3-leave-active) {
-	/* override these when not leaving, so we can set screen position for all cell-containers in `updated` lifecycle method */
+	/* override these when not leaving, so we can set screen position for all tile-containers in `updated` lifecycle method */
 	top: auto !important;
 	left: auto !important;
 	width: auto !important;

@@ -27,7 +27,7 @@ const store = new Vuex.Store({
             {index: 9, pattern: [0,4,8], score: 20, name: 'Kiru'},
             {index: 10, pattern: [2,4,6], score: 20, name: 'Kiru'},
         ],
-        boughtCell: null,
+        boughtTile: null,
         tropes: data.tropes,
         sessions: [
             session2
@@ -36,18 +36,18 @@ const store = new Vuex.Store({
     },
     mutations: {
         NEW_BOARD (state) {
-            const newCells = getRandomCellArray(9)
-			newCells[4].selected = true
-			state.playerData.cells = newCells
+            const newTiles = getRandomTileArray(9)
+			newTiles[4].selected = true
+			state.playerData.tiles = newTiles
         },
         INITIALIZE_PLAYER_DATA(state) {
             const lsData = localStorage.getItem(LS_PLAYER_DATA)
-            const newCells = getRandomCellArray(9)
-            newCells[4].selected = true
+            const newTiles = getRandomTileArray(9)
+            newTiles[4].selected = true
             const playerDataDefaults = {
                 score: 20,
-                cells: newCells,
-                soldCellIds: [],
+                tiles: newTiles,
+                soldTileIds: [],
             }
             const playerData = Object.assign({}, playerDataDefaults, JSON.parse(lsData) || {})
             state.playerData = playerData
@@ -59,20 +59,20 @@ const store = new Vuex.Store({
             state.playerData.score = Math.max(0, state.playerData.score + amount)
         },
         CLEAR_SESSION_DATA (state) {
-            state.playerData.soldCellIds = []
+            state.playerData.soldTileIds = []
         },
         DISCARD_REPLACEMENT (state) {
-            state.boughtCell = null
+            state.boughtTile = null
         },
         BUY_REPLACEMENT (state) {
-			state.boughtCell = getRandomCell()
+			state.boughtTile = getRandomTile()
         },
         PLACE_REPLACEMENT (state) {
-            Vue.set(state.playerData.cells, i, state.boughtCell)
-            state.boughtCell = null
+            Vue.set(state.playerData.tiles, i, state.boughtTile)
+            state.boughtTile = null
         },
         TOGGLE_CELL (state, i) {
-            state.playerData.cells[i].selected = ! state.playerData.cells[i].selected
+            state.playerData.tiles[i].selected = ! state.playerData.tiles[i].selected
         },
     },
     actions: {
@@ -94,17 +94,17 @@ const store = new Vuex.Store({
         SELL_PATTERN ({commit, state}, soldPatternIndex) {
             const {pattern, score, name} = state.patterns[soldPatternIndex]
             commit('ADJUST_SCORE', score)
-            // copy cells to prevent mutation
-            const resultCells = JSON.parse(JSON.stringify(state.playerData.cells))
-            const sampleCells = getRandomCellArray(pattern.length)
-            pattern.forEach((patternCellIndex, i) => {
-                const toReplace = resultCells[patternCellIndex]
-                //replace the sold cells
-                resultCells[patternCellIndex] = sampleCells[i]
-                state.playerData.soldCellIds.push(toReplace.id)
+            // copy tiles to prevent mutation
+            const resultTiles = JSON.parse(JSON.stringify(state.playerData.tiles))
+            const sampleTiles = getRandomTileArray(pattern.length)
+            pattern.forEach((patternTileIndex, i) => {
+                const toReplace = resultTiles[patternTileIndex]
+                //replace the sold tiles
+                resultTiles[patternTileIndex] = sampleTiles[i]
+                state.playerData.soldTileIds.push(toReplace.id)
             })
-            resultCells[4].selected = true
-            state.playerData.cells = resultCells
+            resultTiles[4].selected = true
+            state.playerData.tiles = resultTiles
         }
     },
     getters: {
@@ -113,12 +113,12 @@ const store = new Vuex.Store({
         },
         sellablePatterns ({patterns, playerData}) {
 			// filter all patterns by whether each pattern matches the current board
-			return patterns.filter(p => p.pattern.every(patternIndex => playerData.cells[patternIndex].selected))
+			return patterns.filter(p => p.pattern.every(patternIndex => playerData.tiles[patternIndex].selected))
         }
     },
 })
 
-function getRandomCell () {
+function getRandomTile () {
     const id = Lodash.sample(store.state.tropes.allIds)
     const text = store.state.tropes.byId[id]
 	return {
@@ -129,7 +129,7 @@ function getRandomCell () {
 	}
 }
 
-function getRandomCellArray(n) {
+function getRandomTileArray(n) {
 	return Lodash.sampleSize(store.state.tropes.allIds, n).map(id => {
         const text = store.state.tropes.byId[id]
         return {

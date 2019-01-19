@@ -19,15 +19,15 @@
 		<div class="board-container"
 		     :style="boardContainerStyle">
 			<BingoBoard3 class="board"
-					     :cells="playerData.cells"
-					     @select="handleCellSelect"/>
+					     :tiles="playerData.tiles"
+					     @select="handleTileSelect"/>
 		</div>
 
 		<PatternSellBar v-if="sellablePatterns.length"/>
-		<PatternLegend v-else-if="!boughtCell"/>
+		<PatternLegend v-else-if="!boughtTile"/>
 
 		<transition name="action-group">
-			<TheBuyMenu v-if="boughtCell"/>
+			<TheBuyMenu v-if="boughtTile"/>
 
 			<div class="action-group"
 			     v-else>
@@ -85,17 +85,17 @@ export default {
 	},
 	computed: {
 		...mapGetters(['sellablePatterns']),
-		...mapState(['boughtCell', 'playerData']),
+		...mapState(['boughtTile', 'playerData']),
 		boardContainerStyle () {
 			return `--color: var(--${
-				this.boughtCell ? 'green' :
+				this.boughtTile ? 'green' :
 				this.sellablePatterns.length ? 'blue' :
 				'blue-gray-light'
 			});`
 		},
 		mode () {
-			if (this.boughtCell) {
-				return 'bought-cell'
+			if (this.boughtTile) {
+				return 'bought-tile'
 			}
 			else {
 				return 'playing'
@@ -106,9 +106,9 @@ export default {
 		copySessionData () {
 			this.$copyText(JSON.stringify(this.playerData))
 		},
-		handleCellSelect (i) {
+		handleTileSelect (i) {
 			switch (this.mode) {
-				case 'bought-cell':
+				case 'bought-tile':
 					if (i === 4) return
 					this.$store.commit('PLACE_REPLACEMENT', i)
 					break;

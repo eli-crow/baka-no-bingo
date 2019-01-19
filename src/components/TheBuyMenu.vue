@@ -6,8 +6,8 @@
 		      icon="times"
 		      @click="$store.commit('DISCARD_REPLACEMENT')"/>
 		<div class="body">
-			<div class="cell">
-				{{ boughtCell.text }}
+			<div class="tile">
+				{{ boughtTile.text }}
 			</div>
 			<div class="button-group">
 				<div class="button"
@@ -33,7 +33,7 @@ import { mapState } from "vuex";
 export default {
 	name: 'TheBuyMenu',
 	computed: {
-		...mapState(['boughtCell']),
+		...mapState(['boughtTile']),
 	}
 }
 </script>
@@ -78,7 +78,7 @@ export default {
 	padding: 1rem 0;
 }
 
-.cell {
+.tile {
 	width: 33.3333vw;
 	height: 33.3333vw;
 	background: var(--white);

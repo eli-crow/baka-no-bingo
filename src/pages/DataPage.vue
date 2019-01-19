@@ -1,8 +1,8 @@
 <template>
     <div class="DataPage">
-        <h2>Most Sold Cells</h2>
+        <h2>Most Sold Tiles</h2>
         <ol>
-            <li v-for="cell in soldCellFrequencyRanking">{{cell.text}}: <strong>{{cell.count}} sold</strong></li>
+            <li v-for="tile in soldTileFrequencyRanking">{{tile.text}}: <strong>{{tile.count}} sold</strong></li>
         </ol>
     </div>
 </template>
@@ -22,11 +22,11 @@ export default {
         }
     },
     computed: {
-        soldCellIds () {
-            return this.playerData.reduce((acc, curr) => acc.concat(curr.soldCellIds), [])
+        soldTileIds () {
+            return this.playerData.reduce((acc, curr) => acc.concat(curr.soldTileIds), [])
         },
-        soldCellFrequencyRanking () {
-            const ranking = countBy(this.soldCellIds)
+        soldTileFrequencyRanking () {
+            const ranking = countBy(this.soldTileIds)
             const entries = Object.entries(ranking)
             entries.sort((a, b) => b[1] - a[1])
             return entries.map(([id, count]) => ({text: data.tropes.byId[id], count}))
