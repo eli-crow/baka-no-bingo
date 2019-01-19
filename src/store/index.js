@@ -53,10 +53,10 @@ const store = new Vuex.Store({
             state.playerData = playerData
         },
         SET_SCORE (state, amount) {
-            state.score = amount
+            state.playerData.score = amount
         },
         ADJUST_SCORE (state, amount) {
-            state.score = Math.max(0, state.score + amount)
+            state.playerData.score = Math.max(0, state.playerData.score + amount)
         },
         CLEAR_SESSION_DATA (state) {
             state.playerData.soldCellIds = []
@@ -87,8 +87,8 @@ const store = new Vuex.Store({
             commit('NEW_BOARD')
         },
         RESET_GAME ({commit}) {
-            commit('SET_SCORE', 20)
             commit('CLEAR_SESSION_DATA')
+            commit('SET_SCORE', 20)
             commit('NEW_BOARD')
         },
         SELL_PATTERN ({commit, state}, soldPatternIndex) {
