@@ -67,7 +67,7 @@ const store = new Vuex.Store({
         BUY_REPLACEMENT (state) {
 			state.boughtTile = getRandomTile()
         },
-        PLACE_REPLACEMENT (state) {
+        PLACE_REPLACEMENT (state, i) {
             Vue.set(state.playerData.tiles, i, state.boughtTile)
             state.boughtTile = null
         },
