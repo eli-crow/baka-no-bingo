@@ -134,10 +134,9 @@ export default {
 	border-image-slice: 36% 36% 50% 36% fill;
 	border-image-width: calc(var(--border-scale) * 36px) calc(var(--border-scale) * 36px) calc(var(--border-scale) * 50px) calc(var(--border-scale) * 36px);
 	border-image-repeat: stretch;
+	border-image-outset: 0px 0px calc(var(--border-scale) * 14.88px) 0px;
 	border-style: solid;
 	padding: var(--tile-padding);
-	margin-bottom: calc(var(--border-scale) * -14.88px);
-	padding-bottom: calc(var(--border-scale) * 14.88px + var(--tile-padding));
 	display: flex;
 	align-items: center;
 	justify-content: center;
