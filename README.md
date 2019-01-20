@@ -1,4 +1,4 @@
-# バカのビンゴ • "Baka no Bingo" • Idiot Bingo
+# ばかのビンゴ • "Baka no Bingo" • Idiot Bingo
 > Bingo for anime night.
 
 ## Planned for v3
