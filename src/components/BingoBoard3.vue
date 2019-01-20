@@ -60,7 +60,7 @@ export default {
 
 			this.staggerIndex++
 		},
-		applyTransitionOffsetStyles() {
+		measureTileOffsets() {
 			const children = Array.from(this.$refs.transitionGroup.$el.children)
 			children.forEach(el => {
 				const {marginLeft, marginTop, width, height} = window.getComputedStyle(el)
@@ -74,10 +74,10 @@ export default {
 		}
 	},
 	updated () {
-		this.applyTransitionOffsetStyles()
+		this.measureTileOffsets()
 	},
 	mounted () {
-		this.applyTransitionOffsetStyles()
+		this.measureTileOffsets()
 	},
 }
 </script>
