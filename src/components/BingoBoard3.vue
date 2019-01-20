@@ -49,7 +49,15 @@ export default {
 	methods: {
 		beforeLeave (el) {
 			el.style.setProperty('--stagger-index', this.staggerIndex)
+
 			el.style.zIndex = Number(el.style.zIndex) + 1
+
+			const {styleLeft, styleTop, styleWidth, styleHeight} = el.dataset
+			el.style.left = styleLeft
+			el.style.top = styleTop
+			el.style.width = styleWidth
+			el.style.height = styleHeight
+
 			this.staggerIndex++
 		},
 		applyTransitionOffsetStyles() {
@@ -57,10 +65,10 @@ export default {
 			children.forEach(el => {
 				const {marginLeft, marginTop, width, height} = window.getComputedStyle(el)
 				const {offsetLeft, offsetTop} = el
-				el.style.left = `${offsetLeft - parseFloat(marginLeft, 10)}px`
-				el.style.top = `${offsetTop - parseFloat(marginTop, 10)}px`
-				el.style.width = width
-				el.style.height = height
+				el.dataset.styleLeft = `${offsetLeft - parseFloat(marginLeft, 10)}px`
+				el.dataset.styleTop = `${offsetTop - parseFloat(marginTop, 10)}px`
+				el.dataset.styleWidth = width
+				el.dataset.styleHeight = height
 			})
 			this.staggerIndex = 0
 		}
@@ -228,13 +236,6 @@ export default {
 .tile-group-leave,
 .tile-group-leave-active { 
 	position: absolute !important;
-}
-.tile-group > *:not(.tile-group-leave-active) {
-	/* override these when not leaving, so we can set screen position for all tile-containers in `updated` lifecycle method */
-	top: auto !important;
-	left: auto !important;
-	width: auto !important;
-	height: auto !important;
 }
 
 .tile-group-enter {
