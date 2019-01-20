@@ -103,7 +103,7 @@ export default {
 .tile-group-aspect-ratio {
 	position: relative;
 	display: flex;
-	align-items: center;
+	align-items: stretch;
 	justify-content: center;
 	width: 100%;
 	max-width: 25rem;
@@ -116,18 +116,12 @@ export default {
 	padding-bottom: 100%;
 }
 .tile-group {
-	position: absolute;
-	left: 0;
-	top: 0;
+	position: relative;
 	width: 100%;
-	height: 100%;
 	padding-bottom: var(--border-scale) * 14.88px;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	grid-template-rows: 1fr 1fr 1fr;
-	border-top: var(--line-groove);
-	border-bottom: var(--line-groove);
-	border-color: transparent;
 }
 .tile {
 	/* 
