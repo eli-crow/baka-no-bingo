@@ -5,19 +5,13 @@
 
 		<header class="header">
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
-			<div class="title">Anime Tropes</div>
 			<Icon class="info-button" 
 			      icon="clipboard"
 				  @click="copySessionData"/>
+			<div class="score">{{ playerData.score }}<span class="score-unit">pts</span></div>
 		</header>
 
-		<div class="score">
-			<div class="score-title"><span class="score-title-japanese">得点</span> Score</div>
-			<div class="score-count">{{ playerData.score }}</div>
-		</div>
-
-		<div class="board-container"
-		     :style="boardContainerStyle">
+		<div class="board-container">
 			<BingoBoard3 class="board"
 					     :tiles="playerData.tiles"
 					     @select="handleTileSelect"/>
@@ -86,13 +80,6 @@ export default {
 	computed: {
 		...mapGetters(['sellablePatterns']),
 		...mapState(['boughtTile', 'playerData']),
-		boardContainerStyle () {
-			return `--color: var(--${
-				this.boughtTile ? 'green' :
-				this.sellablePatterns.length ? 'blue' :
-				'blue-gray-light'
-			});`
-		},
 		mode () {
 			if (this.boughtTile) {
 				return 'bought-tile'
@@ -138,11 +125,9 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: 12px 16px;
-	height: 16.6666666vw;
-	background: white;
+	height: 68px;
 	position: relative;
 	z-index: 2;
-	background: var(--yellow);
 }
 .back {
 	flex: 0 0 2.25rem;
@@ -165,35 +150,29 @@ export default {
 	position: relative;
 	z-index: 1;
 	text-align: center;
-	height: 16.666666vw;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 1rem;
-}
-.score-title {
-	font: var(--font-title);
-	font-size: 1rem;
-	color: var(--gray);
-}
-.score-title-japanese {
-	color: var(--color-text-dark);
-	font-size: 1.25rem;
-}
-.score-count {
 	font: var(--font-title);
 	font-size: 2rem;
+	background-color: white;
+	line-height: 1;
+	align-self: center;
+	padding: 0.5rem 1rem;
+	border-radius: 99999px;
+	box-shadow: 0 4px 0 0 var(--gray-light);
+	margin-left: auto;
+	margin-bottom: 4px;
+}
+.score-unit {
+	font-size: 61%;
 }
 
 
 .board-container {
 	/* --color defined in computed property */
-	background-image: linear-gradient(
-		to top,
-		var(--color),
-		var(--blue-gray-light) 66.66666vw
-	);
-	padding: 1rem 1rem 0;
+	background-image: linear-gradient(to bottom, var(--ambient-dark) -100%, 0%, var(--ambient));
+	padding: 1rem;
 }
 
 

@@ -10,12 +10,12 @@
 					<div class="tile -blue">ば</div>
 					<div class="tile -blue">か</div>
 					<div class="tile -small -white">の</div>
-					<router-link to="/game" 
-								class="tile -text -blue-light"
-								@click.native="$store.dispatch('RESET_GAME')">New</router-link>
+					<router-link class="tile -text -blue-light"
+					             to="/game" 
+								 @click.native="$store.dispatch('RESET_GAME')">New</router-link>
 					<div class="tile -star -red">★</div>
-					<router-link to="/game" 
-								class="tile -text -yellow-light">Continue</router-link>
+					<router-link class="tile -text -yellow-light"
+					             to="/game" >Continue</router-link>
 					<div class="tile -yellow">ビ</div>
 					<div class="tile -yellow">ン</div>
 					<div class="tile -yellow">ゴ</div>
@@ -58,9 +58,9 @@ export default {
 }
 
 .title-container {
-	height: 84px;
+	height: 68px;
 	display: flex;
-	padding-left: 1rem;
+	padding-left: 4rem;
 	padding-top: 2rem;
 	align-items: center;
 }
@@ -93,7 +93,7 @@ export default {
 }
 
 .tile-group-container {
-	--border-scale: 0.85;
+	--border-scale: 1;
 	--tile-padding: 8px;
 	display: flex;
 	align-items: center;

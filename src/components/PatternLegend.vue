@@ -40,7 +40,6 @@ export default {
 <style scoped>
 .PatternLegend {
 	display: flex;
-	background-color: var(--blue-gray-light);
 	height: 3.5rem;
 	justify-content: space-between;
 	padding: 0 1rem;
