@@ -1,5 +1,5 @@
 <template>
-  <div class="App" id="app">
+  <div class="App" id="app" :style="ambientColorStyle">
     <transition name="wipe">
       <router-view class="view"/>
     </transition>
@@ -8,9 +8,28 @@
 
 <script>
 import store from '@/store'
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'App',
   store: store,
+  computed: {
+    ...mapState(['boughtTile']),
+    ...mapGetters(['sellablePatterns']),
+    ambientColorStyle () {
+      return {
+        '--ambient': `var(--${
+          this.boughtTile ? 'green' :
+          this.sellablePatterns.length ? 'blue' :
+          'yellow'
+        })`,
+        '--ambient-dark': `var(--${
+          this.boughtTile ? 'green-dark' :
+          this.sellablePatterns.length ? 'blue-dark' :
+          'yellow-dark'
+        })`,
+      }
+    }
+  },
 }
 </script>
 
@@ -30,10 +49,14 @@ export default {
     --red-dark: HSL(350, 100%, 44%);
     --red-light: hsl(0, 100%, 73%);
     --green: hsl(146, 97%, 35%);
+    --green-dark: hsl(140, 100%, 26%);
     --green-light: hsl(146, 90%, 44%);
     --yellow: hsl(49, 100%, 54%);
-    --yellow-dark: hsl(30, 96%, 48%);
+    --yellow-dark: hsl(27, 97%, 48%);
     --yellow-light: hsl(54, 100%, 78%);
+
+    --ambient: var(--yellow);
+    --ambient-dark: var(--yellow-dark);
 
     --color-text-dark: var(--black);
     --color-text-default: hsl(0, 0%, 13%);
@@ -99,6 +122,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: var(--ambient);
 }
 .App::after {
 	position: absolute;
