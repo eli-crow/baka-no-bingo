@@ -89,7 +89,7 @@ export default {
 }
 
 .tile-group-container {
-	--border-scale: 1;
+	--border-scale: 0.85;
 	--tile-padding: 8px;
 	display: flex;
 	align-items: center;
