@@ -1,24 +1,31 @@
 
 <template>
-	<transition-group class="BingoBoard3"
-	                  name="BingoBoard3"
-	                  tag="div"
-					  @before-leave="beforeLeave">
-		<div class="tile-container"
-		      v-for="(tile, i) in tiles"
-		      :key="tile.key"
-			  :style="{zIndex: i}">
-			<div :class="{
-				     tile: true,
-				     '-selected': tile.selected,
-				     '-star': i === 4,
-				  }"
-				  @click="$emit('select', i)">
-				<span v-if="i === 4" class="icon">★</span>
-				<span v-else class="text">{{ tile.text }}</span>
-			</div>
+	<div class="tile-group-container">
+		<div class="tile-group-aspect-ratio">
+			<transition-group :class="{'tile-group':true, '-animate': animate}"
+			                  name="tile-group"
+			                  tag="div"
+			                  ref="transitionGroup"
+			                  @before-leave="beforeLeave">
+				<div :class="{
+						tile: true,
+						'-red': tile.selected,
+						'-selected-animate': i !== 4 && animate && tile.selected,
+						'-white': !tile.selected,
+						'-star': i === 4,
+					}"
+					v-for="(tile, i) in tiles"
+					:key="tile.key"
+					:style="{
+						zIndex: i
+					}"
+					@click="$emit('select', i); animate = true;">
+					<span v-if="i === 4" class="icon">★</span>
+					<span v-else class="text">{{ tile.text }}</span>
+				</div>
+			</transition-group>
 		</div>
-	</transition-group>
+	</div>
 </template>
 
 
@@ -36,15 +43,17 @@ export default {
 	data () {
 		return {
 			staggerIndex: 0,
+			animate: false,
 		}
 	},
 	methods: {
 		beforeLeave (el) {
 			el.style.setProperty('--stagger-index', this.staggerIndex)
+			el.style.zIndex = Number(el.style.zIndex) + 1
 			this.staggerIndex++
 		},
 		applyTransitionOffsetStyles() {
-			const children = Array.from(this.$el.children)
+			const children = Array.from(this.$refs.transitionGroup.$el.children)
 			children.forEach(el => {
 				const {marginLeft, marginTop, width, height} = window.getComputedStyle(el)
 				const {offsetLeft, offsetTop} = el
@@ -69,62 +78,134 @@ export default {
 
 <style scoped>
 .BingoBoard3 {
-	position: relative;
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
-	grid-template-rows: repeat(3, 33.33333vw);
-	padding-bottom: 0.5rem;
-	z-index: 1;
 }
 
-.tile-container {
+.tile-group-container {
+	--border-scale: 1;
+	--tile-padding: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-bottom: calc(var(--border-scale) * 14.88px);
 }
-
-.tile {
-	height: 100%;
+.tile-group-aspect-ratio {
 	position: relative;
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	text-align: center;
-	padding: 8px;
-	font-size: 3.75vw;
-	box-shadow: 0 0.5rem 0 0 var(--dark, var(--gray-lightest));
-	border-radius: 16px;
-	background-color: var(--light, white);
-	border: solid 2px var(--dark, var(--gray-lightest));
-	border-top: solid 2px var(--lighter, white);
+	justify-content: center;
+	width: 100%;
+	max-width: 25rem;
+	box-sizing: content-box;
 }
-.tile::before {
-	position: absolute;
+.tile-group-aspect-ratio::before {
 	content: '';
+	width: 0;
+	height: 0;
+	padding-bottom: 100%;
+}
+.tile-group {
+	position: absolute;
 	left: 0;
 	top: 0;
 	width: 100%;
-	height: calc(100% + 0.5rem);
-	border: solid 2px var(--light);
-	opacity: 0.4;
-	border-radius: inherit;
-	mix-blend-mode: screen;
+	height: 100%;
+	padding-bottom: var(--border-scale) * 14.88px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
+	border-top: var(--line-groove);
+	border-bottom: var(--line-groove);
+	border-color: black;
 }
-.tile.-selected {
-	--light: var(--red);
-	--lighter: var(--red-light);
-	--dark: var(--red-dark);
+.tile {
+	/* 
+	set min-width and -height to override default tile sizing behavior
+	allowing consistently sized tiles.
+	*/
+	min-width: 0;
+	min-height: 0;
+	position: relative;
+	border-image-slice: 36% 36% 50% 36% fill;
+	border-image-width: calc(var(--border-scale) * 36px) calc(var(--border-scale) * 36px) calc(var(--border-scale) * 50px) calc(var(--border-scale) * 36px);
+	border-image-repeat: stretch;
+	border-style: solid;
+	padding: var(--tile-padding);
+	margin-bottom: calc(var(--border-scale) * -14.88px);
+	padding-bottom: calc(var(--border-scale) * 14.88px + var(--tile-padding));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	font-size: 14px;
+	line-height: 1.15;
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.tile.-text {
+	position: relative;
+	font-size: 1rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-weight: 700;
+	color: black;
+	text-decoration: none;
+}
+.tile.-text::after {
+	position: absolute;
+	content: '';
+	left: 50%;
+	top: 50%;
+	width: 4rem;
+	height: 4rem;
+	transform: translate(-50%,-50%);
+	background-color: var(--circle);
+	border-radius: 99999px;
+	pointer-events: none;
+	/* HACK: you can do better than this */
+	mix-blend-mode: darken;
+}
+.tile.-blue {
+	--circle: var(--blue);
+	border-image-source: url('../assets/images/tile-blue.svg');
+}
+.tile.-red {
+	--circle: var(--red);
 	color: white;
+	border-image-source: url('../assets/images/tile-red.svg');
+}
+@keyframes tile-selected-animate {
+	50% { transform: translate3d(0, 0.5rem, 0); }
+}
+.tile.-selected-animate {
+	animation: tile-selected-animate 0.5s ease;
 }
 .tile.-star {
-	background-color: var(--red);
-	color: inherit;
+	color: var(--black);
+}
+.tile.-yellow {
+	--circle: var(--yellow);
+	border-image-source: url('../assets/images/tile-yellow.svg');
+}
+.tile.-white {
+	--circle: var(--white);
+	border-image-source: url('../assets/images/tile-white.svg');
+}
+.tile.-blue-light {
+	--circle: var(--blue);
+	border-image-source: url('../assets/images/tile-light-blue.svg');
+}
+.tile.-yellow-light {
+	--circle: var(--yellow);
+	border-image-source: url('../assets/images/tile-light-yellow.svg');
 }
 
 .icon {
-	font-size: 20vw;
+	font-size: 4rem;
 }
 
-.BingoBoard3-enter-active,
-.BingoBoard3-enter-to,
-.BingoBoard3-leave-active {
+.tile-group-enter-active,
+.tile-group-enter-to,
+.tile-group-leave-active {
 	--stagger-delay: calc(var(--stagger-index, 0) * 30ms);
 	--duration-transform: .35s;
 	--duration-delay: 0.2s;
@@ -132,24 +213,23 @@ export default {
 	--easing-transform: cubic-bezier(0.740, 0.010, 0.455, 1.290);
 	transform-origin: center;
 }
-.BingoBoard3-enter-active,
-.BingoBoard3-enter-to {
+.tile-group-enter-active,
+.tile-group-enter-to {
 	transition:
 		opacity var(--duration-opacity) ease var(--stagger-delay),
 		transform var(--duration-transform) var(--easing-transform) calc(var(--duration-opacity) + var(--duration-delay) + var(--stagger-delay));
 }
-.BingoBoard3-leave-active {
+.tile-group-leave-active {
 	transition:
 		opacity var(--duration-opacity) ease calc(var(--duration-transform) + var(--duration-delay) + var(--stagger-delay)),
 		transform var(--duration-transform) var(--easing-transform) var(--stagger-delay);
 }
 
-.BingoBoard3-leave,
-.BingoBoard3-leave-active { 
+.tile-group-leave,
+.tile-group-leave-active { 
 	position: absolute !important;
-	z-index: 100 !important;
 }
-.BingoBoard3 > *:not(.BingoBoard3-leave-active) {
+.tile-group > *:not(.tile-group-leave-active) {
 	/* override these when not leaving, so we can set screen position for all tile-containers in `updated` lifecycle method */
 	top: auto !important;
 	left: auto !important;
@@ -157,16 +237,16 @@ export default {
 	height: auto !important;
 }
 
-.BingoBoard3-enter {
+.tile-group-enter {
 	opacity: 0;
 	transform: translateY(1rem);
 }
-.BingoBoard3-leave-to {
+.tile-group-leave-to {
 	opacity: 0;
 	transform: translateY(-8rem);
 }
 
-.BingoBoard3-move:not(.BingoBoard3-leave-active):not(.BingoBoard3-enter-active) {
+.tile-group-move:not(.tile-group-leave-active):not(.tile-group-enter-active) {
 	transition: transform 0.35s ease;
 	z-index: 1;
 }
