@@ -12,18 +12,20 @@
 <script>
 import session2 from '@/data/session-2'
 import data from '@/data/tropes'
+
+import { mapState } from 'vuex'
 import { countBy } from "lodash";
 
 export default {
     name: 'DataPage',
-    data () {
-        return {
-            ...session2
-        }
-    },
     computed: {
+        ...mapState(['isConnected', 'sessions']),
         soldTileIds () {
-            return this.playerData.reduce((acc, curr) => acc.concat(curr.soldTileIds), [])
+            // sessions --> playerData(concatenated) --> soldTileIds(concatenated)
+            return this.sessions.map(s => s.playerData)
+                                .reduce((acc, cur) => acc.concat(cur))
+                                .map(pd => pd.soldTileIds)
+                                .reduce((acc, cur) => acc.concat(cur))
         },
         soldTileFrequencyRanking () {
             const ranking = countBy(this.soldTileIds)
