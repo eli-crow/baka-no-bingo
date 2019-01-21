@@ -28,10 +28,8 @@ export default {
         },
         soldTileIds () {
             // sessions --> playerData(concatenated) --> soldTileIds(concatenated)
-            return this.sessions.map(s => s.playerData)
-                                .reduce((acc, cur) => acc.concat(cur))
-                                .map(pd => pd.soldTileIds)
-                                .reduce((acc, cur) => acc.concat(cur))
+            return this.sessions.map(s => s.playerData).reduce((acc, cur) => acc.concat(cur))
+                                .map(pd => pd.soldTileIds).reduce((acc, cur) => acc.concat(cur))
         },
         soldTileFrequencyRanking () {
             const ranking = countBy(this.soldTileIds)
