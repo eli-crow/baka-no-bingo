@@ -54,6 +54,9 @@ export default {
     --yellow: hsl(49, 100%, 54%);
     --yellow-dark: hsl(27, 97%, 48%);
     --yellow-light: hsl(54, 100%, 78%);
+    --purple: hsl(269, 100%, 59%);
+    --purple-dark: hsl(275, 83%, 35%);
+    --purple-light: hsl(265, 96%, 68%);
 
     --ambient: var(--yellow);
     --ambient-dark: var(--yellow-dark);
