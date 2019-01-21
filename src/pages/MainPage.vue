@@ -1,8 +1,8 @@
 <template>
 	<div class="MainPage">
 		<div class="title-container">
-			<div class="title">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
-			<div class="title title-duplicate">Baka no Bingo ★ <span class="title-version">v{{ version }}</span></div>
+			<div class="title">Baka no Bingo ★ <span class="title-version">v{{ appVersion }}</span></div>
+			<div class="title title-duplicate">Baka no Bingo ★ <span class="title-version">v{{ appVersion }}</span></div>
 		</div>
 		<div class="tile-group-container">
 			<div class="tile-group-aspect-ratio">
@@ -33,16 +33,12 @@
 
 
 <script>
+
+import { mapState } from "vuex";
 export default {
 	name: 'MainPage',
-	data () {
-		return {
-			//TODO: refactor all data
-			version: 2,
-			playTesters: ["Danni Kane", "Rachel Dause", "Maria “Labqi Airam” Iqbal", "Zach Lester", "Travis Tornquist", "Sean “Shin Bone” Yager", "Maggie Yager", "Taylor Dickens"]
-		}
-	},
 	computed: {
+		...mapState(['playTesters', 'appVersion']),
 		specialThanks () {
 			return this.playTesters.join(', ')
 		},
