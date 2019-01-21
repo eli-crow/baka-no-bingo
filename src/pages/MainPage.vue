@@ -4,43 +4,99 @@
 			<div class="title">Baka no Bingo ★ <span class="title-version">v{{ appVersion }}</span></div>
 			<div class="title title-duplicate">Baka no Bingo ★ <span class="title-version">v{{ appVersion }}</span></div>
 		</div>
+		
 		<div class="tile-group-container">
 			<div class="tile-group-aspect-ratio">
 				<div class="tile-group">
 					<div class="tile -blue">ば</div>
 					<div class="tile -blue">か</div>
 					<div class="tile -small -white">の</div>
-					<router-link class="tile -text -blue-light"
-					             to="/game" 
-								 @click.native="$store.dispatch('RESET_GAME')">New</router-link>
+					<a class="tile -text -blue-light"
+					   @click="host">Host</a>
 					<div class="tile -star -red">★</div>
-					<router-link class="tile -text -yellow-light"
-					             to="/game" >Continue</router-link>
+					<a class="tile -text -yellow-light"
+					   @click="joinStart">Join</a>
 					<div class="tile -yellow">ビ</div>
 					<div class="tile -yellow">ン</div>
 					<div class="tile -yellow">ゴ</div>
 				</div>
 			</div>
 		</div>
+
 		<div class="credits">
 			<p class="byline">A game by Eli Crow</p>
 			<p class="special-thanks">Special thanks to: {{ specialThanks }}.</p>
 			<router-link to="/data" class="button">Stats</router-link>
 		</div>
+
+		<ModalTransition>
+			<ModalAction v-if="modal === 'hosting'"
+						 title="Host a Game" 
+						 description="Others can join using this code."
+						 @close="cancelHost">
+				<p v-if="isConnectedAsHost" class="host-connected">
+					<span class="host-room-title">Room ID</span>
+					<span class="host-room-id">{{ roomId }}</span>
+				</p>
+				<div v-else class="host-waiting">Establishing connection.</div>
+			</ModalAction>
+
+			<ModalAction v-else-if="modal === 'joining'"
+						 title="Join a Game" 
+						 description="Enter the code given by your host."
+						 @close="cancelJoin">
+				<input type="text" v-model="joinRoomId"/>
+				<button @click="join"></button>
+				{{ isConnectedAsGuest }}
+			</ModalAction>
+		</ModalTransition>
 	</div>
 </template>
 
 
 
 <script>
+import ModalAction from '@/components/ModalAction'
+import ModalTransition from '@/components/ModalAction'
 
 import { mapState } from "vuex";
+
 export default {
 	name: 'MainPage',
+	data () {
+		return  {
+			modal: '',
+			joinRoomId: '',
+		}
+	},
+	components: {
+		ModalAction,
+		ModalTransition,
+	},
 	computed: {
-		...mapState(['playTesters', 'appVersion']),
+		...mapState(['playTesters', 'appVersion', 'isConnectedAsHost', 'isConnectedAsGuest', 'roomId']),
 		specialThanks () {
 			return this.playTesters.join(', ')
+		},
+	},
+	methods: {
+		host () {
+			this.modal = 'hosting'
+			this.$socket.emit('host')
+		},
+		cancelHost () {
+			this.modal = ''
+			this.$socket.emit('cancel_host')
+		},
+		join () {
+			this.$socket.emit('join', this.joinRoomId)
+		},
+		joinStart () {
+			this.modal = 'joining'
+		},
+		cancelJoin () {
+			this.modal = ''
+			this.isJoining = false
 		},
 	},
 }

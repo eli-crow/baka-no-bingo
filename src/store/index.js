@@ -13,6 +13,10 @@ const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 const store = new Vuex.Store({
     state: {
         isConnected: false,
+        isConnectedAsHost: false,
+        isConnectedAsGuest: false,
+        roomId: null,
+
         socketTestMessage: '',
         appVersion: 3,
         playTesters: ["Danni Kane", "Rachel Dause", "Maria “Labqi Airam” Iqbal", "Zach Lester", "Travis Tornquist", "Sean “Shin Bone” Yager", "Maggie Yager", "Taylor Dickens"],
@@ -47,6 +51,7 @@ const store = new Vuex.Store({
             const newTiles = getRandomTileArray(9)
             newTiles[4].selected = true
             const playerDataDefaults = {
+                name: '',
                 score: 20,
                 tiles: newTiles,
                 soldTileIds: [],
@@ -84,6 +89,14 @@ const store = new Vuex.Store({
         },
         SOCKET_TEST(state, message) {
             state.socketMessage = message
+        },
+        SOCKET_CONFIRM_HOST(state, id) {
+            state.isConnectedAsHost = true
+            state.roomId = id
+        },
+        SOCKET_CONFIRM_GUEST(state, id) {
+            state.isConnectedAsGuest = true
+            state.roomId = id
         },
     },
     actions: {
