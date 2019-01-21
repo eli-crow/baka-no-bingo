@@ -4,6 +4,9 @@
         <ol>
             <li v-for="tile in soldTileFrequencyRanking">{{tile.text}}: <strong>{{tile.count}} sold</strong></li>
         </ol>
+
+        <h2>Most Sold Tiles</h2>
+        <p>{{ message }}</p>
     </div>
 </template>
 
@@ -20,6 +23,9 @@ export default {
     name: 'DataPage',
     computed: {
         ...mapState(['isConnected', 'sessions']),
+        message () {
+            return this.isConnected ? `I'm connected!` :  `Not connected, sorry`
+        },
         soldTileIds () {
             // sessions --> playerData(concatenated) --> soldTileIds(concatenated)
             return this.sessions.map(s => s.playerData)
