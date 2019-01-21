@@ -7,11 +7,9 @@
 </template>
 
 <script>
-import store from '@/store'
 import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'App',
-  store: store,
   computed: {
     ...mapState(['boughtTile']),
     ...mapGetters(['sellablePatterns']),

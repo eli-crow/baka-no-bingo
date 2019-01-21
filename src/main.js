@@ -2,22 +2,35 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import store from './store'
 import router from './router'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCheck, faTrash, faRedo, faChevronLeft, faTimes, faClipboard } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import VueClipboard from 'vue-clipboard2'
-
 library.add(faCheck, faTrash, faRedo, faChevronLeft, faTimes, faClipboard)
 Vue.component('Icon', FontAwesomeIcon)
 
-Vue.config.productionTip = false
-
+import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+
+import VueSocketIO from 'vue-socket.io'
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'http://localhost:3000',
+  vuex: {
+    store: store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_',
+  }
+}))
+
+Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: { App },
   template: '<App/>'

@@ -12,6 +12,8 @@ const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
 
 const store = new Vuex.Store({
     state: {
+        isConnected: false,
+        socketTestMessage: '',
         appVersion: 3,
         playTesters: ["Danni Kane", "Rachel Dause", "Maria “Labqi Airam” Iqbal", "Zach Lester", "Travis Tornquist", "Sean “Shin Bone” Yager", "Maggie Yager", "Taylor Dickens"],
         patterns: [
@@ -73,6 +75,15 @@ const store = new Vuex.Store({
         },
         TOGGLE_CELL (state, i) {
             state.playerData.tiles[i].selected = ! state.playerData.tiles[i].selected
+        },
+        SOCKET_CONNECT (state) {
+            state.isConnected = true
+        },
+        SOCKET_DISCONNECT (state) {
+            state.isConnected = false
+        },
+        SOCKET_TEST(state, message) {
+            state.socketMessage = message
         },
     },
     actions: {
