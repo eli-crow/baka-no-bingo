@@ -57,7 +57,7 @@
 
 <script>
 import ModalAction from '@/components/ModalAction'
-import ModalTransition from '@/components/ModalAction'
+import ModalTransition from '@/components/ModalTransition'
 
 import { mapState } from "vuex";
 

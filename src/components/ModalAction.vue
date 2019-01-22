@@ -6,7 +6,7 @@
                 <p class="description">{{ description }}</p>
                 <Icon class="icon" icon="times"/>
             </header>
-            <div class="inner-content">
+            <div class="slot-content">
                 <slot/>
             </div>
         </div>
