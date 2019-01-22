@@ -34,11 +34,12 @@
 						 title="Host a Game" 
 						 description="Others can join using this code."
 						 @close="cancelHost">
-				<p v-if="isConnectedAsHost" class="host-connected">
+				<p v-if="isConnectedAsHost" class="host-room">
 					<span class="host-room-title">Room ID</span>
 					<span class="host-room-id">{{ roomId }}</span>
 				</p>
 				<div v-else class="host-waiting">Establishing connection.</div>
+				<router-link class="button" to="/game">Start Game</router-link>
 			</ModalAction>
 
 			<ModalAction v-else-if="modal === 'joining'"
@@ -46,8 +47,7 @@
 						 description="Enter the code given by your host."
 						 @close="cancelJoin">
 				<input type="text" v-model="joinRoomId"/>
-				<button @click="join"></button>
-				{{ isConnectedAsGuest }}
+				<a class="button" @click="join">Join Room</a>
 			</ModalAction>
 		</ModalTransition>
 	</div>
@@ -99,6 +99,13 @@ export default {
 			this.isJoining = false
 		},
 	},
+	mounted () {
+		this.$store.watch(s => s.isConnectedAsGuest, value => {
+			if (value === true) {
+				this.$router.push('/game')
+			}
+		});
+	}
 }
 </script>
 
@@ -265,14 +272,35 @@ export default {
 
 .button {
 	display: flex;
-	width: min-content;
+	width: max-content;
 	margin-top: 1.5rem;
 	margin-bottom: 1rem;
-	padding: 0.25rem 1rem;
-	border-radius: 2px; 
-	background-color: var(--yellow-dark);
+	padding: 12px 16px;
+	border-radius: var(--radius-small);
+	box-shadow: 0 6px 0 0 var(--green-dark);
+	background-color: var(--green);
 	font-weight: 700;
-	color: inherit;
+	color: white;
 	text-decoration: inherit;
+}
+
+.host-room {
+	margin: 0;
+	padding: 16px 16px;
+	line-height: 1;
+	background-color: var(--white);
+	box-shadow: 0 8px 0 0 var(--blue);
+	border: solid 1px var(--blue);
+	border-radius: var(--radius-medium);
+}
+.host-room-title {
+	display: block;
+	margin-bottom: 8px;
+}
+.host-room-id {
+	display: block;
+	font-weight: 700;
+	font-size: 48px;
+	text-transform: uppercase;
 }
 </style>
