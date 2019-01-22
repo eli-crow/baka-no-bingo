@@ -15,6 +15,7 @@ const store = new Vuex.Store({
         isConnected: false,
         isConnectedAsHost: false,
         isConnectedAsGuest: false,
+        roomId: null,
 
         socketTestMessage: '',
         appVersion: 3,
@@ -39,12 +40,12 @@ const store = new Vuex.Store({
         ],
         playerData: {
             id: uid(),
-            roomId: null,
             name: localStorage.getItem(LS_NAME) || '',
             score: 20,
             tiles: getRandomTileArray(9, [4]),
             soldTileIds: [],
         },
+        otherPlayerData: {}
     },
     mutations: {
         NEW_BOARD (state) {
@@ -93,6 +94,9 @@ const store = new Vuex.Store({
         SOCKET_CONFIRM_GUEST(state, id) {
             state.isConnectedAsGuest = true
             state.roomId = id
+        },
+        SOCKET_OTHER_PLAYER_UPDATED(state, {id, playerData}) {
+            state.otherPlayerData[id] = playerData
         },
     },
     actions: {
@@ -165,8 +169,13 @@ store.watch(state => state.playerData.name, newValue => {
     localStorage.setItem(LS_NAME, newValue)
 })
 
+
+//socket.io emit
+let socket
+
 //send reduced playerData to socket server
 store.watch(state => state.playerData, newValue => {
+    if (!socket) socket = new Vue().$socket
     const reducedPlayerData = JSON.parse(JSON.stringify(newValue))
     reducedPlayerData.tiles = reducedPlayerData.tiles.map(t => t.selected)
     socket.emit('set_player_data', reducedPlayerData)
