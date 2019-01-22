@@ -5,9 +5,7 @@
 
 		<header class="header">
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
-			<Icon class="info-button" 
-			      icon="clipboard"
-				  @click="copySessionData"/>
+			<p>{{ roomId }}</p>
 			<div class="score">{{ playerData.score }}<span class="score-unit">pts</span></div>
 		</header>
 
@@ -79,7 +77,7 @@ export default {
 	},
 	computed: {
 		...mapGetters(['sellablePatterns']),
-		...mapState(['boughtTile', 'playerData']),
+		...mapState(['boughtTile', 'playerData', 'roomId']),
 		mode () {
 			if (this.boughtTile) {
 				return 'bought-tile'
