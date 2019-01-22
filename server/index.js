@@ -15,6 +15,8 @@ function generateRoomId () {
     return id
 }
 
+const __playerData = {}
+
 app.get('/', function(req, res){
   res.send('<h1>Hello world</h1>');
 });
@@ -23,6 +25,7 @@ io.on('connection', function (socket) {
     io.emit('CONNECT')
 
     socket.on('disconnect', function () {
+        delete __playerData[socket.id]
         io.emit('DISCONNECT')
     })
     socket.on('host', function () {
@@ -36,7 +39,11 @@ io.on('connection', function (socket) {
         }
     })
     socket.on('set_player_data', function (playerData) {
-        socket.playerData = playerData
+        __playerData[socket.id] = playerData
+        socket.broadcast.emit('OTHER_PLAYER_UPDATED', {
+            id: socket.id,
+            playerData: __playerData[socket.id],
+        })
     })
 })
 
