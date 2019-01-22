@@ -8,14 +8,13 @@ import session2 from '@/data/session-2'
 
 Vue.use(Vuex)
 
-const LS_PLAYER_DATA =  'bakaNoBingoPlayerData';
+const LS_NAME =  'bakanobingo_name';
 
 const store = new Vuex.Store({
     state: {
         isConnected: false,
         isConnectedAsHost: false,
         isConnectedAsGuest: false,
-        roomId: null,
 
         socketTestMessage: '',
         appVersion: 3,
@@ -38,26 +37,19 @@ const store = new Vuex.Store({
         sessions: [
             session2
         ],
-        playerData: {},
+        playerData: {
+            id: uid(),
+            roomId: null,
+            name: localStorage.getItem(LS_NAME) || '',
+            score: 20,
+            tiles: getRandomTileArray(9, [4]),
+            soldTileIds: [],
+        },
     },
     mutations: {
         NEW_BOARD (state) {
-            const newTiles = getRandomTileArray(9)
-			newTiles[4].selected = true
+            const newTiles = getRandomTileArray(9, [4])
 			state.playerData.tiles = newTiles
-        },
-        INITIALIZE_PLAYER_DATA(state) {
-            const lsData = localStorage.getItem(LS_PLAYER_DATA)
-            const newTiles = getRandomTileArray(9)
-            newTiles[4].selected = true
-            const playerDataDefaults = {
-                name: '',
-                score: 20,
-                tiles: newTiles,
-                soldTileIds: [],
-            }
-            const playerData = Object.assign({}, playerDataDefaults, JSON.parse(lsData) || {})
-            state.playerData = playerData
         },
         SET_SCORE (state, amount) {
             state.playerData.score = amount
@@ -81,6 +73,10 @@ const store = new Vuex.Store({
         TOGGLE_CELL (state, i) {
             state.playerData.tiles[i].selected = ! state.playerData.tiles[i].selected
         },
+        SET_NAME (state, name) {
+            state.playerData.name = name
+        },
+
         SOCKET_CONNECT (state) {
             state.isConnected = true
         },
@@ -153,21 +149,27 @@ function getRandomTile () {
 	}
 }
 
-function getRandomTileArray(n) {
-	return Lodash.sampleSize(store.state.tropes.allIds, n).map(id => {
-        const text = store.state.tropes.byId[id]
+function getRandomTileArray(n, selectedIndices=[]) {
+	return Lodash.sampleSize(data.tropes.allIds, n).map((id, i) => {
+        const text = data.tropes.byId[id]
         return {
             text: text,
-            selected: false,
+            selected: selectedIndices.includes(i) ? true : false,
             id: id,
             key: uid(),
         }
 	})
 }
 
-store.commit('INITIALIZE_PLAYER_DATA')
+store.watch(state => state.playerData.name, newValue => {
+    localStorage.setItem(LS_NAME, newValue)
+})
+
+//send reduced playerData to socket server
 store.watch(state => state.playerData, newValue => {
-    localStorage.setItem(LS_PLAYER_DATA, JSON.stringify(newValue))
+    const reducedPlayerData = JSON.parse(JSON.stringify(newValue))
+    reducedPlayerData.tiles = reducedPlayerData.tiles.map(t => t.selected)
+    socket.emit('set_player_data', reducedPlayerData)
 }, {deep: true})
 
 export default store
