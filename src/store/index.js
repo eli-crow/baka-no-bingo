@@ -81,22 +81,25 @@ const store = new Vuex.Store({
         SOCKET_CONNECT (state) {
             state.isConnected = true
         },
-        SOCKET_DISCONNECT (state) {
+        SOCKET_DISCONNECT (state, id) {
             state.isConnected = false
+            Vue.delete(state.otherPlayerData, id)
         },
         SOCKET_TEST(state, message) {
             state.socketMessage = message
         },
-        SOCKET_CONFIRM_HOST(state, id) {
+        SOCKET_CONFIRM_HOST(state, {roomId, playerData}) {
             state.isConnectedAsHost = true
-            state.roomId = id
+            state.roomId = roomId
+            state.otherPlayerData = playerData
         },
-        SOCKET_CONFIRM_GUEST(state, id) {
+        SOCKET_CONFIRM_GUEST(state, {roomId, playerData}) {
             state.isConnectedAsGuest = true
-            state.roomId = id
+            state.roomId = roomId
+            state.otherPlayerData = playerData
         },
         SOCKET_OTHER_PLAYER_UPDATED(state, {id, playerData}) {
-            state.otherPlayerData[id] = playerData
+            Vue.set(state.otherPlayerData, id, playerData)
         },
     },
     actions: {
@@ -138,6 +141,16 @@ const store = new Vuex.Store({
         sellablePatterns ({patterns, playerData}) {
 			// filter all patterns by whether each pattern matches the current board
 			return patterns.filter(p => p.pattern.every(patternIndex => playerData.tiles[patternIndex].selected))
+        },
+        playersRanked ({otherPlayerData}) {
+            const result = Object.values(otherPlayerData).sort((a,b) => b.score - a.score)
+            console.log(result)
+            return result
+        },
+        playerDataSimplified ({playerData}) {
+            const result = JSON.parse(JSON.stringify(playerData))
+            result.tiles = result.tiles.map(t => t.selected)
+            return result
         }
     },
 })
@@ -176,9 +189,7 @@ let socket
 //send reduced playerData to socket server
 store.watch(state => state.playerData, newValue => {
     if (!socket) socket = new Vue().$socket
-    const reducedPlayerData = JSON.parse(JSON.stringify(newValue))
-    reducedPlayerData.tiles = reducedPlayerData.tiles.map(t => t.selected)
-    socket.emit('set_player_data', reducedPlayerData)
+    socket.emit('set_player_data', store.getters.playerDataSimplified)
 }, {deep: true})
 
 export default store

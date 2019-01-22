@@ -59,7 +59,7 @@
 import ModalAction from '@/components/ModalAction'
 import ModalTransition from '@/components/ModalTransition'
 
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
 	name: 'MainPage',
@@ -74,7 +74,8 @@ export default {
 		ModalTransition,
 	},
 	computed: {
-		...mapState(['playTesters', 'appVersion', 'isConnectedAsHost', 'isConnectedAsGuest', 'roomId']),
+		...mapGetters(['playerDataSimplified']),
+		...mapState(['playTesters', 'appVersion', 'isConnectedAsHost', 'isConnectedAsGuest', 'roomId', 'playerData']),
 		specialThanks () {
 			return this.playTesters.join(', ')
 		},
@@ -82,14 +83,19 @@ export default {
 	methods: {
 		host () {
 			this.modal = 'hosting'
-			this.$socket.emit('host')
+			this.$socket.emit('host', {
+				playerData: this.playerDataSimplified,
+			})
 		},
 		cancelHost () {
 			this.modal = ''
 			this.$socket.emit('cancel_host')
 		},
 		join () {
-			this.$socket.emit('join', this.joinRoomId)
+			this.$socket.emit('join', {
+				roomId: this.joinRoomId,
+				playerData: this.playerDataSimplified,
+			})
 		},
 		joinStart () {
 			this.modal = 'joining'

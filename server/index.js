@@ -22,22 +22,32 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function (socket) {
-    io.emit('CONNECT')
+    io.emit('CONNECT', socket.id)
 
     socket.on('disconnect', function () {
         delete __playerData[socket.id]
-        io.emit('DISCONNECT')
+        io.emit('DISCONNECT', socket.id)
     })
-    socket.on('host', function () {
-        const id = generateRoomId()
-        socket.join(id)
-        socket.emit('CONFIRM_HOST', id)
+
+    socket.on('host', function ({playerData}) {
+        const roomId = generateRoomId()
+        socket.join(roomId)
+        socket.emit('CONFIRM_HOST', {
+            roomId: roomId,
+            playerData: __playerData,
+        })
     })
-    socket.on('join', function (id) {
-        if (id in io.sockets.adapter.rooms) {
-            socket.emit('CONFIRM_GUEST', id)
+
+    socket.on('join', function ({roomId, playerData}) {
+        __playerData[socket.id] = playerData
+        if (roomId in io.sockets.adapter.rooms) {
+            socket.emit('CONFIRM_GUEST', {
+                roomId: roomId,
+                playerData: __playerData,
+            })
         }
     })
+
     socket.on('set_player_data', function (playerData) {
         __playerData[socket.id] = playerData
         socket.broadcast.emit('OTHER_PLAYER_UPDATED', {
