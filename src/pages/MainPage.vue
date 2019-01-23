@@ -274,24 +274,4 @@ export default {
 	color: white;
 	text-decoration: inherit;
 }
-
-.host-room {
-	margin: 0;
-	padding: 16px 16px;
-	line-height: 1;
-	background-color: var(--white);
-	box-shadow: 0 8px 0 0 var(--blue);
-	border: solid 1px var(--blue);
-	border-radius: var(--radius-medium);
-}
-.host-room-title {
-	display: block;
-	margin-bottom: 8px;
-}
-.host-room-id {
-	display: block;
-	font-weight: 700;
-	font-size: 48px;
-	text-transform: uppercase;
-}
 </style>
