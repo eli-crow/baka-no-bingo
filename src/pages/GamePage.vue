@@ -5,7 +5,10 @@
 
 		<header class="header">
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
-			<p>{{ roomId }}</p>
+			<p class="room">
+				<span class="room-title">Room</span>
+				<span class="room-id">{{ roomId }}</span>
+			</p>
 			<div class="scores">
 				<div class="my-score">{{ playerData.score }}</div>
 				<a class="players" @click="modal='players'"><Icon icon="list-ol"/></a>
@@ -162,14 +165,30 @@ export default {
 	background-color: rgba(0, 0, 0, 0.1);
 	color: var(--black);
 }
-.title {
+.room {
 	flex: 1 1 auto;
-	font: var(--font-title);
 }
-
-.score {
-	position: relative;
-	z-index: 1;
+.room-title {
+	display: block;
+	margin: 0;
+	line-height: 1;
+	text-transform: uppercase;
+	font-size: 14px;
+	letter-spacing: 0.07em;
+	font-weight: 700;
+	margin-bottom: 2px;
+	opacity: 0.5;
+}
+.room-id {
+	display: block;
+	margin: 0;
+	font-size: 24px;
+	text-transform: uppercase;
+	font-weight: 700;
+	line-height: 1;
+}
+.scores {
+	flex: 0 0 auto;
 	text-align: center;
 	display: flex;
 	align-items: center;
@@ -179,11 +198,19 @@ export default {
 	background-color: white;
 	line-height: 1;
 	align-self: center;
-	padding: 0.5rem 1rem;
+
 	border-radius: 99999px;
 	box-shadow: 0 4px 0 0 var(--gray-light);
 	margin-left: auto;
 	margin-bottom: 4px;
+}
+.my-score {
+	padding: 8px 12px 8px 20px;
+	border-right: solid 1px var(--gray-light);
+}
+.players {
+	padding: 8px 16px 8px 12px;
+	font-size: 24px;
 }
 
 
