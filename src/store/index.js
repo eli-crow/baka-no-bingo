@@ -155,7 +155,10 @@ const store = new Vuex.Store({
 			return patterns.filter(p => p.pattern.every(patternIndex => playerData.tiles[patternIndex].selected))
         },
         playersRanked ({allPlayerData}) {
-            const result = Object.values(allPlayerData).sort((a,b) => b.score - a.score)
+            const copy = JSON.parse(JSON.stringify(allPlayerData))
+            const result = Object.entries(copy)
+                                 .map(([id, playerData]) => ({id, ...playerData}))
+                                 .sort((a,b) => b.score - a.score)
             return result
         },
         playerDataSimplified ({playerData}) {

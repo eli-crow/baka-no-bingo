@@ -3,7 +3,8 @@
         <ol class="list">
             <li class="player"
                 v-for="player in playersRanked" 
-                :key="player.id">
+                :key="player.id"
+                @click="$emit('select', player.id)">
                 <PatternIconTiles class="icon" :tiles="player.tiles"/>
                 <div class="name">{{ player.name || 'Guest'}}</div>
                 <div class="score">{{ player.score }}</div>
