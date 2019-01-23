@@ -37,6 +37,7 @@ export default {
     width: 100%;
     height: 100%;
     display: flex;
+    padding: 12px;
     align-items: center;
     justify-content: center;
     background-color: rgba(0,0,0,0.6);
@@ -51,6 +52,8 @@ export default {
 	*/
 	min-width: 0;
 	min-height: 0;
+    width: 20rem;
+    max-width: 100%;
 	position: relative;
     border-image-source: url('../assets/images/tile-white.svg');
 	border-image-slice: 36% 36% 50% 36% fill;

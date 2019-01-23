@@ -49,7 +49,7 @@
 			             title="Players"
 			             description="Who's in the lead?"
 						 @close="modal = null">
-				<PlayerList class="player-list"></PlayerList>
+				<PlayerList class="player-list"/>
 			</ModalAction>
 		</ModalTransition>
 	</div>
