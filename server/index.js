@@ -3,6 +3,16 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var uuid = require('uuid')
 
+app.get('/', function(req, res){
+  res.send('<h1>Hello world</h1>');
+});
+
+const __rooms = {}
+function setRoomPlayerData (roomId, playerId, playerData) {
+    const room = __rooms[roomId] = __rooms[roomId] || {}
+    room[playerId] = playerData
+}
+
 const POSSIBLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
 function generateRoomId () {
     let id
@@ -15,45 +25,77 @@ function generateRoomId () {
     return id
 }
 
-const __playerData = {}
+io.on('connection', (socket) => {
+    const playerId = uuid()
 
-app.get('/', function(req, res){
-  res.send('<h1>Hello world</h1>');
-});
+    socket.emit('CONNECT')
 
-io.on('connection', function (socket) {
-    io.emit('CONNECT', socket.id)
+    socket.on('disconnecting', () => {
+        socket.emit('LEFT')
 
-    socket.on('disconnect', function () {
-        delete __playerData[socket.id]
-        io.emit('DISCONNECT', socket.id)
-    })
-
-    socket.on('host', function ({playerData}) {
-        const roomId = generateRoomId()
-        socket.join(roomId)
-        socket.emit('CONFIRM_HOST', {
-            roomId: roomId,
-            playerData: __playerData,
-        })
-    })
-
-    socket.on('join', function ({roomId, playerData}) {
-        __playerData[socket.id] = playerData
-        if (roomId in io.sockets.adapter.rooms) {
-            socket.emit('CONFIRM_GUEST', {
-                roomId: roomId,
-                playerData: __playerData,
+        const joinedRooms = Object.keys(socket.rooms)
+        joinedRooms.forEach(roomId => {
+            if (roomId in __rooms) {
+                delete __rooms[roomId][playerId]
+            }
+            socket.broadcast.in(roomId).emit('OTHER_LEFT', {
+                playerId: playerId,
             })
-        }
+        })
     })
 
-    socket.on('set_player_data', function (playerData) {
-        __playerData[socket.id] = playerData
-        socket.broadcast.emit('OTHER_PLAYER_UPDATED', {
-            id: socket.id,
-            playerData: __playerData[socket.id],
+    socket.on('disconnect', () => {
+        //HACK: there's got to be a more efficient way to do this
+        //Delete playerId from every room
+        socket.emit('DISCONNECT')
+    })
+
+    //Create a room and join it
+    socket.on('host', ({playerData}) => {
+        const roomId = generateRoomId()
+
+        socket.join(roomId)
+        setRoomPlayerData(roomId, playerId, playerData)
+
+        //Confirm self has joined
+        socket.emit('JOINED', {
+            roomId: roomId,
+            allPlayerData: __rooms[roomId],
         })
+        //Notify others self has joined
+        socket.broadcast.in(roomId).emit('OTHER_JOINED', {
+            playerId: playerId,
+            playerData: playerData,
+        })
+    })
+
+    //Join a room
+    socket.on('join', ({roomId, playerData}) => {
+        if (! (roomId in io.sockets.adapter.rooms)) {
+            return
+        }
+
+        socket.join(roomId)
+        setRoomPlayerData(roomId, playerId, playerData)
+
+        //Confirm self has joined
+        socket.emit('JOINED', {
+            roomId: roomId,
+            allPlayerData: __rooms[roomId],
+        })
+        //Notify others self has joined
+        socket.broadcast.in(roomId).emit('OTHER_JOINED', {
+            playerId: playerId,
+            playerData: playerData,
+        })
+    })
+
+    socket.on('update', ({roomId, playerData}) => {
+        setRoomPlayerData(roomId, playerId, playerData)
+        //Confirm self has updated
+        socket.emit('UPDATED')
+        //Notify others self has updated
+        socket.broadcast.in(roomId).emit('OTHER_UPDATED', {playerId, playerData})
     })
 })
 

@@ -30,19 +30,7 @@
 		</div>
 
 		<ModalTransition>
-			<ModalAction v-if="modal === 'hosting'"
-						 title="Host a Game" 
-						 description="Others can join using this code."
-						 @close="cancelHost">
-				<p v-if="isConnectedAsHost" class="host-room">
-					<span class="host-room-title">Room ID</span>
-					<span class="host-room-id">{{ roomId }}</span>
-				</p>
-				<div v-else class="host-waiting">Establishing connection.</div>
-				<router-link class="button" to="/game">Start Game</router-link>
-			</ModalAction>
-
-			<ModalAction v-else-if="modal === 'joining'"
+			<ModalAction v-if="modal === 'joining'"
 						 title="Join a Game" 
 						 description="Enter the code given by your host."
 						 @close="cancelJoin">
@@ -75,14 +63,13 @@ export default {
 	},
 	computed: {
 		...mapGetters(['playerDataSimplified']),
-		...mapState(['playTesters', 'appVersion', 'isConnectedAsHost', 'isConnectedAsGuest', 'roomId', 'playerData']),
+		...mapState(['playTesters', 'appVersion', 'roomId', 'playerData']),
 		specialThanks () {
 			return this.playTesters.join(', ')
 		},
 	},
 	methods: {
 		host () {
-			this.modal = 'hosting'
 			this.$socket.emit('host', {
 				playerData: this.playerDataSimplified,
 			})
@@ -106,10 +93,8 @@ export default {
 		},
 	},
 	mounted () {
-		this.$store.watch(s => s.isConnectedAsGuest, value => {
-			if (value === true) {
-				this.$router.push('/game')
-			}
+		this.$store.watch(s => s.roomId, value => {
+			if (value) { this.$router.push('/game') }
 		});
 	}
 }

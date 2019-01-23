@@ -6,9 +6,9 @@ import store from './store'
 import router from './router'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheck, faTrash, faRedo, faChevronLeft, faTimes, faClipboard } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faTrash, faRedo, faChevronLeft, faTimes, faClipboard, faListOl } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faCheck, faTrash, faRedo, faChevronLeft, faTimes, faClipboard)
+library.add(faCheck, faTrash, faRedo, faChevronLeft, faTimes, faClipboard, faListOl)
 Vue.component('Icon', FontAwesomeIcon)
 
 import VueClipboard from 'vue-clipboard2'

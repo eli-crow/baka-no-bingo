@@ -6,7 +6,10 @@
 		<header class="header">
 			<router-link class="back" to="/"><Icon icon="chevron-left"/></router-link>
 			<p>{{ roomId }}</p>
-			<div class="score">{{ playerData.score }}<span class="score-unit">pts</span></div>
+			<div class="scores">
+				<div class="my-score">{{ playerData.score }}</div>
+				<a class="players" @click="modal='players'"><Icon icon="list-ol"/></a>
+			</div>
 		</header>
 
 		<div class="board-container">
@@ -40,6 +43,15 @@
 				              @select="$store.dispatch('SPELL_RESET_BOARD')"/>
 			</div>
 		</transition>
+
+		<ModalTransition>
+			<ModalAction v-if="modal === 'players'"
+			             title="Players"
+			             description="Who's in the lead?"
+						 @close="modal = null">
+				<PlayerList class="player-list"></PlayerList>
+			</ModalAction>
+		</ModalTransition>
 	</div>
 </template>
 
@@ -60,6 +72,9 @@ import PatternSellBar from '@/components/PatternSellBar'
 import PatternLegend from '@/components/PatternLegend'
 import ActionButton from '@/components/ActionButton'
 import TheBuyMenu from '@/components/TheBuyMenu'
+import ModalAction from '@/components/ModalAction'
+import ModalTransition from '@/components/ModalTransition'
+import PlayerList from '@/components/PlayerList'
 
 export default {
 	name: 'GamePage',
@@ -71,9 +86,17 @@ export default {
 		ActionButton,
 		TheBuyMenu,
 		GlobalEvents,
+		ModalAction,
+		ModalTransition,
+		PlayerList,
 	},
 	props: {
 		resetGameOnLoad: Boolean,
+	},
+	data () {
+		return {
+			modal: '',
+		}
 	},
 	computed: {
 		...mapGetters(['sellablePatterns']),
@@ -161,9 +184,6 @@ export default {
 	box-shadow: 0 4px 0 0 var(--gray-light);
 	margin-left: auto;
 	margin-bottom: 4px;
-}
-.score-unit {
-	font-size: 61%;
 }
 
 

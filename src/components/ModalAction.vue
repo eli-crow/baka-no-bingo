@@ -33,6 +33,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1000000;
     width: 100%;
     height: 100%;
     display: flex;
@@ -99,6 +100,5 @@ export default {
 
 .slot-content {
     padding: 16px 16px;
-    text-align: center;
 }
 </style>

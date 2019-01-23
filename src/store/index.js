@@ -8,16 +8,11 @@ import session2 from '@/data/session-2'
 
 Vue.use(Vuex)
 
+//localStorage values
 const LS_NAME =  'bakanobingo_name';
 
 const store = new Vuex.Store({
     state: {
-        isConnected: false,
-        isConnectedAsHost: false,
-        isConnectedAsGuest: false,
-        roomId: null,
-
-        socketTestMessage: '',
         appVersion: 3,
         playTesters: ["Danni Kane", "Rachel Dause", "Maria “Labqi Airam” Iqbal", "Zach Lester", "Travis Tornquist", "Sean “Shin Bone” Yager", "Maggie Yager", "Taylor Dickens"],
         patterns: [
@@ -38,6 +33,10 @@ const store = new Vuex.Store({
         sessions: [
             session2
         ],
+
+//socket.io
+        isConnected: false,
+        roomId: null,
         playerData: {
             id: uid(),
             name: localStorage.getItem(LS_NAME) || '',
@@ -45,8 +44,9 @@ const store = new Vuex.Store({
             tiles: getRandomTileArray(9, [4]),
             soldTileIds: [],
         },
-        otherPlayerData: {}
+        allPlayerData: {}
     },
+
     mutations: {
         NEW_BOARD (state) {
             const newTiles = getRandomTileArray(9, [4])
@@ -76,32 +76,43 @@ const store = new Vuex.Store({
         },
         SET_NAME (state, name) {
             state.playerData.name = name
+            localStorage.setItem(LS_NAME, name)
         },
 
+//socket.io
+        //Self connects
         SOCKET_CONNECT (state) {
             state.isConnected = true
         },
-        SOCKET_DISCONNECT (state, id) {
+        //Self disconnects
+        SOCKET_DISCONNECT (state) {
             state.isConnected = false
-            Vue.delete(state.otherPlayerData, id)
         },
-        SOCKET_TEST(state, message) {
-            state.socketMessage = message
-        },
-        SOCKET_CONFIRM_HOST(state, {roomId, playerData}) {
-            state.isConnectedAsHost = true
+        //Self joins existing room
+        SOCKET_JOINED (state, {roomId, allPlayerData}) {
             state.roomId = roomId
-            state.otherPlayerData = playerData
+            state.allPlayerData = allPlayerData
         },
-        SOCKET_CONFIRM_GUEST(state, {roomId, playerData}) {
-            state.isConnectedAsGuest = true
-            state.roomId = roomId
-            state.otherPlayerData = playerData
+        SOCKET_LEFT (state) {
+            state.roomId = null
         },
-        SOCKET_OTHER_PLAYER_UPDATED(state, {id, playerData}) {
-            Vue.set(state.otherPlayerData, id, playerData)
+        SOCKET_UPDATED (state) {
+
+        },
+        //Other joins room
+        SOCKET_OTHER_JOINED(state, {playerId, playerData}) {
+            Vue.set(state.allPlayerData, playerId, playerData)
+        },
+        //Other player left room
+        SOCKET_OTHER_LEFT(state, {playerId}) {
+            Vue.delete(state.allPlayerData, playerId)
+        },
+        //Other's playerData updates
+        SOCKET_OTHER_UPDATED(state, {playerId, playerData}) {
+            Vue.set(state.allPlayerData, playerId, playerData)
         },
     },
+
     actions: {
         SPELL_BUY ({commit, state}) {
             if (state.playerData.score < 5) return
@@ -134,6 +145,7 @@ const store = new Vuex.Store({
             state.playerData.tiles = resultTiles
         }
     },
+
     getters: {
         allTropes ({tropes}) {
             return tropes.allIds.map(id => tropes.byId[id])
@@ -142,9 +154,8 @@ const store = new Vuex.Store({
 			// filter all patterns by whether each pattern matches the current board
 			return patterns.filter(p => p.pattern.every(patternIndex => playerData.tiles[patternIndex].selected))
         },
-        playersRanked ({otherPlayerData}) {
-            const result = Object.values(otherPlayerData).sort((a,b) => b.score - a.score)
-            console.log(result)
+        playersRanked ({allPlayerData}) {
+            const result = Object.values(allPlayerData).sort((a,b) => b.score - a.score)
             return result
         },
         playerDataSimplified ({playerData}) {
@@ -183,13 +194,24 @@ store.watch(state => state.playerData.name, newValue => {
 })
 
 
-//socket.io emit
-let socket
+//HACK: socket.io needs to happen after some stuff in main.js
+window.setTimeout(() => {
+    const socket = new Vue().$socket
 
-//send reduced playerData to socket server
-store.watch(state => state.playerData, newValue => {
-    if (!socket) socket = new Vue().$socket
-    socket.emit('set_player_data', store.getters.playerDataSimplified)
-}, {deep: true})
+    socket.on('reconnect', () => {
+        socket.emit('join', {
+            roomId: store.state.roomId, 
+            playerData: store.getters.playerDataSimplified,
+        })
+    })
+    
+    //send reduced playerData to socket server
+    store.watch(state => state.playerData, newValue => {
+        socket.emit('update', {
+            roomId: store.state.roomId,
+            playerData: store.getters.playerDataSimplified
+        })
+    }, {deep: true})
+}, 0)
 
 export default store
