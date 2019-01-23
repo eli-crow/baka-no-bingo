@@ -71,6 +71,8 @@ io.on('connection', (socket) => {
 
     //Join a room
     socket.on('join', ({roomId, playerData}) => {
+        roomId = roomId.toLowerCase()
+
         if (! (roomId in io.sockets.adapter.rooms)) {
             return
         }
@@ -91,6 +93,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('update', ({roomId, playerData}) => {
+        roomId = roomId.toLowerCase()
         setRoomPlayerData(roomId, playerId, playerData)
         //Confirm self has updated
         socket.emit('UPDATED')
