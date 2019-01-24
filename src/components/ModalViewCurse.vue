@@ -8,15 +8,8 @@
             <p class="description">{{ viewedCurse.description }}</p>
         </div>
         <ButtonGroup>
-            <ButtonSquare @select="dispel"
-                          color="green">
-                Dispel!
-            </ButtonSquare>
-            <ButtonSquare @select="giveUp"
-                          color="red"
-                          :cost="giveUpCost">
-                Give Up
-            </ButtonSquare>
+            <ButtonSquare @select="dispel" color="green">Dispel!</ButtonSquare>
+            <ButtonSquare @select="giveUp" color="red" :cost="giveUpCost">Give Up</ButtonSquare>
         </ButtonGroup>
     </ModalAction>
 </template>
