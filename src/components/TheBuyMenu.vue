@@ -1,6 +1,6 @@
 <template>
 	<div class="TheBuyMenu">
-		<img class="icon" src="@/assets/icons/action-buy.svg"/>
+		<img class="icon" src="@/assets/icons/spell-replace.svg"/>
 		<div class="title">Tap a tile to replace it.</div>
 		<Icon class="x"
 		      icon="times"
