@@ -34,7 +34,7 @@ export default {
 <style>
   :root {
     --white: hsl(0, 0%, 100%);
-    --black: hsl(0, 0%, 5%);
+    --black: hsl(0, 0%, 0%);
     --gray: hsl(0, 0%, 67%);
     --gray-dark: hsl(0, 0%, 54%);
     --gray-light: hsl(0, 0%, 83%);
@@ -49,7 +49,7 @@ export default {
     --green: hsl(146, 97%, 35%);
     --green-dark: hsl(140, 100%, 26%);
     --green-light: hsl(146, 90%, 44%);
-    --yellow: hsl(49, 100%, 54%);
+    --yellow: hsl(49, 100%, 50%);
     --yellow-dark: hsl(27, 97%, 48%);
     --yellow-light: hsl(54, 100%, 78%);
     --purple: hsl(269, 100%, 59%);
@@ -60,7 +60,7 @@ export default {
     --ambient-dark: var(--yellow-dark);
 
     --color-text-dark: var(--black);
-    --color-text-default: hsl(0, 0%, 13%);
+    --color-text-default: var(--black);
     --color-text-light: hsl(0, 0%, 42%);
 
     --font-family-hiragino: "Hiragino Sans", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
