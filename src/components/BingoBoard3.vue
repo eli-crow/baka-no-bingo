@@ -9,9 +9,11 @@
 			                  @before-leave="beforeLeave">
 				<div :class="{
 						tile: true,
-						'-red': tile.selected,
+						'-red': tile.type === 'trope' && tile.selected,
 						'-selected-animate': i !== 4 && animate && tile.selected,
-						'-white': !tile.selected,
+						'-white': tile.type === 'trope' && !tile.selected,
+						'-purple': tile.type === 'curse',
+						'-skull': tile.type === 'curse',
 						'-star': i === 4,
 					}"
 					v-for="(tile, i) in tiles"
@@ -21,7 +23,11 @@
 					}"
 					@click="$emit('select', i); animate = true;">
 					<span v-if="i === 4" class="icon">★</span>
-					<template v-else class="text">{{ tile.text }}</template>
+					<Icon v-else-if="tile.type === 'curse'" 
+					      class="icon"
+						  icon="bnb-skull"/>
+
+					<span v-if="i !== 4" class="text">{{ tile.text }}</span>
 				</div>
 			</transition-group>
 		</div>
@@ -176,13 +182,22 @@ export default {
 	color: white;
 	border-image-source: url('../assets/images/tile-red.svg');
 }
+.tile.-purple {
+	--circle: var(--purple);
+	color: white;
+	border-image-source: url('../assets/images/tile-purple.svg');
+}
+.tile.-skull .icon {
+	color: var(--black);
+	opacity: 0.3;
+}
 @keyframes tile-selected-animate {
 	50% { transform: translate3d(0, 0.5rem, 0); }
 }
 .tile.-selected-animate {
 	animation: tile-selected-animate 0.5s ease;
 }
-.tile.-star {
+.tile.-star .icon {
 	color: var(--black);
 }
 .tile.-yellow {
@@ -203,7 +218,17 @@ export default {
 }
 
 .icon {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	font-size: 4rem;
+}
+
+.text {
+	position: relative;
+	zIndex: 1;
 }
 
 .tile-group-enter-active,
