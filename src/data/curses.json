@@ -1,0 +1,9 @@
+{
+    "byId": {
+        "1": {
+            "name": "Notice me, sempai!",
+            "description": "Tell someone to “notice” you. If they make eye contact with you, the curse is lifted."
+        } 
+    },
+    "allIds": [1]
+}
