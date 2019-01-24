@@ -19,7 +19,7 @@ export default {
 		color: String,
 		icon: String,
 		label: String,
-		cost: String,
+		cost: [Number, String],
 		enabled: { type: Boolean, default: false },
 	},
 	computed: {
