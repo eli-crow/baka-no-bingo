@@ -105,6 +105,14 @@ io.on('connection', (socket) => {
         //Notify others self has updated
         socket.broadcast.in(roomId).emit('OTHER_UPDATED', {playerId, playerData})
     })
+
+    socket.on('curse', ({targetPlayerId, curseId}) => {
+        const targetSocketId = __playerIdToSocketId[targetPlayerId]
+        io.to(targetSocketId).emit('CURSED', {
+            from: playerId,
+            curseId: curseId,
+        })
+    })
 })
 
 http.listen(3000, function(){
