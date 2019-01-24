@@ -13,6 +13,9 @@ function setRoomPlayerData (roomId, playerId, playerData) {
     room[playerId] = playerData
 }
 
+// maps "playerId" : socket.id
+const __playerIdToSocketId = {}
+
 const POSSIBLE_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
 function generateRoomId () {
     let id
@@ -33,6 +36,8 @@ io.on('connection', (socket) => {
     socket.on('disconnecting', () => {
         socket.emit('LEFT')
 
+        delete __playerIdToSocketId[playerId]
+
         const joinedRooms = Object.keys(socket.rooms)
         joinedRooms.forEach(roomId => {
             if (roomId in __rooms) {
@@ -45,8 +50,6 @@ io.on('connection', (socket) => {
     })
 
     socket.on('disconnect', () => {
-        //HACK: there's got to be a more efficient way to do this
-        //Delete playerId from every room
         socket.emit('DISCONNECT')
     })
 
@@ -56,6 +59,7 @@ io.on('connection', (socket) => {
 
         socket.join(roomId)
         setRoomPlayerData(roomId, playerId, playerData)
+        __playerIdToSocketId[playerId] = socket.id
 
         //Confirm self has joined
         socket.emit('JOINED', {
@@ -79,6 +83,7 @@ io.on('connection', (socket) => {
 
         socket.join(roomId)
         setRoomPlayerData(roomId, playerId, playerData)
+        __playerIdToSocketId[playerId] = socket.id
 
         //Confirm self has joined
         socket.emit('JOINED', {
@@ -96,7 +101,7 @@ io.on('connection', (socket) => {
         roomId = roomId.toLowerCase()
         setRoomPlayerData(roomId, playerId, playerData)
         //Confirm self has updated
-        socket.emit('UPDATED')
+        socket.emit('UPDATED', {playerId, playerData})
         //Notify others self has updated
         socket.broadcast.in(roomId).emit('OTHER_UPDATED', {playerId, playerData})
     })
