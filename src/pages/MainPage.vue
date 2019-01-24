@@ -70,6 +70,7 @@ export default {
 	},
 	methods: {
 		host () {
+			this.$store.dispatch('RESET_GAME')
 			this.$socket.emit('host', {
 				playerData: this.playerDataSimplified,
 			})
@@ -79,6 +80,7 @@ export default {
 			this.$socket.emit('cancel_host')
 		},
 		join () {
+			this.$store.dispatch('RESET_GAME')
 			this.$socket.emit('join', {
 				roomId: this.joinRoomId,
 				playerData: this.playerDataSimplified,
