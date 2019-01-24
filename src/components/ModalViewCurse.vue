@@ -2,6 +2,7 @@
     <ModalAction class="ModalViewCurse" 
                  title="Cursed!"
 	             description="Follow instructions to dispel!"
+                 icon="bnb-skull"
 	             @close="$emit('close'); $store.commit('SET_VIEW_CURSE_INDEX', null)">
         <div class="curse">
             <h3 class="title">#{{ viewedCurse.id }}: {{ viewedCurse.text }}</h3>

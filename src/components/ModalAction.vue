@@ -3,8 +3,11 @@
         <GlobalEvents @keydown.esc="$emit('close')"/>
         <div class="content" @click.stop>
             <header class="header">
-                <p class="title">{{ title }}</p>
-                <p class="description">{{ description }}</p>
+                <Icon v-if="icon" class="icon" :icon="icon"/>
+                <div class="header-text">
+                    <p class="title">{{ title }}</p>
+                    <p class="description">{{ description }}</p>
+                </div>
                 <Icon class="x" icon="times" @click="$emit('close')"/>
             </header>
             <div class="slot-content">
@@ -24,6 +27,7 @@ export default {
     props: {
         title: String,
         description: String,
+        icon: String,
     }
 }
 </script>
@@ -68,26 +72,28 @@ export default {
 }
 
 .header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-column-gap: 20px;
-    grid-template-areas:
-        "title       x"
-        "description x";
+    display: flex;
     border-bottom: solid 1px var(--white);
     padding: 16px 16px;
 }
 
+.icon {
+    width: 36px;
+    height: 36px;
+    align-self: center;
+    margin-right: 8px;
+}
+
+.header-text {
+    flex: 1 1 auto;
+}
 .title {
-    grid-area: title;
     margin: 0;
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 4px;
 }
-
 .description {
-    grid-area: description;
     margin: 0;
     font-size: 14px;
 }
@@ -98,7 +104,6 @@ export default {
     padding: 0.5rem;
     border-radius: 99999px;
     background-color: var(--gray-light);
-    grid-area: x;
 }
 
 .slot-content {
