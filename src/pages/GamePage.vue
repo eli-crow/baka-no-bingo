@@ -30,20 +30,28 @@
 			<div class="action-group"
 			     v-else>
 				<ActionButton class="action"
-					          icon="action-buy"
-						      label="Buy"
+					          icon="spell-replace"
+						      label="Replace"
 						      color="green"
 						      cost="5"
 						      :enabled="playerData.score >= 5"
 				              @select="$store.dispatch('SPELL_BUY')"/>
 
 				<ActionButton class="action"
-					          icon="action-reset"
+					          icon="spell-reset"
 						      label="Reset"
 						      color="red"
-						      cost="20"
-						      :enabled="playerData.score >= 20"
+						      cost="10"
+						      :enabled="playerData.score >= 10"
 				              @select="$store.dispatch('SPELL_RESET_BOARD')"/>
+
+				<ActionButton class="action"
+					          icon="spell-curse"
+						      label="Curse"
+						      color="purple"
+						      :cost="curseCost"
+						      :enabled="playerData.score >= curseCost"
+				              @select="modal = 'ModalCurse'"/>
 			</div>
 		</transition>
 
