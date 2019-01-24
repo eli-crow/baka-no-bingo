@@ -11,7 +11,7 @@
 			</p>
 			<div class="scores">
 				<div class="my-score">{{ playerData.score }}</div>
-				<a class="players" @click="modal='players'"><Icon icon="list-ol"/></a>
+				<a class="players" @click="modal = 'ModalPlayerRank'"><Icon icon="list-ol"/></a>
 			</div>
 		</header>
 
@@ -56,12 +56,7 @@
 		</transition>
 
 		<ModalTransition>
-			<ModalAction v-if="modal === 'players'"
-			             title="Players"
-			             description="Who's in the lead?"
-						 @close="modal = null">
-				<PlayerList class="player-list"/>
-			</ModalAction>
+			<component v-if="modal" :is="modal" @close="modal = null"/>
 		</ModalTransition>
 	</div>
 </template>
@@ -85,7 +80,12 @@ import ActionButton from '@/components/ActionButton'
 import TheBuyMenu from '@/components/TheBuyMenu'
 import ModalAction from '@/components/ModalAction'
 import ModalTransition from '@/components/ModalTransition'
-import PlayerList from '@/components/PlayerList'
+
+import ModalPlayerRank from '@/components/ModalPlayerRank'
+import ModalCurse from '@/components/ModalCurse'
+import ModalViewCurse from '@/components/ModalViewCurse'
+
+import curses from '@/data/curses'
 
 export default {
 	name: 'GamePage',
@@ -97,9 +97,11 @@ export default {
 		ActionButton,
 		TheBuyMenu,
 		GlobalEvents,
-		ModalAction,
+
 		ModalTransition,
-		PlayerList,
+		ModalPlayerRank,
+		ModalCurse,
+		ModalViewCurse,
 	},
 	props: {
 		resetGameOnLoad: Boolean,
@@ -107,10 +109,11 @@ export default {
 	data () {
 		return {
 			modal: '',
+			viewCurseIndex: null,
 		}
 	},
 	computed: {
-		...mapGetters(['sellablePatterns']),
+		...mapGetters(['sellablePatterns', 'curseCost']),
 		...mapState(['boughtTile', 'playerData', 'roomId']),
 		mode () {
 			if (this.boughtTile) {
@@ -122,18 +125,23 @@ export default {
 		},
 	},
 	methods: {
-		copySessionData () {
-			this.$copyText(JSON.stringify(this.playerData))
-		},
 		handleTileSelect (i) {
+			const type = this.playerData.tiles[i].type
+
 			switch (this.mode) {
 				case 'bought-tile':
 					if (i === 4) return
+					if (type === 'curse') return
 					this.$store.commit('PLACE_REPLACEMENT', i)
 					break;
 				case 'playing':
 					if (i === 4) return
-					this.$store.commit('TOGGLE_CELL', i)
+					if (type === 'curse') {
+						this.modal = 'ModalViewCurse'
+						this.$store.commit('SET_VIEW_CURSE_INDEX', i)
+					} else if (type === 'trope') {
+						this.$store.commit('TOGGLE_TILE', i)
+					}
 					break;
 			}
 		},
