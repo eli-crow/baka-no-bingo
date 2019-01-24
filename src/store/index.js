@@ -4,6 +4,7 @@ import Lodash from "lodash"
 import uid from "uuid"
 
 import data from '@/data/tropes'
+import curses from '@/data/curses'
 import session2 from '@/data/session-2'
 
 Vue.use(Vuex)
@@ -30,15 +31,16 @@ const store = new Vuex.Store({
         ],
         boughtTile: null,
         tropes: data.tropes,
+        curses: curses,
         sessions: [
             session2
         ],
+        viewCurseIndex: null,
 
 //socket.io
         isConnected: false,
         roomId: null,
         playerData: {
-            id: uid(),
             name: localStorage.getItem(LS_NAME) || '',
             score: 20,
             tiles: getRandomTileArray(9, [4]),
@@ -48,8 +50,14 @@ const store = new Vuex.Store({
     },
 
     mutations: {
-        NEW_BOARD (state) {
-            const newTiles = getRandomTileArray(9, [4])
+        NEW_BOARD (state, shouldReplaceCurses) {
+            const tilesCopy = JSON.parse(JSON.stringify(state.playerData.tiles))
+            const tilesSample = getRandomTileArray(9, [4])
+            const newTiles = tilesCopy.map((t, i) => {
+                return shouldReplaceCurses || t.type !== 'curse'
+                    ? tilesSample[i]
+                    : t
+            })
 			state.playerData.tiles = newTiles
         },
         SET_SCORE (state, amount) {
@@ -71,12 +79,19 @@ const store = new Vuex.Store({
             Vue.set(state.playerData.tiles, i, state.boughtTile)
             state.boughtTile = null
         },
-        TOGGLE_CELL (state, i) {
+        REPLACE_TILE (state, i) {
+            const newTile = getRandomTile()
+            Vue.set(state.playerData.tiles, i, newTile)
+        },
+        TOGGLE_TILE (state, i) {
             state.playerData.tiles[i].selected = ! state.playerData.tiles[i].selected
         },
         SET_NAME (state, name) {
             state.playerData.name = name
             localStorage.setItem(LS_NAME, name)
+        },
+        SET_VIEW_CURSE_INDEX (state, index) {
+            state.viewCurseIndex = index
         },
 
 //socket.io
@@ -93,11 +108,21 @@ const store = new Vuex.Store({
             state.roomId = roomId
             state.allPlayerData = allPlayerData
         },
+        //Self left room
         SOCKET_LEFT (state) {
             state.roomId = null
         },
-        SOCKET_UPDATED (state) {
-
+        //Self updated
+        SOCKET_UPDATED (state, {playerId, playerData}) {
+            Vue.set(state.allPlayerData, playerId, playerData)
+        },
+        //Self cursed
+        SOCKET_CURSED (state, {from, curseId}) {
+            const possible = [0,1,2,3,  5,6,7,8]
+            const index = Lodash.sample(possible)
+            const curse = getCurseTile(curseId)
+            curse.from = from
+            Vue.set(state.playerData.tiles, index, curse)
         },
         //Other joins room
         SOCKET_OTHER_JOINED(state, {playerId, playerData}) {
@@ -120,14 +145,14 @@ const store = new Vuex.Store({
             commit('BUY_REPLACEMENT')
         },
         SPELL_RESET_BOARD ({commit, state}) {
-            if (state.playerData.score < 20) return
-            commit('ADJUST_SCORE', -20)
+            if (state.playerData.score < 10) return
+            commit('ADJUST_SCORE', -10)
             commit('NEW_BOARD')
         },
         RESET_GAME ({commit}) {
             commit('CLEAR_SESSION_DATA')
             commit('SET_SCORE', 20)
-            commit('NEW_BOARD')
+            commit('NEW_BOARD', true)
         },
         SELL_PATTERN ({commit, state}, soldPatternIndex) {
             const {pattern, score, name} = state.patterns[soldPatternIndex]
@@ -143,7 +168,10 @@ const store = new Vuex.Store({
             })
             resultTiles[4].selected = true
             state.playerData.tiles = resultTiles
-        }
+        },
+        DISPEL_CURSE ({commit}, index) {
+            commit('REPLACE_TILE', index)
+        },
     },
 
     getters: {
@@ -157,7 +185,7 @@ const store = new Vuex.Store({
         playersRanked ({allPlayerData}) {
             const copy = JSON.parse(JSON.stringify(allPlayerData))
             const result = Object.entries(copy)
-                                 .map(([id, playerData]) => ({id, ...playerData}))
+                                 .map((entry) => ({id: entry[0], ...entry[1]}))
                                  .sort((a,b) => b.score - a.score)
             return result
         },
@@ -165,18 +193,38 @@ const store = new Vuex.Store({
             const result = JSON.parse(JSON.stringify(playerData))
             result.tiles = result.tiles.map(t => t.selected)
             return result
-        }
+        },
+        curseCost ({playerData}) {
+          return Math.floor(Math.max(20, 0.25 * playerData.score))
+        },
     },
 })
+
+// tile interface: {text, selected, id, key, type}
+
+function getCurseTile (curseId, from=null) {
+    const curse = curses.byId[curseId]
+    if (!curse) { return null }
+    return {
+        text: curse.name,
+        description: curse.description,
+        from: from,
+        selected: false,
+        id: curseId,
+        key: uid(),
+        type: 'curse'
+    }
+}
 
 function getRandomTile () {
     const id = Lodash.sample(store.state.tropes.allIds)
     const text = store.state.tropes.byId[id]
 	return {
 		text: text,
-		selected: false,
+        selected: false,
 		id: id,
-		key: uid(),
+        key: uid(),
+        type: 'trope',
 	}
 }
 
@@ -188,6 +236,7 @@ function getRandomTileArray(n, selectedIndices=[]) {
             selected: selectedIndices.includes(i) ? true : false,
             id: id,
             key: uid(),
+            type: 'trope',
         }
 	})
 }
@@ -202,14 +251,20 @@ window.setTimeout(() => {
     const socket = new Vue().$socket
 
     socket.on('reconnect', () => {
-        socket.emit('join', {
-            roomId: store.state.roomId, 
-            playerData: store.getters.playerDataSimplified,
-        })
+        if (store.state.roomId) {
+            //only rejoin if we are reconnecting in the middle of a game
+            socket.emit('join', {
+                roomId: store.state.roomId, 
+                playerData: store.getters.playerDataSimplified,
+            })
+        }
     })
     
     //send reduced playerData to socket server
     store.watch(state => state.playerData, newValue => {
+        if (!store.state.roomId) {
+            return
+        }
         socket.emit('update', {
             roomId: store.state.roomId,
             playerData: store.getters.playerDataSimplified
