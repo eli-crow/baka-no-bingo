@@ -1,42 +1,36 @@
-<template>
-	<div class="TheBuyMenu">
-		<img class="icon" src="@/assets/icons/action-buy.svg"/>
-		<div class="title">Tap a tile to replace it.</div>
-		<Icon class="x"
-		      icon="times"
-		      @click="$store.commit('DISCARD_REPLACEMENT')"/>
-		<div class="body">
-			<div class="tile">
-				{{ boughtTile.text }}
-			</div>
-			<div class="button-group">
-				<div class="button"
-				     style="--color: var(--green-light)"
-				     @click="$store.commit('BUY_REPLACEMENT')">
-					Try another
-					<span class="button-cost">-5</span>
-				</div>
-				<div class="button"
-				     style="--color: var(--red)"
-				     @click="$store.commit('DISCARD_REPLACEMENT')">
-					Discard
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
-
-
-
-<script>
-import { mapState } from "vuex";
-export default {
-	name: 'TheBuyMenu',
-	computed: {
-		...mapState(['boughtTile']),
-	}
-}
+<script setup>
+import game from '../store/game'
 </script>
+
+
+
+<template>
+  <div class="TheBuyMenu">
+    <img class="icon" src="../assets/icons/spell-replace.svg" />
+    <div class="title">Tap a tile to replace it.</div>
+    <Icon class="x"
+      icon="times"
+      @click="game.discardTile()" />
+    <div class="body">
+      <div class="tile">
+        {{ game.boughtTile.text }}
+      </div>
+      <div class="button-group">
+        <div class="button"
+          style="--color: var(--green-light)"
+          @click="game.spells.buy()">
+          Try another
+          <span class="button-cost">-5</span>
+        </div>
+        <div class="button"
+          style="--color: var(--red)"
+          @click="game.discardTile()">
+          Discard
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 
 

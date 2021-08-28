@@ -1,36 +1,25 @@
-<template>
-	<div class="PatternSellBar">
-		<div class="title">売る Sell!</div>
-		<div class="pattern-group">
-			<div class="pattern"
-			     v-for="p in sellablePatterns"
-			     :key="p.index"
-			     @click="$store.dispatch('SELL_PATTERN', p.index)">
-				<PatternIcon class="pattern-icon"
-				             :pattern="p.pattern.join('')"/>
-				<span class="pattern-score">+{{ p.score }}</span>
-			</div>
-		</div>
-	</div>
-</template>
-
-
-
-<script>
-import PatternIcon from '@/components/PatternIcon'
-
-import { mapGetters } from "vuex";
-
-export default {
-	name: 'PatternSellBar',
-	components: {
-		PatternIcon,
-	},
-	computed: {
-		...mapGetters(['sellablePatterns'])
-	}
-}
+<script setup>
+import PatternIcon from './PatternIcon.vue';
+import game from '../store/game'
 </script>
+
+
+
+<template>
+  <div class="PatternSellBar">
+    <div class="title">売る Sell!</div>
+    <div class="pattern-group">
+      <div class="pattern"
+        v-for="p in game.sellablePatterns"
+        :key="p.index"
+        @click="game.sellPattern(p.index)">
+        <PatternIcon class="pattern-icon"
+          :pattern="p.pattern.join('')" />
+        <span class="pattern-score">+{{ p.score }}</span>
+      </div>
+    </div>
+  </div>
+</template>
 
 
 
