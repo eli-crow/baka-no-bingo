@@ -97,6 +97,12 @@ body {
   overflow-x: hidden;
 }
 
+#app {
+  flex: 1 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .wipe-enter-active,
 .wipe-leave-active {
   transition: 0.125s linear;
@@ -123,9 +129,11 @@ body {
   display: flex;
   flex-direction: column;
   background: var(--ambient);
+  position: relative;
 }
+
 .App::after {
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   content: "";
   top: 1px;
@@ -137,6 +145,7 @@ body {
   mix-blend-mode: overlay;
   pointer-events: none;
 }
+
 .view {
   flex: 1 0 auto;
   padding-bottom: 1rem;

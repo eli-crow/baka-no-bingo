@@ -6,13 +6,3 @@
     <slot />
   </transition>
 </template>
-
-<script>
-export default {
-    name: 'ModalTransition'
-}
-</script>
-
-<style>
-
-</style>

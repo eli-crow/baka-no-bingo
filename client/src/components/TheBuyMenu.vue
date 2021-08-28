@@ -1,5 +1,6 @@
 <script setup>
 import game from '../store/game'
+import Icon from './Icon'
 </script>
 
 
@@ -15,7 +16,7 @@ import game from '../store/game'
     </div>
     <Icon
       class="x"
-      icon="times"
+      :icon="x"
       @click="game.discardTile()"
     />
     <div class="body">

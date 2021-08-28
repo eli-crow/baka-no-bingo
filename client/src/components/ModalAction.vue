@@ -1,4 +1,6 @@
 <script setup>
+import Icon, {x} from './Icon'
+
 const props = defineProps({
   title: {
     type: String,
@@ -43,7 +45,7 @@ const emit = defineEmits(['close'])
         </div>
         <Icon
           class="x"
-          icon="times"
+          :icon="x"
           @click="emit('close')"
         />
       </header>

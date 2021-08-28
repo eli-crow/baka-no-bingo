@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed } from 'vue';
+import { computed } from 'vue';
 
 const PATHS = {
   "01235678": "M 0,0  L 0,1  L 1,1  L 1,0  Z",

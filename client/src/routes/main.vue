@@ -98,17 +98,11 @@ watch(game.room.id, value => {
       <p class="special-thanks">
         Special thanks to: {{ specialThanksList }}.
       </p>
-      <router-link
-        to="/data"
-        class="button"
-      >
-        Stats
-      </router-link>
     </div>
 
     <ModalTransition>
       <ModalAction
-        v-if="modal === 'joining'"
+        v-if="state.modal === 'joining'"
         title="Join a Game"
         description="Enter the code given by your host."
         @close="cancelJoin"

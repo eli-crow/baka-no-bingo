@@ -1,6 +1,7 @@
 <script setup>
-import { computed, defineProps, reactive } from 'vue';
+import { reactive } from 'vue';
 
+import Icon, {chevronLeft, listOl} from '../components/Icon'
 import BingoBoard3 from '../components/BingoBoard3.vue';
 import PatternIcon from '../components/PatternIcon.vue';
 import PatternSellBar from '../components/PatternSellBar.vue';
@@ -42,7 +43,7 @@ function handleTileSelect(i) {
         class="back"
         to="/"
       >
-        <Icon icon="chevron-left" />
+        <Icon :icon="chevronLeft" />
       </router-link>
       <p class="room">
         <span class="room-title">Room</span>
@@ -54,9 +55,9 @@ function handleTileSelect(i) {
         </div>
         <a
           class="players"
-          @click="modal = 'ModalPlayerRank'"
+          @click="state.modal = 'ModalPlayerRank'"
         >
-          <Icon icon="list-ol" />
+          <Icon :icon="listOl" />
         </a>
       </div>
     </header>
@@ -103,9 +104,9 @@ function handleTileSelect(i) {
 
     <ModalTransition>
       <component
-        :is="modal"
-        v-if="modal"
-        @close="modal = null"
+        :is="state.modal"
+        v-if="state.modal"
+        @close="state.modal = null"
       />
     </ModalTransition>
   </div>

@@ -58,6 +58,11 @@ export function createGameStore() {
             result.tiles = result.tiles.map(t => t.selected)
             return result
         },
+        host() {
+            
+        },
+        join() {
+        },
         discardTile() {
             my.boughtTile = null 
         },

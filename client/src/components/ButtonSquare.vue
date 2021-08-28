@@ -1,4 +1,6 @@
 <script setup>
+import Icon from './Icon'
+
 const props = defineProps({
     color: {
         type: String,
