@@ -14,7 +14,10 @@ const PATHS = {
 };
 
 const props = defineProps({
-  pattern: String,
+  pattern: {
+    type: String,
+    required: true
+  }
 });
 
 const bottomLines = computed(() => [PATHS['01235678'], PATHS['345'], PATHS['147'], PATHS['048'], PATHS['246']]);
@@ -31,21 +34,27 @@ const topLines = computed(() => {
 
 
 <template>
-  <svg class="PatternIcon"
+  <svg
+    class="PatternIcon"
     width="1px"
     height="1px"
     viewBox="0 0 1 1"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <g class="grid">
-      <path v-for="(path, i) in bottomLines"
-        :d="path"
+      <path
+        v-for="(path, i) in bottomLines"
         :key="i"
-        class="line" />
+        :d="path"
+        class="line"
+      />
     </g>
-    <path v-for="(path, i) in topLines"
-      :d="path"
+    <path
+      v-for="(path, i) in topLines"
       :key="'active'+i"
-      class="line-active" />
+      :d="path"
+      class="line-active"
+    />
   </svg>
 </template>
 

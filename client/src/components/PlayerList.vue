@@ -1,6 +1,8 @@
 <script setup>
 import PatternIconTiles from './PatternIconTiles.vue';
 import game from '../store/game'
+
+const emit = defineEmits(['select'])
 </script>
 
 
@@ -8,13 +10,22 @@ import game from '../store/game'
 <template>
   <div class="PlayerList">
     <ol class="list">
-      <li class="player"
+      <li
         v-for="player in game.room.playersRanked"
         :key="player.id"
-        @click="$emit('select', player.id)">
-        <PatternIconTiles class="icon" :tiles="player.tiles" />
-        <div class="name">{{ player.name || 'Guest'}}</div>
-        <div class="score">{{ player.score }}</div>
+        class="player"
+        @click="emit('select', player.id)"
+      >
+        <PatternIconTiles
+          class="icon"
+          :tiles="player.tiles"
+        />
+        <div class="name">
+          {{ player.name || 'Guest' }}
+        </div>
+        <div class="score">
+          {{ player.score }}
+        </div>
       </li>
     </ol>
   </div>

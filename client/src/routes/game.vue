@@ -32,11 +32,16 @@ function handleTileSelect(i) {
 
 <template>
   <div class="GamePage">
-    <GlobalEvents @keydown.space="cheat"
-      @keydown.esc="anticheat" />
+    <GlobalEvents
+      @keydown.space="cheat"
+      @keydown.esc="anticheat"
+    />
 
     <header class="header">
-      <router-link class="back" to="/">
+      <router-link
+        class="back"
+        to="/"
+      >
         <Icon icon="chevron-left" />
       </router-link>
       <p class="room">
@@ -44,17 +49,24 @@ function handleTileSelect(i) {
         <span class="room-id">{{ roomId }}</span>
       </p>
       <div class="scores">
-        <div class="my-score">{{ playerData.score }}</div>
-        <a class="players" @click="modal = 'ModalPlayerRank'">
+        <div class="my-score">
+          {{ playerData.score }}
+        </div>
+        <a
+          class="players"
+          @click="modal = 'ModalPlayerRank'"
+        >
           <Icon icon="list-ol" />
         </a>
       </div>
     </header>
 
     <div class="board-container">
-      <BingoBoard3 class="board"
+      <BingoBoard3
+        class="board"
         :tiles="playerData.tiles"
-        @select="handleTileSelect" />
+        @select="handleTileSelect"
+      />
     </div>
 
     <PatternSellBar v-if="sellablePatterns.length" />
@@ -63,28 +75,38 @@ function handleTileSelect(i) {
     <transition name="action-group">
       <TheBuyMenu v-if="boughtTile" />
 
-      <div class="action-group"
-        v-else>
-        <ActionButton class="action"
+      <div
+        v-else
+        class="action-group"
+      >
+        <ActionButton
+          class="action"
           icon="spell-replace"
           label="Replace"
           color="green"
           cost="5"
           :enabled="playerData.score >= 5"
-          @select="$store.dispatch('SPELL_BUY')" />
+          @select="$store.dispatch('SPELL_BUY')"
+        />
 
-        <ActionButton class="action"
+        <ActionButton
+          class="action"
           icon="spell-reset"
           label="Reset"
           color="red"
           cost="10"
           :enabled="playerData.score >= 10"
-          @select="$store.dispatch('SPELL_RESET_BOARD')" />
+          @select="$store.dispatch('SPELL_RESET_BOARD')"
+        />
       </div>
     </transition>
 
     <ModalTransition>
-      <component v-if="modal" :is="modal" @close="modal = null" />
+      <component
+        :is="modal"
+        v-if="modal"
+        @close="modal = null"
+      />
     </ModalTransition>
   </div>
 </template>

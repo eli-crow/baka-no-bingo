@@ -1,12 +1,8 @@
 <template>
-    <div class="ButtonGroup"><slot/></div>
+  <div class="ButtonGroup">
+    <slot />
+  </div>
 </template>
-
-<script>
-export default {
-    name: "ButtonGroup",
-}
-</script>
 
 <style scoped>
 .ButtonGroup {

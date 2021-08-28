@@ -47,41 +47,80 @@ watch(game.room.id, value => {
 <template>
   <div class="MainPage">
     <div class="title-container">
-      <div class="title">Baka no Bingo ★ <span class="title-version">v{{ appInfo.version }}</span></div>
-      <div class="title title-duplicate">Baka no Bingo ★ <span class="title-version">v{{ appInfo.version }}</span></div>
+      <div class="title">
+        Baka no Bingo ★ <span class="title-version">v{{ appInfo.version }}</span>
+      </div>
+      <div class="title title-duplicate">
+        Baka no Bingo ★ <span class="title-version">v{{ appInfo.version }}</span>
+      </div>
     </div>
 
     <div class="tile-group-container">
       <div class="tile-group-aspect-ratio">
         <div class="tile-group">
-          <div class="tile -blue">ば</div>
-          <div class="tile -blue">か</div>
-          <div class="tile -small -white">の</div>
-          <a class="tile -text -blue-light"
-            @click="host">Host</a>
-          <div class="tile -star -red">★</div>
-          <a class="tile -text -yellow-light"
-            @click="joinStart">Join</a>
-          <div class="tile -yellow">ビ</div>
-          <div class="tile -yellow">ン</div>
-          <div class="tile -yellow">ゴ</div>
+          <div class="tile -blue">
+            ば
+          </div>
+          <div class="tile -blue">
+            か
+          </div>
+          <div class="tile -small -white">
+            の
+          </div>
+          <a
+            class="tile -text -blue-light"
+            @click="host"
+          >Host</a>
+          <div class="tile -star -red">
+            ★
+          </div>
+          <a
+            class="tile -text -yellow-light"
+            @click="joinStart"
+          >Join</a>
+          <div class="tile -yellow">
+            ビ
+          </div>
+          <div class="tile -yellow">
+            ン
+          </div>
+          <div class="tile -yellow">
+            ゴ
+          </div>
         </div>
       </div>
     </div>
 
     <div class="credits">
-      <p class="byline">A game by Eli Crow</p>
-      <p class="special-thanks">Special thanks to: {{ specialThanksList }}.</p>
-      <router-link to="/data" class="button">Stats</router-link>
+      <p class="byline">
+        A game by Eli Crow
+      </p>
+      <p class="special-thanks">
+        Special thanks to: {{ specialThanksList }}.
+      </p>
+      <router-link
+        to="/data"
+        class="button"
+      >
+        Stats
+      </router-link>
     </div>
 
     <ModalTransition>
-      <ModalAction v-if="modal === 'joining'"
+      <ModalAction
+        v-if="modal === 'joining'"
         title="Join a Game"
         description="Enter the code given by your host."
-        @close="cancelJoin">
-        <input type="text" v-model="joinRoomId" />
-        <a class="button" @click="join">Join Room</a>
+        @close="cancelJoin"
+      >
+        <input
+          v-model="joinRoomId"
+          type="text"
+        >
+        <a
+          class="button"
+          @click="join"
+        >Join Room</a>
       </ModalAction>
     </ModalTransition>
   </div>

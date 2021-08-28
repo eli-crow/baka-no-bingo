@@ -1,42 +1,54 @@
+<script setup>
+const props = defineProps({
+    color: {
+        type: String,
+        default: "green",
+    },
+    icon: {
+        type: String,
+        default: null,
+    },
+    cost: {
+        type: [String, Number],
+        default: null,
+    },
+    href: {
+        type: String,
+        default: null,
+    }
+})
+const emit = defineEmits([
+    'select'
+])
+</script>
+
+
+
 <template>
-    <a class="ButtonSquare Button" 
-       @click="$emit('select')"
-       :href="href"
-       :style="{
-           '--bg': `var(--${color})`,
-           '--bg-dark': `var(--${color}-dark)`,
-           '--fg': `var(--white)`,
-       }"
-       >
-       <Icon class="icon" v-if="icon" :icon="icon"/>
-       <span class="slot-content"><slot/></span>
-       <span class="cost" v-if="cost === 0 || cost">-{{ cost }}</span>
-    </a>
+  <a
+    class="ButtonSquare Button" 
+    :href="href"
+    :style="{
+      '--bg': `var(--${color})`,
+      '--bg-dark': `var(--${color}-dark)`,
+      '--fg': `var(--white)`,
+    }"
+    @click="emit('select')"
+  >
+    <Icon
+      v-if="icon"
+      class="icon"
+      :icon="icon"
+    />
+    <span class="slot-content"><slot /></span>
+    <span
+      v-if="cost === 0 || cost"
+      class="cost"
+    >-{{ cost }}</span>
+  </a>
 </template>
 
-<script>
-export default {
-    name: "ButtonSquare",
-    props: {
-        color: {
-            type: String,
-            default: "green",
-        },
-        icon: {
-            type: String,
-            required: false,
-        },
-        cost: {
-            type: [String, Number],
-            required: false,
-        },
-        href: {
-            type: String,
-            required: false,
-        }
-    },
-}
-</script>
+
 
 <style scoped>
 .ButtonSquare {

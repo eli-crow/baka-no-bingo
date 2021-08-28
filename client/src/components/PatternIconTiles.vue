@@ -1,10 +1,12 @@
 <template>
-	<div class="PatternIconTiles">
-        <div class="tile"
-             v-for="tile in tiles" 
-             :data-selected="tile === true">
-        </div>
-    </div>
+  <div class="PatternIconTiles">
+    <div
+      v-for="tile in tiles"
+      :key="tile.key" 
+      class="tile"
+      :data-selected="tile === true"
+    />
+  </div>
 </template>
 
 
@@ -13,7 +15,10 @@
 export default {
 	name: 'PatternIconTiles',
 	props: {
-		tiles: Array,
+		tiles: {
+      type: Array,
+      required: true,
+    },
 	},
 }
 </script>

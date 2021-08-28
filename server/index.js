@@ -8,6 +8,6 @@ const port = 8080
 
 initSocket(http)
 
-http.listen(port, () => {
+    http.listen(port, () => {
     console.log(`listening on *:${port}`);
 });

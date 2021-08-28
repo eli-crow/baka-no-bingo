@@ -2,15 +2,25 @@
 import { defineProps } from 'vue';
 
 const props = defineProps({
-  icon: Object
+  icon: {
+    type: Object,
+    required: true,
+  },
 });
 
 export * as icons from './icons.js'
 </script>
 
 <template>
-  <svg :width="icon.w" :height="icon.h" :view-box="`0 0 ${icon.w} ${icon.h}`">
-    <path :d="icon.d" fill="currentcolor" />
+  <svg
+    :width="props.icon.w"
+    :height="props.icon.h"
+    :view-box="`0 0 ${props.icon.w} ${props.icon.h}`"
+  >
+    <path
+      :d="props.icon.d"
+      fill="currentcolor"
+    />
   </svg>
 </template>
 

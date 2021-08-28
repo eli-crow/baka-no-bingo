@@ -1,32 +1,40 @@
-<template>
-	<div :class="{ActionButton: true, 'disabled': !enabled}"
-	     :style="{'--bg-color': `var(--${color})` }"
-	     @click="$emit('select')">
-		<div class="button">
-			<img class="icon" :src="iconSrc"/>
-			<span class="score" v-if="cost">-{{ cost }}</span>
-		</div>
-		<div class="label">{{ label }}</div>
-	</div>
-</template>
+<script setup>
+import { computed } from "@vue/reactivity"
 
+const props = defineProps({
+	color: { type: String, default: 'blue' },
+	icon: { type: String, required: true },
+	label: { type: String, required: true },
+	cost: { type: [Number, String], required: true},
+	enabled: { type: Boolean, default: false },
+})
 
-
-<script>
-export default {
-	name: 'ActionButton',
-	props: {
-		color: String,
-		icon: String,
-		label: String,
-		cost: [Number, String],
-		enabled: { type: Boolean, default: false },
-	},
-	computed: {
-		iconSrc () { return require(`@/assets/icons/${this.icon}.svg`)}
-	},
-}
+const iconSrc = computed(() => import(`../assets/icons/${props.icon}.svg`))
 </script>
+
+
+
+<template>
+  <div
+    :class="{ActionButton: true, 'disabled': !enabled}"
+    :style="{'--bg-color': `var(--${color})` }"
+    @click="emit('select')"
+  >
+    <div class="button">
+      <img
+        class="icon"
+        :src="iconSrc"
+      >
+      <span
+        v-if="cost"
+        class="score"
+      >-{{ cost }}</span>
+    </div>
+    <div class="label">
+      {{ label }}
+    </div>
+  </div>
+</template>
 
 
 

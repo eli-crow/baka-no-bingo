@@ -1,24 +1,51 @@
 <script setup>
-import { defineProps } from 'vue';
-
-defineProps({
-  title: String,
-  description: String,
-  icon: String,
+const props = defineProps({
+  title: {
+    type: String,
+    default: null
+    },
+  description: {
+    type: String,
+    default: null
+    },
+  icon: {
+    type: String,
+    default: null
+    },
 })
+
+const emit = defineEmits(['close'])
 </script>
 
 
 <template>
-  <section class="ModalAction" @click="$emit('close')">
-    <div class="content" @click.stop>
+  <section
+    class="ModalAction"
+    @click="$emit('close')"
+  >
+    <div
+      class="content"
+      @click.stop
+    >
       <header class="header">
-        <Icon v-if="icon" class="icon" :icon="icon" />
+        <Icon
+          v-if="icon"
+          class="icon"
+          :icon="icon"
+        />
         <div class="header-text">
-          <p class="title">{{ title }}</p>
-          <p class="description">{{ description }}</p>
+          <p class="title">
+            {{ props.title }}
+          </p>
+          <p class="description">
+            {{ props.description }}
+          </p>
         </div>
-        <Icon class="x" icon="times" @click="$emit('close')" />
+        <Icon
+          class="x"
+          icon="times"
+          @click="emit('close')"
+        />
       </header>
       <div class="slot-content">
         <slot />

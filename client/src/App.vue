@@ -17,7 +17,11 @@ const ambientColorStyle = computed(() => {
 </script>
 
 <template>
-  <div class="App" id="app" :style="ambientColorStyle">
+  <div
+    id="app"
+    class="App"
+    :style="ambientColorStyle"
+  >
     <transition name="wipe">
       <router-view class="view" />
     </transition>

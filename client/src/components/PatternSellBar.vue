@@ -7,14 +7,20 @@ import game from '../store/game'
 
 <template>
   <div class="PatternSellBar">
-    <div class="title">売る Sell!</div>
+    <div class="title">
+      売る Sell!
+    </div>
     <div class="pattern-group">
-      <div class="pattern"
+      <div
         v-for="p in game.sellablePatterns"
         :key="p.index"
-        @click="game.sellPattern(p.index)">
-        <PatternIcon class="pattern-icon"
-          :pattern="p.pattern.join('')" />
+        class="pattern"
+        @click="game.sellPattern(p.index)"
+      >
+        <PatternIcon
+          class="pattern-icon"
+          :pattern="p.pattern.join('')"
+        />
         <span class="pattern-score">+{{ p.score }}</span>
       </div>
     </div>

@@ -1,13 +1,20 @@
 <script setup>
-import { defineProps, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 const props = defineProps({
-  tiles: Array,
+  tiles: {
+    type: Array,
+    required: true
+  },
   enabled: {
     type: Boolean,
     default: true,
   },
 });
+
+const emit = defineEmits([
+  'select'
+]);
 
 const state = reactive({
   staggerIndex: 0,
@@ -15,7 +22,6 @@ const state = reactive({
 });
 
 const transitionGroupRef = ref();
-
 
 function beforeLeave(el) {
   el.style.setProperty('--stagger-index', this.staggerIndex);
@@ -59,26 +65,36 @@ function mounted() {
 <template>
   <div class="tile-group-container">
     <div class="tile-group-aspect-ratio">
-      <transition-group :class="{'tile-group':true, '-animate': animate}"
+      <transition-group
+        ref="transitionGroup"
+        :class="{'tile-group':true, '-animate': animate}"
         name="tile-group"
         tag="div"
-        ref="transitionGroup"
-        @before-leave="beforeLeave">
-        <div :class="{
-						tile: true,
-						'-red': tile.type === 'trope' && tile.selected,
-						'-selected-animate': i !== 4 && animate && tile.selected,
-						'-white': tile.type === 'trope' && !tile.selected,
-						'-star': i === 4,
-					}"
+        @before-leave="beforeLeave"
+      >
+        <div
           v-for="(tile, i) in tiles"
           :key="tile.key"
+          :class="{
+            tile: true,
+            '-red': tile.type === 'trope' && tile.selected,
+            '-selected-animate': i !== 4 && animate && tile.selected,
+            '-white': tile.type === 'trope' && !tile.selected,
+            '-star': i === 4,
+          }"
           :style="{
-						zIndex: i
-					}"
-          @click="$emit('select', i); animate = true;">
-          <span v-if="i === 4" class="icon">★</span>
-          <span v-else class="text">{{ tile.text }}</span>
+            zIndex: i
+          }"
+          @click="emit('select', i); state.animate = true;"
+        >
+          <span
+            v-if="i === 4"
+            class="icon"
+          >★</span>
+          <span
+            v-else
+            class="text"
+          >{{ tile.text }}</span>
         </div>
       </transition-group>
     </div>

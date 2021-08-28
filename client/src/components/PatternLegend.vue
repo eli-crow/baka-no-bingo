@@ -7,23 +7,52 @@ import PatternIcon from './PatternIcon.vue';
 <template>
   <div class="PatternLegend">
     <div class="pattern">
-      <PatternIcon class="pattern-icon" pattern="246" />
-      <PatternIcon class="pattern-icon" pattern="345" />
-      <div class="pattern-score">20</div>
+      <PatternIcon
+        class="pattern-icon"
+        pattern="246"
+      />
+      <PatternIcon
+        class="pattern-icon"
+        pattern="345"
+      />
+      <div class="pattern-score">
+        20
+      </div>
     </div>
     <div class="pattern">
-      <PatternIcon class="pattern-icon" pattern="036" />
-      <PatternIcon class="pattern-icon" pattern="012" />
-      <div class="pattern-score">50</div>
+      <PatternIcon
+        class="pattern-icon"
+        pattern="036"
+      />
+      <PatternIcon
+        class="pattern-icon"
+        pattern="012"
+      />
+      <div class="pattern-score">
+        50
+      </div>
     </div>
     <div class="pattern">
-      <PatternIcon class="pattern-icon" pattern="13457" />
-      <PatternIcon class="pattern-icon" pattern="02468" />
-      <div class="pattern-score">100</div>
+      <PatternIcon
+        class="pattern-icon"
+        pattern="13457"
+      />
+      <PatternIcon
+        class="pattern-icon"
+        pattern="02468"
+      />
+      <div class="pattern-score">
+        100
+      </div>
     </div>
     <div class="pattern">
-      <PatternIcon class="pattern-icon" pattern="012345678" />
-      <div class="pattern-score">250</div>
+      <PatternIcon
+        class="pattern-icon"
+        pattern="012345678"
+      />
+      <div class="pattern-score">
+        250
+      </div>
     </div>
   </div>
 </template>
