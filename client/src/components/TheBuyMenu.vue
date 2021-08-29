@@ -7,38 +7,19 @@ import Icon from './Icon'
 
 <template>
   <div class="TheBuyMenu">
-    <img
-      class="icon"
-      src="../assets/icons/spell-replace.svg"
-    >
-    <div class="title">
-      Tap a tile to replace it.
-    </div>
-    <Icon
-      class="x"
-      :icon="x"
-      @click="game.discardTile()"
-    />
+    <img class="icon" src="../assets/icons/spell-replace.svg">
+    <div class="title">Tap a tile to replace it. </div>
+    <Icon class="x" :icon="x" @click="game.discardTile()" />
     <div class="body">
-      <div class="tile">
-        {{ game.boughtTile.text }}
-      </div>
+      <Tile :text="game.boughtTile.text" />
       <div class="button-group">
-        <div
-          class="button"
-          style="--color: var(--green-light)"
-          @click="game.spells.buy()"
-        >
+        <button class="button" style="--color: var(--green-light)" @click="game.spells.buy()">
           Try another
           <span class="button-cost">-5</span>
-        </div>
-        <div
-          class="button"
-          style="--color: var(--red)"
-          @click="game.discardTile()"
-        >
+        </button>
+        <button class="button" style="--color: var(--red)" @click="game.discardTile()">
           Discard
-        </div>
+        </button>
       </div>
     </div>
   </div>
@@ -82,18 +63,6 @@ import Icon from './Icon'
 	display: flex;
 	align-items: center;
 	padding: 1rem 0;
-}
-
-.tile {
-	width: 33.3333vw;
-	height: 33.3333vw;
-	background: var(--white);
-	border-radius: var(--radius-medium);
-	box-shadow: 0 0.5rem 0 0 var(--gray-lightest);
-	display: flex;
-	align-items: center;
-	padding: 0.5rem;
-	text-align: center;
 }
 
 .button-group {

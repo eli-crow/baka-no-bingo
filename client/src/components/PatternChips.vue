@@ -1,9 +1,20 @@
+<script setup>
+defineProps({
+  tiles: {
+    type: Array,
+    required: true,
+  },
+})
+</script>
+
+
+
 <template>
-  <div class="PatternIconTiles">
+  <div class="pattern-chips">
     <div
       v-for="tile in tiles"
       :key="tile.key" 
-      class="tile"
+      class="pattern-chip"
       :data-selected="tile === true"
     />
   </div>
@@ -11,22 +22,8 @@
 
 
 
-<script>
-export default {
-	name: 'PatternIconTiles',
-	props: {
-		tiles: {
-      type: Array,
-      required: true,
-    },
-	},
-}
-</script>
-
-
-
 <style scoped>
-.PatternIconTiles {
+.pattern-chips {
     width: 2rem;
     height: 2rem;
     position: relative;
@@ -35,7 +32,7 @@ export default {
     border-radius: 3px;
 }
 
-.tile {
+.pattern-chip {
     float: left;
     width: 33.333333%;
     height: 33.333333%;
@@ -43,7 +40,7 @@ export default {
     background: var(--white);
     border-radius: 3px;
 }
-.tile[data-selected] {
+.pattern-chip[data-selected] {
     background-color: var(--red);
 }
 </style>

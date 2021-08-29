@@ -37,11 +37,10 @@ const ambientColorStyle = computed(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--ambient);
   position: relative;
 }
 
-.App::after {
+/* .App::after {
   position: fixed;
   z-index: 1000;
   content: "";
@@ -53,7 +52,7 @@ const ambientColorStyle = computed(() => {
   opacity: 0.25;
   mix-blend-mode: overlay;
   pointer-events: none;
-}
+} */
 
 .view {
   flex: 1 0 auto;

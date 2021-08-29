@@ -8,15 +8,9 @@ const props = defineProps({
 </script>
 
 <template>
-  <svg
-    :width="props.icon.w"
-    :height="props.icon.h"
-    :viewBox="`0 0 ${props.icon.w} ${props.icon.h}`"
-  >
-    <path
-      :d="props.icon.d"
-      fill="currentcolor"
-    />
+  <svg :width="props.icon.w" :height="props.icon.h" :viewBox="`0 0 ${props.icon.w} ${props.icon.h}`">
+    <title>{{ props.icon.title }}</title>
+    <path fill="currentcolor" :d="props.icon.d" />
   </svg>
 </template>
 

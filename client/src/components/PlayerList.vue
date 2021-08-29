@@ -1,5 +1,5 @@
 <script setup>
-import PatternIconTiles from './PatternIconTiles.vue';
+import PatternChips from './PatternChips.vue';
 import game from '../store/game'
 
 const emit = defineEmits(['select'])
@@ -16,7 +16,7 @@ const emit = defineEmits(['select'])
         class="player"
         @click="emit('select', player.id)"
       >
-        <PatternIconTiles
+        <PatternChips
           class="icon"
           :tiles="player.tiles"
         />

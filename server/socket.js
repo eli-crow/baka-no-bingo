@@ -40,8 +40,6 @@ function setRoomData(room, socket, data) {
 }
 
 function joinRoom(room, socket, data) {
-    console.log(rooms)
-    // console.log(`socket ${socket.id} joined room "${room}," which has ${Object.keys(rooms?.[room])?.length} players`)
     socket.join(room)
     setRoomData(room, socket, data)
     socket.emit('joined', {
@@ -57,7 +55,6 @@ function joinRoom(room, socket, data) {
 function leaveRooms(socket) {
     socket.emit('left')
     Object.keys(socket.rooms).forEach(room => {
-        // console.log(`socket ${socket.id} left room "${room}," which has ${Object.keys(rooms?.[room])?.length} players`)
         removeRoomData(room, socket)
         socket.broadcast.in(room).emit('otherLeft', {theirId})
     })
@@ -78,7 +75,6 @@ export default function initSocket(httpServer) {
     
         socket.on('host', ({myData}) => {
             const room = generateRoomId()
-            console.log(myData,room)
             joinRoom(room, socket, myData)
         })
     

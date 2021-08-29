@@ -1,6 +1,7 @@
 <script setup>
 import { reactive } from 'vue';
 
+import Tile from '../components/Tile.vue'
 import Icon, {chevronLeft, listOl} from '../components/Icon'
 import BingoBoard3 from '../components/BingoBoard3.vue';
 import PatternIcon from '../components/PatternIcon.vue';
@@ -34,27 +35,25 @@ function handleTileSelect(i) {
 <template>
   <div class="GamePage">
     <header class="header">
-      <router-link
-        class="back"
-        to="/"
-      >
-        <Icon :icon="chevronLeft" />
-      </router-link>
-      <p class="room">
-        <span class="room-title">Room</span>
-        <span class="room-id">{{ game.room.id }}</span>
-      </p>
-      <div class="scores">
-        <div class="my-score">
-          {{ game.playerData.score }}
+      <Tile color="yellow" class="room-tile">
+        <div class="room">
+          <router-link class="back" to="/">
+            <Icon :icon="chevronLeft" />
+          </router-link>
+          <p class="room-details">
+            <span class="room-title">Room</span>
+            <span class="room-id">{{ game.room.id }}</span>
+          </p>
         </div>
-        <a
-          class="players"
-          @click="state.modal = 'ModalPlayerRank'"
-        >
-          <Icon :icon="listOl" />
-        </a>
-      </div>
+      </Tile>
+      <Tile class="score-tile" color="white">  
+        <div class="scores">
+          <div class="my-score">{{ game.playerData.score }}</div>
+          <a class="players" @click="state.modal = 'ModalPlayerRank'">
+            <Icon :icon="listOl" />
+          </a>
+        </div>
+      </Tile>
     </header>
 
     <div class="board-container">
@@ -70,11 +69,7 @@ function handleTileSelect(i) {
 
     <transition name="action-group">
       <TheBuyMenu v-if="game.boughtTile" />
-
-      <div
-        v-else
-        class="action-group"
-      >
+      <div v-else class="action-group">
         <ActionButton
           class="action"
           icon="spell-replace"
@@ -115,11 +110,15 @@ function handleTileSelect(i) {
 
 .header {
   display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  height: 68px;
+  height: 80px;
   position: relative;
-  z-index: 2;
+  margin-bottom: 1rem;
+  --distance: 0;
+}
+.room-tile {
+  flex: 1 1 0;
+  display: flex;
+  margin-left: -8rem;
 }
 .back {
   flex: 0 0 2.25rem;
@@ -134,7 +133,12 @@ function handleTileSelect(i) {
   color: var(--black);
 }
 .room {
-  flex: 1 1 auto;
+  padding: 12px;
+  padding-left: 8rem;
+  display: flex;
+  align-items: center;
+}
+.room-details {
 }
 .room-title {
   display: block;
@@ -147,6 +151,10 @@ function handleTileSelect(i) {
   margin-bottom: 2px;
   opacity: 0.5;
 }
+.score-tile {
+  flex: 1 1 auto;
+  margin-right: -8rem;
+}
 .room-id {
   display: block;
   margin: 0;
@@ -156,21 +164,12 @@ function handleTileSelect(i) {
   line-height: 1;
 }
 .scores {
-  flex: 0 0 auto;
   text-align: center;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   font: var(--font-title);
   font-size: 2rem;
-  background-color: white;
   line-height: 1;
-  align-self: center;
-
-  border-radius: 99999px;
-  box-shadow: 0 4px 0 0 var(--gray-light);
-  margin-left: auto;
-  margin-bottom: 4px;
 }
 .my-score {
   padding: 8px 12px 8px 20px;
@@ -182,13 +181,6 @@ function handleTileSelect(i) {
 }
 
 .board-container {
-  /* --color defined in computed property */
-  background-image: linear-gradient(
-    to bottom,
-    var(--ambient-dark) -100%,
-    0%,
-    var(--ambient)
-  );
   padding: 1rem;
 }
 

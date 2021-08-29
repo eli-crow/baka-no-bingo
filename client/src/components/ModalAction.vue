@@ -1,5 +1,6 @@
 <script setup>
 import Icon, {x} from './Icon'
+import Tile from './Tile.vue'
 
 const props = defineProps({
   title: {
@@ -9,11 +10,7 @@ const props = defineProps({
   description: {
     type: String,
     default: null
-    },
-  icon: {
-    type: String,
-    default: null
-    },
+    }
 })
 
 const emit = defineEmits(['close'])
@@ -21,38 +18,20 @@ const emit = defineEmits(['close'])
 
 
 <template>
-  <section
-    class="ModalAction"
-    @click="$emit('close')"
-  >
-    <div
-      class="content"
-      @click.stop
-    >
+  <section class="ModalAction" role="dialog" @click="$emit('close')">
+    <Tile class="content" @click.stop>
       <header class="header">
-        <Icon
-          v-if="icon"
-          class="icon"
-          :icon="icon"
-        />
+        <Icon v-if="icon" class="icon" :icon="icon" />
         <div class="header-text">
-          <p class="title">
-            {{ props.title }}
-          </p>
-          <p class="description">
-            {{ props.description }}
-          </p>
+          <p class="title">{{ props.title }}</p>
+          <p class="description">{{ props.description }}</p>
         </div>
-        <Icon
-          class="x"
-          :icon="x"
-          @click="emit('close')"
-        />
+        <button @click="emit('close')"><Icon class="x" :icon="x" /></button>
       </header>
       <div class="slot-content">
         <slot />
       </div>
-    </div>
+    </Tile>
   </section>
 </template>
 
@@ -73,27 +52,7 @@ const emit = defineEmits(['close'])
 }
 
 .content {
-    --border-scale: 0.75;
-    --tile-padding: 0px;
-    /* 
-	set min-width and -height to override default tile sizing behavior
-	allowing consistently sized tiles.
-	*/
-	min-width: 0;
-	min-height: 0;
-    width: 20rem;
-    max-width: 100%;
-	position: relative;
-    border-image-source: url('../assets/images/tile-white.svg');
-	border-image-slice: 36% 36% 50% 36% fill;
-	border-image-width: calc(var(--border-scale) * 36px) calc(var(--border-scale) * 36px) calc(var(--border-scale) * 50px) calc(var(--border-scale) * 36px);
-	border-image-repeat: stretch;
-	border-image-outset: 0px 0px calc(var(--border-scale) * 14.88px) 0px;
-	border-style: solid;
-	padding: var(--tile-padding);
-	line-height: 1.15;
-	touch-action: manipulation;
-	-webkit-tap-highlight-color: rgba(0,0,0,0);
+  text-align: left;
 }
 
 .header {

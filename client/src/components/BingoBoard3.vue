@@ -1,5 +1,7 @@
 <script setup>
 import { computed, nextTick, reactive } from 'vue';
+import { star as starIcon } from './Icon'
+import Tile from './Tile.vue'
 
 const props = defineProps({
   tiles: {
@@ -22,9 +24,10 @@ const state = reactive({
   staggerIndex: 0
 });
 
-function setTileRef(tileEl) {
-  if (tileEl) {
-    state.tileMeasurements.set(tileEl, measureTile(tileEl))
+function setTileRef(tile) {
+  if (tile) {
+    const el = tile.$el
+    state.tileMeasurements.set(el, measureTile(el))
   }
 }
 
@@ -68,24 +71,20 @@ function clearTileMeasurements() {
         @before-leave="beforeLeave"
         @leave="leave"
       >
-        <div
+        <Tile 
           v-for="(tile, i) in props.tiles"
-          :key="tile.key"
           :ref="setTileRef"
-          :data-index="i"
-          :class="{
-            tile: true,
-            '-red': tile.selected,
-            '-selected-animate': i !== 4 && state.animate && tile.selected,
-            '-white': !tile.selected,
-            '-star': i === 4,
-          }"
+          :key="tile.key"
+          tag="button"
+          :disabled="i === 4"
+          :color="tile.selected ? 'red' : 'white'"
+          :animate="i !== 4 && state.animate && tile.selected"
+          :icon="i === 4 ? starIcon : null"
           :style="{zIndex: i}"
-          @click="emit('select', i); state.animate = true;"
+          @select="emit('select', i); state.animate = true;"
         >
-          <span v-if="i === 4" class="icon">★</span>
-          <span v-else class="text">{{ tile.text }}</span>
-        </div>
+          {{ i === 4 ? '' : tile.text }}
+        </Tile>
       </transition-group>
     </div>
   </div>
@@ -94,12 +93,9 @@ function clearTileMeasurements() {
 
 
 <style scoped>
-.BingoBoard3 {
-}
-
 .tile-group-container {
-  --border-scale: 0.95;
-  --tile-padding: 8px;
+  --border-scale: 1;
+  --tile-padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +108,6 @@ function clearTileMeasurements() {
   justify-content: center;
   width: 100%;
   max-width: 25rem;
-  box-sizing: content-box;
 }
 .tile-group-aspect-ratio::before {
   content: "";
@@ -120,6 +115,7 @@ function clearTileMeasurements() {
   height: 0;
   padding-bottom: 100%;
 }
+
 .tile-group {
   position: relative;
   width: 100%;
@@ -128,114 +124,6 @@ function clearTileMeasurements() {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   border-color: black;
-}
-.tile {
-  /* 
-	set min-width and -height to override default tile sizing behavior
-	allowing consistently sized tiles.
-	*/
-  min-width: 0;
-  min-height: 0;
-  position: relative;
-  border-image-source: url("../assets/images/tile-white.svg");
-  border-image-slice: 36% 36% 50% 36% fill;
-  border-image-width: calc(var(--border-scale) * 36px)
-    calc(var(--border-scale) * 36px) calc(var(--border-scale) * 50px)
-    calc(var(--border-scale) * 36px);
-  border-image-repeat: stretch;
-  border-image-outset: 0px 0px calc(var(--border-scale) * 14.88px) 0px;
-  border-style: solid;
-  padding: var(--tile-padding);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 14px;
-  line-height: 1.15;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-.tile.-text {
-  position: relative;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  color: black;
-  text-decoration: none;
-}
-.tile.-text::after {
-  position: absolute;
-  content: "";
-  left: 50%;
-  top: 50%;
-  width: 4rem;
-  height: 4rem;
-  transform: translate(-50%, -50%);
-  background-color: var(--circle);
-  border-radius: 99999px;
-  pointer-events: none;
-  /* HACK: you can do better than this */
-  mix-blend-mode: darken;
-}
-.tile.-blue {
-  --circle: var(--blue);
-  border-image-source: url("../assets/images/tile-blue.svg");
-}
-.tile.-red {
-  --circle: var(--red);
-  color: white;
-  border-image-source: url("../assets/images/tile-red.svg");
-}
-.tile.-purple {
-  --circle: var(--purple);
-  color: white;
-  border-image-source: url("../assets/images/tile-purple.svg");
-}
-.tile.-skull .icon {
-  color: var(--black);
-  opacity: 0.3;
-}
-@keyframes tile-selected-animate {
-  50% {
-    transform: translate3d(0, 0.5rem, 0);
-  }
-}
-.tile.-selected-animate {
-  animation: tile-selected-animate 0.5s ease;
-}
-.tile.-star .icon {
-  color: var(--black);
-}
-.tile.-yellow {
-  --circle: var(--yellow);
-  border-image-source: url("../assets/images/tile-yellow.svg");
-}
-.tile.-white {
-  --circle: var(--white);
-  border-image-source: url("../assets/images/tile-white.svg");
-}
-.tile.-blue-light {
-  --circle: var(--blue);
-  border-image-source: url("../assets/images/tile-light-blue.svg");
-}
-.tile.-yellow-light {
-  --circle: var(--yellow);
-  border-image-source: url("../assets/images/tile-light-yellow.svg");
-}
-
-.icon {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 4rem;
-}
-
-.text {
-  position: relative;
-  zindex: 1;
 }
 
 .tile-group-enter-active,
@@ -247,22 +135,24 @@ function clearTileMeasurements() {
   --duration-opacity: 0.25s;
   --easing-transform: cubic-bezier(0.74, 0.01, 0.455, 1.29);
   transform-origin: center;
+  pointer-events: none;
 }
 .tile-group-enter-active,
 .tile-group-enter-to {
-  transition: opacity var(--duration-opacity) ease var(--stagger-delay),
+  transition: 
+    opacity var(--duration-opacity) ease var(--stagger-delay),
     transform var(--duration-transform) var(--easing-transform)
       calc(
         var(--duration-opacity) + var(--duration-delay) + var(--stagger-delay)
       );
 }
 .tile-group-leave-active {
-  transition: opacity var(--duration-opacity) ease
+  transition: 
+    opacity var(--duration-opacity) ease
       calc(
         var(--duration-transform) + var(--duration-delay) + var(--stagger-delay)
       ),
-    transform var(--duration-transform) var(--easing-transform)
-      var(--stagger-delay);
+    transform var(--duration-transform) var(--easing-transform) var(--stagger-delay);
 }
 
 .tile-group-leave-from,
@@ -272,11 +162,11 @@ function clearTileMeasurements() {
 
 .tile-group-enter-from {
   opacity: 0;
-  transform: translateY(1rem);
+  --distance: 0;
 }
 .tile-group-leave-to {
   opacity: 0;
-  transform: translateY(-8rem);
+  --distance: 16rem;
 }
 
 .tile-group-move:not(.tile-group-leave-active):not(.tile-group-enter-active) {

@@ -1,6 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 :root {
     --white: hsl(0, 0%, 100%);
     --black: hsl(0, 0%, 0%);
@@ -39,11 +36,14 @@
 }
 
 html {
+    margin: 0;
     height: 100%;
     overflow-x: hidden;
+    background-color: var(--yellow);
 }
 
 body {
+    margin: 0;
     min-height: 100%;
     font: var(--font-default);
     color: var(--color-text-default);
@@ -52,12 +52,22 @@ body {
     overflow-x: hidden;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 /* container */
 
 #app {
     flex: 1 0 0;
     display: flex;
     flex-direction: column;
+}
+
+button {
+    appearance: none;
+    border: 0;
+    background: transparent;
 }
 
 /* transitions */
@@ -74,4 +84,8 @@ body {
 
 .wipe-enter-from, .wipe-leave-to {
     opacity: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
 }

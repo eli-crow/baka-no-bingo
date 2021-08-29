@@ -20,7 +20,6 @@ export function createRoomStore(onMyUpdate) {
         },
 
         joined({room: roomId, allData}) {
-            console.log(roomId, allData)
             room.id = roomId
             room.playerData = allData
         },
@@ -71,7 +70,6 @@ export function createRoomStore(onMyUpdate) {
             socket.emit('host', {myData})
         },
         join(room, myData) {
-            console.log(room)
             socket.emit('join', {room, myData})
         },
         leave() {
