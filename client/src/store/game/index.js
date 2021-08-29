@@ -53,54 +53,55 @@ export function createGameStore() {
     return {
         room: room,
         playerData: readonly(my.playerData),
-        get boughtTile () { return my.boughtTile },
         tropes: readonly(tropes),
+        
+        get boughtTile () { 
+            return my.boughtTile 
+        },
+
         get sellablePatterns() {
             return patterns.filter(p => p.pattern.every(i => my.playerData.tiles[i].selected))
         },
+
         get playerDataSimplified () {
             const result = JSON.parse(JSON.stringify(state.playerData))
             result.tiles = result.tiles.map(t => t.selected)
             return result
         },
+
         host() {
             this.resetGame()
             room.host(my.playerData)
         },
+
         join(roomId) {
             this.resetGame()
             room.join(roomId, my.playerData)
         },
+
         discardTile() {
             my.boughtTile = null 
         },
+
         placeTile(i) {
             my.playerData.tiles[i] = my.boughtTile
             my.boughtTile = null
         },
+
         toggleTile(i) {
             my.playerData.tiles[i].selected = !my.playerData.tiles[i].selected
         },
-        spells: {
-            buy() {
-                if (my.playerData.score < 5) throw new Error("Not enough points")
-                my.playerData.score -= 5
-                my.boughtTile = createRandomTile()
-            },
-            reset() {
-                if (my.playerData.score < 20) throw new Error("Not enough points")
-                my.playerData.score -= 20
-                my.playerData.tiles = createRandomBoard()
-            },
-        },
+
         resetGame() {
             my.playerData.soldTileIds = []
             my.playerData.score = 20
             my.playerData.tiles = createRandomBoard()
         },
+
         setName(name) {
             my.playerData.name = name
         },
+
         sellPattern(i) {
             const {pattern, score} = patterns[i]
             my.playerData.score += score
@@ -113,6 +114,20 @@ export function createGameStore() {
                 my.playerData.soldTileIds.push(toReplace.id)
             })
             my.playerData.tiles[4].selected = true
+        },
+
+        spells: {
+            buy() {
+                if (my.playerData.score < 5) throw new Error("Not enough points")
+                my.playerData.score -= 5
+                my.boughtTile = createRandomTile()
+            },
+            
+            reset() {
+                if (my.playerData.score < 20) throw new Error("Not enough points")
+                my.playerData.score -= 20
+                my.playerData.tiles = createRandomBoard()
+            },
         },
     }
 }

@@ -14,6 +14,7 @@ export function createRoomStore(onMyUpdate) {
         connect() {
             room.connected = true
         },
+
         disconnect() {
             room.connected = false
         },
@@ -23,6 +24,7 @@ export function createRoomStore(onMyUpdate) {
             room.id = roomId
             room.playerData = allData
         },
+
         otherJoined({theirId, theirData}) {
             room.playerData[theirId] = theirData
         },
@@ -31,6 +33,7 @@ export function createRoomStore(onMyUpdate) {
             room.id = null
             playerData = {}
         },
+
         otherLeft({theirId}) {
             delete room.playerData[theirId]
         },
@@ -39,6 +42,7 @@ export function createRoomStore(onMyUpdate) {
             room.playerData[myId] = myData
             onMyUpdate(myData)
         },
+
         otherUpdated({theirId, theirData}) {
             room.playerData[theirId] = theirData
         },
@@ -67,6 +71,7 @@ export function createRoomStore(onMyUpdate) {
             socket.emit('host', {myData})
         },
         join(room, myData) {
+            console.log(room)
             socket.emit('join', {room, myData})
         },
         leave() {

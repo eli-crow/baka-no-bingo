@@ -11,7 +11,7 @@ const props = defineProps({
   <svg
     :width="props.icon.w"
     :height="props.icon.h"
-    :view-box="`0 0 ${props.icon.w} ${props.icon.h}`"
+    :viewBox="`0 0 ${props.icon.w} ${props.icon.h}`"
   >
     <path
       :d="props.icon.d"
@@ -24,5 +24,7 @@ const props = defineProps({
 svg {
   display: inline-block;
   height: 1em;
+  width: auto;
+  overflow: visible;
 }
 </style>

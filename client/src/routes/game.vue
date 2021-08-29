@@ -64,6 +64,7 @@ function handleTileSelect(i) {
         @select="handleTileSelect"
       />
     </div>
+    <pre><code>{{ JSON.stringify(game.room, null, "\t") }}</code></pre>
 
     <PatternSellBar v-if="game.sellablePatterns.length" />
     <PatternLegend v-else-if="!game.boughtTile" />

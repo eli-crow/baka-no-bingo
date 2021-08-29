@@ -11,7 +11,7 @@ function generateRoomId() {
     // generate room ids until we find one that isn't already taken and isn't a bad word
     do {
         id = ''
-        for (let i = 0; i < 4; i++) {
+        for (let  i = 0; i < 4; i++) {
             id += letters.charAt(Math.floor(Math.random() * letters.length))
         }
     } while (id in io.sockets.adapter.rooms || bad.includes(id))

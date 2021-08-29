@@ -11,7 +11,7 @@ import router from '../routes'
 
 const state = reactive({
   modal: '',
-  joinRoomId: '',
+  roomCode: '',
 });
 
 const specialThanksList = computed(() => {
@@ -87,12 +87,12 @@ watch(() => game.room.id, value => {
         @close="state.modal = ''"
       >
         <input
-          v-model="state.joinRoomId"
+          v-model="state.roomCode"
           type="text"
         >
         <button
           class="button"
-          @click="game.join"
+          @click="game.join(state.roomCode)"
         >
           Join Room
         </button>
