@@ -4,8 +4,8 @@
         "node": ">=13.0.0"
     },
     "workspaces": [
-        "client",
-        "server"
+        "server",
+        "client"
     ],
     "license": "UNLICENSED"
 }

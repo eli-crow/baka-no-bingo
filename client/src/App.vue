@@ -22,9 +22,14 @@ const ambientColorStyle = computed(() => {
     class="App"
     :style="ambientColorStyle"
   >
-    <transition name="wipe">
-      <router-view class="view" />
-    </transition>
+    <router-view
+      v-slot="{ Component }"
+      class="view"
+    >
+      <transition name="wipe">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
@@ -71,6 +76,12 @@ const ambientColorStyle = computed(() => {
   --radius-medium: 10px;
 
   --line-groove: solid 2px hsl(0, 0%, 98%);
+}
+
+button {
+  appearance: none;
+  border: 0;
+  background: none;
 }
 
 *,

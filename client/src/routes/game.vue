@@ -33,11 +33,6 @@ function handleTileSelect(i) {
 
 <template>
   <div class="GamePage">
-    <GlobalEvents
-      @keydown.space="cheat"
-      @keydown.esc="anticheat"
-    />
-
     <header class="header">
       <router-link
         class="back"
@@ -47,11 +42,11 @@ function handleTileSelect(i) {
       </router-link>
       <p class="room">
         <span class="room-title">Room</span>
-        <span class="room-id">{{ roomId }}</span>
+        <span class="room-id">{{ game.room.id }}</span>
       </p>
       <div class="scores">
         <div class="my-score">
-          {{ playerData.score }}
+          {{ game.playerData.score }}
         </div>
         <a
           class="players"
@@ -65,16 +60,16 @@ function handleTileSelect(i) {
     <div class="board-container">
       <BingoBoard3
         class="board"
-        :tiles="playerData.tiles"
+        :tiles="game.playerData.tiles"
         @select="handleTileSelect"
       />
     </div>
 
-    <PatternSellBar v-if="sellablePatterns.length" />
-    <PatternLegend v-else-if="!boughtTile" />
+    <PatternSellBar v-if="game.sellablePatterns.length" />
+    <PatternLegend v-else-if="!game.boughtTile" />
 
     <transition name="action-group">
-      <TheBuyMenu v-if="boughtTile" />
+      <TheBuyMenu v-if="game.boughtTile" />
 
       <div
         v-else
@@ -86,8 +81,8 @@ function handleTileSelect(i) {
           label="Replace"
           color="green"
           cost="5"
-          :enabled="playerData.score >= 5"
-          @select="$store.dispatch('SPELL_BUY')"
+          :enabled="game.playerData.score >= 5"
+          @select="game.spells.buy()"
         />
 
         <ActionButton
@@ -96,8 +91,8 @@ function handleTileSelect(i) {
           label="Reset"
           color="red"
           cost="10"
-          :enabled="playerData.score >= 10"
-          @select="$store.dispatch('SPELL_RESET_BOARD')"
+          :enabled="game.playerData.score >= 10"
+          @select="game.spells.reset()"
         />
       </div>
     </transition>

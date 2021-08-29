@@ -6,13 +6,13 @@ export default createRouter({
     {
       path: '/',
       name: 'Home',
-      component: import('./main.vue'),
+      component: () => import('./home.vue'),
     },
     {
       path: '/game',
       name: 'Game',
       props: true,
-      component: import('./game.vue'),
+      component: () => import('./game.vue'),
     }
   ]
 })

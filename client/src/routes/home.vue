@@ -7,6 +7,7 @@ import { computed, reactive, watch } from 'vue';
 import appInfo from '../data/appInfo.json';
 import specialThanks from '../data/specialThanks.json';
 import game from "../store/game";
+import router from '../routes'
 
 const state = reactive({
   modal: '',
@@ -17,27 +18,13 @@ const specialThanksList = computed(() => {
   return new Intl.ListFormat('en-US', { style: 'long', type: 'conjunction' }).format(specialThanks);
 });
 
-function host() {
-  game.resetGame();
-  game.host();
-}
 function cancelHost() {
   state.modal = '';
   game.cancelHost();
 }
-function join() {
-  game.resetGame();
-  game.join(state.joinRoomId);
-}
-function joinStart() {
-  state.modal = 'joining';
-}
-function cancelJoin() {
-  state.modal = '';
-}
 
-watch(game.room.id, value => {
-  if (value) this.$router.push('/game');
+watch(() => game.room.id, value => {
+  if (value) router.push('/game');
 });
 </script>
 
@@ -45,7 +32,7 @@ watch(game.room.id, value => {
 
 
 <template>
-  <div class="MainPage">
+  <div class="HomePage">
     <div class="title-container">
       <div class="title">
         Baka no Bingo ★ <span class="title-version">v{{ appInfo.version }}</span>
@@ -58,38 +45,30 @@ watch(game.room.id, value => {
     <div class="tile-group-container">
       <div class="tile-group-aspect-ratio">
         <div class="tile-group">
-          <div class="tile -blue">
-            ば
-          </div>
-          <div class="tile -blue">
-            か
-          </div>
-          <div class="tile -small -white">
-            の
-          </div>
-          <a
-            class="tile -text -blue-light"
-            @click="host"
-          >Host</a>
-          <div class="tile -star -red">
-            ★
-          </div>
-          <a
-            class="tile -text -yellow-light"
-            @click="joinStart"
-          >Join</a>
-          <div class="tile -yellow">
-            ビ
-          </div>
-          <div class="tile -yellow">
-            ン
-          </div>
-          <div class="tile -yellow">
-            ゴ
-          </div>
+          <div class="tile -blue">ば</div>
+          <div class="tile -blue">か</div>
+          <div class="tile -small -white">の</div>
+          <button
+            class="tile -text -blue-light -button"
+            @click="game.host()"
+          >
+            Host
+          </button>
+          <div class="tile -star -red">★</div>
+          <button
+            class="tile -text -yellow-light -button"
+            @click="state.modal = 'joining'"
+          >
+            Join
+          </button>
+          <div class="tile -yellow">ビ</div>
+          <div class="tile -yellow">ン</div>
+          <div class="tile -yellow">ゴ</div>
         </div>
       </div>
     </div>
+
+    <pre><code>{{ JSON.stringify(game.room, null, "\t") }}</code></pre>
 
     <div class="credits">
       <p class="byline">
@@ -105,16 +84,18 @@ watch(game.room.id, value => {
         v-if="state.modal === 'joining'"
         title="Join a Game"
         description="Enter the code given by your host."
-        @close="cancelJoin"
+        @close="state.modal = ''"
       >
         <input
-          v-model="joinRoomId"
+          v-model="state.joinRoomId"
           type="text"
         >
-        <a
+        <button
           class="button"
-          @click="join"
-        >Join Room</a>
+          @click="game.join"
+        >
+          Join Room
+        </button>
       </ModalAction>
     </ModalTransition>
   </div>
@@ -123,7 +104,7 @@ watch(game.room.id, value => {
 
 
 <style scoped>
-.MainPage {
+.HomePage {
   background: var(--yellow);
 }
 
@@ -167,7 +148,7 @@ watch(game.room.id, value => {
 }
 
 .tile-group-container {
-  --border-scale: 0.85;
+  --border-scale: 0.95;
   --tile-padding: 8px;
   display: flex;
   align-items: center;
@@ -216,14 +197,29 @@ watch(game.room.id, value => {
   /* margin-bottom: calc(var(--border-scale) * -14.88px); */
   /* padding-bottom: calc(var(--border-scale) * 14.88px + var(--tile-padding)); */
   display: flex;
+  cursor: default;
+  user-select: none;
   align-items: center;
   justify-content: center;
   text-align: center;
   font-weight: 700;
-  font-size: 4rem;
+  font-size: 5rem;
+  transition: 0.35s ease;
+  transition-property: transform;
 }
 .tile.-small {
   font-size: 2rem;
+}
+.tile.-button {
+  cursor: pointer;
+}
+.tile.-button:hover {
+  outline: 0;
+  transform: translateY(-0.4rem);
+}
+.tile.-button:active {
+  transition-duration: 0.25s;
+  transform: translateY(0.3rem);
 }
 .tile.-text {
   position: relative;

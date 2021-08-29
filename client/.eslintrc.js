@@ -4,6 +4,7 @@ module.exports = {
     'plugin:vue/vue3-recommended',
   ],
   rules: {
-    "vue/comment-directive": 0
+    "vue/comment-directive": 0,
+    "vue/singleline-html-element-content-newline": 0
   }
 }

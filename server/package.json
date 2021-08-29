@@ -5,10 +5,12 @@
     "dev": "node index.js",
     "start": "echo \"Error: not ready for production\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --ext .js,.json --ext",
+    "lint:fix": "eslint . --ext .js,.json --fix"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "socket.io": "^4.1.3"
   }

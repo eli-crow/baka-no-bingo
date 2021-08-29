@@ -67,18 +67,18 @@ function mounted() {
     <div class="tile-group-aspect-ratio">
       <transition-group
         ref="transitionGroup"
-        :class="{'tile-group':true, '-animate': animate}"
+        :class="{'tile-group':true, '-animate': state.animate}"
         name="tile-group"
         tag="div"
         @before-leave="beforeLeave"
       >
         <div
-          v-for="(tile, i) in tiles"
+          v-for="(tile, i) in props.tiles"
           :key="tile.key"
           :class="{
             tile: true,
             '-red': tile.type === 'trope' && tile.selected,
-            '-selected-animate': i !== 4 && animate && tile.selected,
+            '-selected-animate': i !== 4 && state.animate && tile.selected,
             '-white': tile.type === 'trope' && !tile.selected,
             '-star': i === 4,
           }"
@@ -108,7 +108,7 @@ function mounted() {
 }
 
 .tile-group-container {
-  --border-scale: 0.85;
+  --border-scale: 0.95;
   --tile-padding: 8px;
   display: flex;
   align-items: center;

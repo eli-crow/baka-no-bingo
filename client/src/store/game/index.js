@@ -5,12 +5,15 @@ import { sample, sampleSize } from "lodash"
 import { v4 as uuid } from "uuid"
 import { createRoomStore } from './room'
 
-
 export function createGameStore() {
     const my = reactive({
         boughtTile: null,
         playerData: createPlayerData(),
     })
+
+    function onUpdate(data) {
+        Object.assign(my.playerData, data)
+    }
 
     function createPlayerData() {
         const stored = JSON.parse(localStorage.getItem('playerData'))
@@ -41,14 +44,16 @@ export function createGameStore() {
         return tiles
     }
 
+    const room = createRoomStore(onUpdate)
+
     watch(my.playerData, nv => {
         localStorage.setItem('playerData', JSON.stringify(nv))
     }, {deep: true})
 
     return {
-        room: createRoomStore(),
+        room: room,
         playerData: readonly(my.playerData),
-        boughtTile: readonly(my.boughtTile),
+        get boughtTile () { return my.boughtTile },
         tropes: readonly(tropes),
         get sellablePatterns() {
             return patterns.filter(p => p.pattern.every(i => my.playerData.tiles[i].selected))
@@ -59,9 +64,12 @@ export function createGameStore() {
             return result
         },
         host() {
-            
+            this.resetGame()
+            room.host(my.playerData)
         },
-        join() {
+        join(roomId) {
+            this.resetGame()
+            room.join(roomId, my.playerData)
         },
         discardTile() {
             my.boughtTile = null 
@@ -98,7 +106,7 @@ export function createGameStore() {
             my.playerData.score += score
             
             const sampleTiles = getRandomTileArray(pattern.length)
-            pattern.forEach((patternTileIndex, i) => {
+            pattern.forEach((patternTileIndex, i) => { 
                 const toReplace = resultTiles[patternTileIndex]
                 //replace the sold tiles
                 my.playerData.tiles[patternTileIndex] = sampleTiles[i]
