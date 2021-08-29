@@ -106,9 +106,9 @@ export function createGameStore() {
             const {pattern, score} = patterns[i]
             my.playerData.score += score
             
-            const sampleTiles = getRandomTileArray(pattern.length)
+            const sampleTiles = createRandomTileArray(pattern.length)
             pattern.forEach((patternTileIndex, i) => { 
-                const toReplace = resultTiles[patternTileIndex]
+                const toReplace = my.playerData.tiles[patternTileIndex]
                 //replace the sold tiles
                 my.playerData.tiles[patternTileIndex] = sampleTiles[i]
                 my.playerData.soldTileIds.push(toReplace.id)

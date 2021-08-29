@@ -46,13 +46,12 @@ onMounted(() => {
 .DebugView {
     position: fixed;
     font-size: 8px;
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(12px);
+    background-color: rgba(0, 0, 0, 0.85);
     overflow: scroll;
     z-index: 10000;
     padding: 8px;
     font-family: 'Roboto Mono', monospace;
-    color: white;
+    color: rgb(206, 225, 252);
     border-radius: 12px;
 }
 [data-right="true"] {

@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { onBeforeUpdate, onMounted, onUpdated, reactive, ref } from 'vue';
 
 const props = defineProps({
   tiles: {
@@ -21,42 +21,34 @@ const state = reactive({
   animate: false,
 });
 
-const transitionGroupRef = ref();
+const tileMeasurements = new Map()
+function setTileRef(tileEl) {
+  if (tileEl) {
+    tileMeasurements.set(tileEl, measureTile(tileEl))
+  }
+}
+onBeforeUpdate(() => {
+  tileMeasurements.clear()
+  state.staggerIndex = 0;
+})
 
 function beforeLeave(el) {
-  el.style.setProperty('--stagger-index', this.staggerIndex);
+  el.style.setProperty('--stagger-index', state.staggerIndex);
 
-  el.style.zIndex = Number(el.style.zIndex) + 1;
-
-  const { styleLeft, styleTop, styleWidth, styleHeight } = el.dataset;
-  el.style.left = styleLeft;
-  el.style.top = styleTop;
-  el.style.width = styleWidth;
-  el.style.height = styleHeight;
+  const measurements = tileMeasurements.get(el)
+  Object.assign(el.style, measurements, {
+    zIndex: Number(el.style.zIndex) + 1
+  })
 
   state.staggerIndex++;
 }
 
-function measureTileOffsets() {
-  const children = Array.from(transitionGroup.current.$el.children);
-  children.forEach(el => {
-    const { marginLeft, marginTop, width, height } = window.getComputedStyle(el);
-    const { offsetLeft, offsetTop } = el;
-    el.dataset.styleLeft = `${offsetLeft - parseFloat(marginLeft, 10)}px`;
-    el.dataset.styleTop = `${offsetTop - parseFloat(marginTop, 10)}px`;
-    el.dataset.styleWidth = width;
-    el.dataset.styleHeight = height;
-  });
-  state.staggerIndex = 0;
-}
-
-//TODO: updated and mounted
-function updated() {
-  measureTileOffsets();
-}
-
-function mounted() {
-  measureTileOffsets();
+function measureTile(el) {
+  const { marginLeft, marginTop, width, height } = window.getComputedStyle(el);
+  const { offsetLeft, offsetTop } = el;
+  const left = `${offsetLeft - parseFloat(marginLeft, 10)}px`;
+  const top = `${offsetTop - parseFloat(marginTop, 10)}px`;
+  return {left, top, width, height}
 }
 </script>
 
@@ -66,7 +58,6 @@ function mounted() {
   <div class="tile-group-container">
     <div class="tile-group-aspect-ratio">
       <transition-group
-        ref="transitionGroup"
         :class="{'tile-group':true, '-animate': state.animate}"
         name="tile-group"
         tag="div"
@@ -75,26 +66,19 @@ function mounted() {
         <div
           v-for="(tile, i) in props.tiles"
           :key="tile.key"
+          :ref="setTileRef"
           :class="{
             tile: true,
-            '-red': tile.type === 'trope' && tile.selected,
+            '-red': tile.selected,
             '-selected-animate': i !== 4 && state.animate && tile.selected,
-            '-white': tile.type === 'trope' && !tile.selected,
+            '-white': !tile.selected,
             '-star': i === 4,
           }"
-          :style="{
-            zIndex: i
-          }"
+          :style="{zIndex: i}"
           @click="emit('select', i); state.animate = true;"
         >
-          <span
-            v-if="i === 4"
-            class="icon"
-          >★</span>
-          <span
-            v-else
-            class="text"
-          >{{ tile.text }}</span>
+          <span v-if="i === 4" class="icon">★</span>
+          <span v-else class="text">{{ tile.text }}</span>
         </div>
       </transition-group>
     </div>
@@ -275,12 +259,12 @@ function mounted() {
       var(--stagger-delay);
 }
 
-.tile-group-leave,
+.tile-group-leave-from,
 .tile-group-leave-active {
   position: absolute !important;
 }
 
-.tile-group-enter {
+.tile-group-enter-from {
   opacity: 0;
   transform: translateY(1rem);
 }
