@@ -32,7 +32,7 @@ onBeforeUpdate(() => {
 
 function beforeLeave(el) {
   const measurements = state.tileMeasurements.get(el)
-  const index = Object.keys(state.tileMeasurements).indexOf(el)
+  const index = [...state.tileMeasurements.keys()].indexOf(el)
   Object.assign(el.style, measurements, {
     zIndex: Number(el.style.zIndex) + 1,
   })
