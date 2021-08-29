@@ -1,9 +1,11 @@
-import tropes from '../../data/tropes'
+import tropesData from '../../data/tropes'
 import patterns from '../../data/patterns'
 import { reactive, readonly, watch } from "vue"
 import { sample, sampleSize } from "lodash"
 import { v4 as uuid } from "uuid"
 import { createRoomStore } from './room'
+
+const tropes = Object.entries(tropesData).map(([id, text]) => ({id, text}))
 
 export function createGameStore() {
     const my = reactive({
@@ -25,17 +27,16 @@ export function createGameStore() {
         }
     }
 
-    function createTile(id) {
-        const text = tropes.byId[id]
-        return {text, id, selected: false, key: uuid()}
+    function createTile({id, text}) {
+        return {id, text, selected: false, key: uuid()}
     }
 
     function createRandomTile () {
-        return createTile(sample(tropes.allIds))
+        return createTile(sample(tropes))
     }
 
     function createRandomTileArray(n) {
-        return sampleSize(tropes.allIds, n).map(createTile)
+        return sampleSize(tropes, n).map(createTile)
     }
 
     function createRandomBoard() {

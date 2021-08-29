@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUpdate, onMounted, onUpdated, reactive, ref } from 'vue';
+import { computed, nextTick, reactive } from 'vue';
 
 const props = defineProps({
   tiles: {
@@ -18,7 +18,8 @@ const emit = defineEmits([
 
 const state = reactive({
   animate: false,
-  tileMeasurements: new Map(),
+  tileMeasurements: new WeakMap(),
+  staggerIndex: 0
 });
 
 function setTileRef(tileEl) {
@@ -26,17 +27,20 @@ function setTileRef(tileEl) {
     state.tileMeasurements.set(tileEl, measureTile(tileEl))
   }
 }
-onBeforeUpdate(() => {
-  state.tileMeasurements.clear()
-})
 
 function beforeLeave(el) {
   const measurements = state.tileMeasurements.get(el)
-  const index = [...state.tileMeasurements.keys()].indexOf(el)
   Object.assign(el.style, measurements, {
     zIndex: Number(el.style.zIndex) + 1,
   })
-  el.style.setProperty('--stagger-index', index)
+  el.style.setProperty('--stagger-index', state.staggerIndex)
+  state.staggerIndex++
+}
+function leave(el) {
+  state.tileMeasurements.delete(el)
+  nextTick(() => {
+    state.staggerIndex--
+  })
 }
 
 function measureTile(el) {
@@ -45,6 +49,10 @@ function measureTile(el) {
   const left = `${offsetLeft - parseFloat(marginLeft, 10)}px`;
   const top = `${offsetTop - parseFloat(marginTop, 10)}px`;
   return {left, top, width, height}
+}
+
+function clearTileMeasurements() {
+  state.tileMeasurements.clear()
 }
 </script>
 
@@ -58,11 +66,13 @@ function measureTile(el) {
         name="tile-group"
         tag="div"
         @before-leave="beforeLeave"
+        @leave="leave"
       >
         <div
           v-for="(tile, i) in props.tiles"
           :key="tile.key"
           :ref="setTileRef"
+          :data-index="i"
           :class="{
             tile: true,
             '-red': tile.selected,
