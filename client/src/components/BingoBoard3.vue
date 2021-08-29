@@ -17,30 +17,26 @@ const emit = defineEmits([
 ]);
 
 const state = reactive({
-  staggerIndex: 0,
   animate: false,
+  tileMeasurements: new Map(),
 });
 
-const tileMeasurements = new Map()
 function setTileRef(tileEl) {
   if (tileEl) {
-    tileMeasurements.set(tileEl, measureTile(tileEl))
+    state.tileMeasurements.set(tileEl, measureTile(tileEl))
   }
 }
 onBeforeUpdate(() => {
-  tileMeasurements.clear()
-  state.staggerIndex = 0;
+  state.tileMeasurements.clear()
 })
 
 function beforeLeave(el) {
-  el.style.setProperty('--stagger-index', state.staggerIndex);
-
-  const measurements = tileMeasurements.get(el)
+  const measurements = state.tileMeasurements.get(el)
+  const index = Object.keys(state.tileMeasurements).indexOf(el)
   Object.assign(el.style, measurements, {
-    zIndex: Number(el.style.zIndex) + 1
+    zIndex: Number(el.style.zIndex) + 1,
   })
-
-  state.staggerIndex++;
+  el.style.setProperty('--stagger-index', index)
 }
 
 function measureTile(el) {
