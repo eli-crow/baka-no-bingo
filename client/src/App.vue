@@ -1,6 +1,9 @@
 <script setup>
-import { computed } from "@vue/reactivity";
+import { computed } from "vue";
+import DebugView from './components/DebugView.vue'
 import game from './store/game';
+
+const showDebug = import.meta.env.DEV
 
 const ambientColorStyle = computed(() => {
   return {
@@ -30,6 +33,8 @@ const ambientColorStyle = computed(() => {
         <component :is="Component" />
       </transition>
     </router-view>
+
+    <DebugView v-if="showDebug" />
   </div>
 </template>
 

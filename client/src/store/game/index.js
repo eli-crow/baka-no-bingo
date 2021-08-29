@@ -64,7 +64,7 @@ export function createGameStore() {
         },
 
         get playerDataSimplified () {
-            const result = JSON.parse(JSON.stringify(state.playerData))
+            const result = JSON.parse(JSON.stringify(my.playerData))
             result.tiles = result.tiles.map(t => t.selected)
             return result
         },
