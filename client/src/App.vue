@@ -1,7 +1,7 @@
 <script setup>
-import { computed } from "vue";
+import { computed } from "vue"
 import DebugView from './components/DebugView.vue'
-import game from './store/game';
+import game from './store/game'
 
 const showDebug = import.meta.env.DEV
 

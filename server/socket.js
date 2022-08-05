@@ -1,4 +1,4 @@
-import {Server} from 'socket.io'
+import { Server } from 'socket.io'
 
 let io
 const rooms = {}
@@ -11,7 +11,7 @@ function generateRoomId() {
     // generate room ids until we find one that isn't already taken and isn't a bad word
     do {
         id = ''
-        for (let  i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i++) {
             id += letters.charAt(Math.floor(Math.random() * letters.length))
         }
     } while (id in io.sockets.adapter.rooms || bad.includes(id))
@@ -35,8 +35,8 @@ function setRoomData(room, socket, data) {
         const players = rooms[room]
         players[socket.id] = data
     }
-    socket.emit('updated', {myId: socket.id, myData: data})
-    socket.broadcast.in(room).emit('otherUpdated', {theirId: socket.id, theirData: data})
+    socket.emit('updated', { myId: socket.id, myData: data })
+    socket.broadcast.in(room).emit('otherUpdated', { theirId: socket.id, theirData: data })
 }
 
 function joinRoom(room, socket, data) {
@@ -56,14 +56,14 @@ function leaveRooms(socket) {
     socket.emit('left')
     Object.keys(socket.rooms).forEach(room => {
         removeRoomData(room, socket)
-        socket.broadcast.in(room).emit('otherLeft', {theirId})
+        socket.broadcast.in(room).emit('otherLeft', { theirId })
     })
 }
 
 export default function initSocket(httpServer) {
     io = new Server(httpServer, {
         cors: {
-            origin: "http://localhost:3000",
+            origin: process.env.CLIENT_URL,
             meethods: ['GET', 'POST']
         }
     })
@@ -72,25 +72,25 @@ export default function initSocket(httpServer) {
         socket.on('disconnecting', () => {
             leaveRooms(socket)
         })
-    
-        socket.on('host', ({myData}) => {
+
+        socket.on('host', ({ myData }) => {
             const room = generateRoomId()
             joinRoom(room, socket, myData)
         })
-    
-        socket.on('join', ({room, myData}) => {
+
+        socket.on('join', ({ room, myData }) => {
             room = room.toLowerCase()
-            if (! (room in rooms)) {
+            if (!(room in rooms)) {
                 //TODO: throw error?
                 return
             }
             joinRoom(room, socket, myData)
         })
-    
-        socket.on('update', ({myData}) => {
+
+        socket.on('update', ({ myData }) => {
             socket.rooms.forEach(room => {
                 setRoomData(room, socket, myData)
             })
         })
-    })    
+    })
 }
