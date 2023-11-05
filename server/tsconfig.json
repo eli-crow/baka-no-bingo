@@ -1,0 +1,23 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "types": ["node"],
+    "noEmit": true
+  },
+  "include": [
+    "./**/*.d.ts",
+    "./src/**/*.ts",
+    "./src/**/*.json",
+    "src/index.mts"
+  ],
+  "references": [
+    {
+      "path": "../shared"
+    }
+  ],
+  "ts-node": {
+    "esm": true
+  }
+}

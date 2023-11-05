@@ -1,69 +1,63 @@
-<script setup>
-import { onMounted, reactive } from "@vue/runtime-core"
-import game from '../store/game'
+<script setup lang="ts">
+import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import { onMounted, reactive } from '@vue/runtime-core';
+
+const game = useGameStateMachine();
 
 const state = reactive({
-    show: false,
-    right: true
-})
+  show: false,
+  right: true,
+});
 
 onMounted(() => {
-    window.addEventListener('keydown', (e) => {
-        switch (e.key) {
-            case '`':
-                if (e.ctrlKey) {
-                    state.show = !state.show
-                    e.preventDefault()
-                }
-                break;
-            case 'd':
-              if (e.ctrlKey && state.show) {
-                state.right = !state.right
-                e.preventDefault()
-              }
+  window.addEventListener('keydown', e => {
+    switch (e.key) {
+      case '`':
+        if (e.ctrlKey) {
+          state.show = !state.show;
+          e.preventDefault();
         }
-    })
-})
+        break;
+      case 'd':
+        if (e.ctrlKey && state.show) {
+          state.right = !state.right;
+          e.preventDefault();
+        }
+    }
+  });
+});
 </script>
-
-
 
 <template>
   <teleport to="body">
-    <div
-      v-if="state.show"
-      class="DebugView"
-      :data-right="state.right"
-    >
-      <pre><code>{{ JSON.stringify(game, null, '  ') }}</code></pre>
+    <div v-if="state.show" class="DebugView" :data-right="state.right">
+      <pre><code>{{ JSON.stringify(game, null, 2) }}</code></pre>
     </div>
   </teleport>
 </template>
 
-
-
 <style scoped>
 .DebugView {
-    position: fixed;
-    font-size: 8px;
-    background-color: rgba(0, 0, 0, 0.85);
-    overflow: scroll;
-    z-index: 10000;
-    padding: 8px;
-    font-family: 'Roboto Mono', monospace;
-    color: rgb(206, 225, 252);
-    border-radius: 12px;
+  position: fixed;
+  font-size: 8px;
+  background-color: rgba(0, 0, 0, 0.85);
+  overflow: scroll;
+  z-index: 10000;
+  padding: 8px;
+  font-family: 'Roboto Mono', monospace;
+  color: rgb(206, 225, 252);
+  border-radius: 12px;
 }
-[data-right="true"] {
-    top: 4px;
-    right: 4px;
-    bottom: 4px;
-    width: 300px;
+[data-right='true'] {
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  width: 300px;
 }
-[data-right="false"] {
-    top: 4px;
-    right: 4px;
-    left: 4px;
-    height: 400px;
+[data-right='false'] {
+  top: 4px;
+  right: 4px;
+  left: 4px;
+  height: 400px;
 }
 </style>

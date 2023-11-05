@@ -1,28 +1,46 @@
-<script setup>
-import Icon from './Icon'
+<script setup lang="ts">
+import Icon, { IconDefinition } from './Icon';
 
-const props = defineProps({
-    icon: { type: Object, default: null },
-    color: { type: String, default: 'white'},
-    animate: { type: Boolean, default: false },
-    tag: { type: String, default: 'div' },
-})
+type TileColor =
+  | 'white'
+  | 'yellow'
+  | 'blue-light'
+  | 'yellow-light'
+  | 'blue'
+  | 'red'
+  | 'purple';
 
-const emit = defineEmits(['select'])
+const props = withDefaults(
+  defineProps<{
+    icon?: IconDefinition;
+    color?: TileColor;
+    animate?: boolean;
+    tag?: string;
+  }>(),
+  {
+    color: 'white',
+    animate: false,
+    tag: 'div',
+  }
+);
 
+const emit = defineEmits<{
+  (e: 'select'): void;
+}>();
 </script>
-
 
 <template>
   <component :is="tag" class="tile" @click="emit('select')">
     <div class="shadow" />
     <div
       class="tile-inner"
-      :data-animate="props.animate" 
+      :data-animate="props.animate"
       :data-color="props.color"
     >
       <Icon v-if="props.icon" class="icon" :icon="props.icon" />
-      <span v-if="$slots.default" class="content"><slot /></span>
+      <span v-if="$slots.default" class="content">
+        <slot />
+      </span>
     </div>
   </component>
 </template>
@@ -35,13 +53,16 @@ const emit = defineEmits(['select'])
   position: relative;
   z-index: 1;
 }
+
 .tile:is(button:not(:disabled), a) {
   cursor: pointer;
 }
+
 .tile:is(button:not(:disabled), a):hover {
   --distance: 1rem;
 }
-.tile:is(button:not(:disabled), a):active{
+
+.tile:is(button:not(:disabled), a):active {
   --distance: 0rem;
 }
 
@@ -52,11 +73,12 @@ const emit = defineEmits(['select'])
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;;
-  border-image-source: url("../assets/images/tile-white.svg");
+  height: 100%;
+  border-image-source: url('@/assets/images/tile-white.svg');
   border-image-slice: 36% 36% 50% 36% fill;
   border-image-width: calc(var(--border-scale-inner) * 36px)
-    calc(var(--border-scale-inner) * 36px) calc(var(--border-scale-inner) * 50px)
+    calc(var(--border-scale-inner) * 36px)
+    calc(var(--border-scale-inner) * 50px)
     calc(var(--border-scale-inner) * 36px);
   border-image-repeat: stretch;
   border-image-outset: 0px 0px calc(var(--border-scale-inner) * 14.88px) 0px;
@@ -115,40 +137,45 @@ const emit = defineEmits(['select'])
   mix-blend-mode: darken;
 } */
 
-
-.tile-inner[data-color="yellow"] {
-    --circle: var(--yellow);
-    border-image-source: url("../assets/images/tile-yellow.svg");
-}
-.tile-inner[data-color="white"] {
-    --circle: var(--white);
-    border-image-source: url("../assets/images/tile-white.svg");
-}
-.tile-inner[data-color="blue-light"] {
-    --circle: var(--blue);
-    border-image-source: url("../assets/images/tile-light-blue.svg");
-}
-.tile-inner[data-color="yellow-light"] {
-    --circle: var(--yellow);
-    border-image-source: url("../assets/images/tile-light-yellow.svg");
+.tile-inner[data-color='yellow'] {
+  --circle: var(--yellow);
+  border-image-source: url('@/assets/images/tile-yellow.svg');
 }
 
-.tile-inner[data-color="blue"] {
+.tile-inner[data-color='white'] {
+  --circle: var(--white);
+  border-image-source: url('@/assets/images/tile-white.svg');
+}
+
+.tile-inner[data-color='blue-light'] {
   --circle: var(--blue);
-  border-image-source: url("../assets/images/tile-blue.svg");
+  border-image-source: url('@/assets/images/tile-light-blue.svg');
 }
-.tile-inner[data-color="red"] {
+
+.tile-inner[data-color='yellow-light'] {
+  --circle: var(--yellow);
+  border-image-source: url('@/assets/images/tile-light-yellow.svg');
+}
+
+.tile-inner[data-color='blue'] {
+  --circle: var(--blue);
+  border-image-source: url('@/assets/images/tile-blue.svg');
+}
+
+.tile-inner[data-color='red'] {
   --circle: var(--red);
   color: white;
-  border-image-source: url("../assets/images/tile-red.svg");
+  border-image-source: url('@/assets/images/tile-red.svg');
 }
-.tile-inner[data-color="red"] .icon {
-    color: black;
+
+.tile-inner[data-color='red'] .icon {
+  color: black;
 }
-.tile-inner[data-color="purple"] {
+
+.tile-inner[data-color='purple'] {
   --circle: var(--purple);
   color: white;
-  border-image-source: url("../assets/images/tile-purple.svg");
+  border-image-source: url('@/assets/images/tile-purple.svg');
 }
 
 .icon {
@@ -163,6 +190,6 @@ const emit = defineEmits(['select'])
 .content {
   position: relative;
   flex: 1 0 0;
-  zindex: 1;
+  z-index: 1;
 }
 </style>

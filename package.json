@@ -1,8 +1,15 @@
 {
-    "name": "baka-no-bingo",
-    "private": true,
-    "workspaces": [
-        "server",
-        "client"
-    ]
+  "name": "baka-no-bingo",
+  "private": true,
+  "scripts": {
+    "prettier": "prettier --write **/*.{js,ts,vue,json}"
+  },
+  "workspaces": [
+    "server",
+    "client",
+    "@shared"
+  ],
+  "devDependencies": {
+    "prettier": "^3.0.3"
+  }
 }

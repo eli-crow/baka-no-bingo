@@ -1,8 +1,5 @@
 <template>
-  <transition
-    name="ModalTransition"
-    mode="out-in"
-  >
+  <transition name="ModalTransition" mode="out-in">
     <slot />
   </transition>
 </template>

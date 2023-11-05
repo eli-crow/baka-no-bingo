@@ -1,37 +1,18 @@
-<script setup>
-import { computed, reactive, watch } from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
-import ModalAction from '../components/ModalAction.vue';
-import ModalTransition from '../components/ModalTransition.vue';
-import Tile from '../components/Tile.vue'
-import Icon, {star as starIcon, ba, ka, no, bi, ng, o} from '../components/Icon';
+import { ba, bi, ka, ng, no, o, star as starIcon } from '@/components/Icon';
+import Tile from '@/components/Tile.vue';
 
-import appInfo from '../data/appInfo.json';
-import specialThanks from '../data/specialThanks.json';
-import game from "../store/game";
-import router from '../routes'
-
-const state = reactive({
-  modal: '',
-  roomCode: '',
-});
+import specialThanks from '@/data/specialThanks.json';
 
 const specialThanksList = computed(() => {
-  return new Intl.ListFormat('en-US', { style: 'long', type: 'conjunction' }).format(specialThanks);
-});
-
-function cancelHost() {
-  state.modal = '';
-  game.cancelHost();
-}
-
-watch(() => game.room.id, value => {
-  if (value) router.push('/game');
+  return new Intl.ListFormat('en-US', {
+    style: 'long',
+    type: 'conjunction',
+  }).format(specialThanks);
 });
 </script>
-
-
-
 
 <template>
   <div class="HomePage">
@@ -47,21 +28,9 @@ watch(() => game.room.id, value => {
             <Tile color="blue" :icon="ba" />
             <Tile color="blue" :icon="ka" />
             <Tile color="white" :icon="no" />
-            <Tile
-              tag="button"
-              color="blue-light"
-              @click="game.host()"
-            >
-              Host
-            </Tile>
+            <Tile tag="a" href="/host" color="blue-light">Host</Tile>
             <Tile color="red" :icon="starIcon" />
-            <Tile
-              tag="button"
-              color="yellow-light"
-              @click="state.modal = 'joining'"
-            >
-              Join
-            </Tile>
+            <Tile tag="a" href="/join" color="yellow-light">Join</Tile>
             <Tile color="yellow" :icon="bi" />
             <Tile color="yellow" :icon="ng" />
             <Tile color="yellow" :icon="o" />
@@ -70,38 +39,14 @@ watch(() => game.room.id, value => {
       </div>
 
       <div class="credits">
-        <p class="byline">
-          A game by Eli Crow
-        </p>
+        <p class="byline"> A game by Eli Crow </p>
         <p class="special-thanks">
           Special thanks to: {{ specialThanksList }}.
         </p>
       </div>
-
-      <ModalTransition>
-        <ModalAction
-          v-if="state.modal === 'joining'"
-          title="Join a Game"
-          description="Enter the code given by your host."
-          @close="state.modal = ''"
-        >
-          <input
-            v-model="state.roomCode"
-            type="text"
-          >
-          <button
-            class="button"
-            @click="game.join(state.roomCode)"
-          >
-            Join Room
-          </button>
-        </ModalAction>
-      </ModalTransition>
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 .HomePage {
@@ -126,6 +71,7 @@ watch(() => game.room.id, value => {
   margin-left: -0.045em;
   font-weight: 900;
 }
+
 .and-other-games {
   display: inline-block;
   max-width: 8rem;
@@ -144,6 +90,7 @@ watch(() => game.room.id, value => {
   justify-content: center;
   padding-bottom: calc(var(--border-scale) * 14.88px);
 }
+
 .tile-group-aspect-ratio {
   position: relative;
   display: flex;
@@ -152,12 +99,14 @@ watch(() => game.room.id, value => {
   width: 100%;
   max-width: 25rem;
 }
+
 .tile-group-aspect-ratio::before {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   padding-bottom: 100%;
 }
+
 .tile-group {
   position: relative;
   width: 100%;
@@ -171,8 +120,9 @@ watch(() => game.room.id, value => {
   font-weight: 700;
   font-size: 5rem;
 }
+
 button.tile {
-    position: relative;
+  position: relative;
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -180,9 +130,10 @@ button.tile {
   color: black;
   text-decoration: none;
 }
+
 button.tile::after {
-   position: absolute;
-  content: "";
+  position: absolute;
+  content: '';
   left: 50%;
   top: 50%;
   width: 4rem;
@@ -218,3 +169,4 @@ button.tile::after {
   text-decoration: inherit;
 }
 </style>
+../composables/game

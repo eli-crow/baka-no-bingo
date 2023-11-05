@@ -1,39 +1,32 @@
-<script setup>
-import { reactive } from 'vue';
+<script setup lang="ts">
+import { defineProps, reactive } from 'vue';
 
-import Tile from '../components/Tile.vue'
-import Icon, {chevronLeft, listOl} from '../components/Icon'
-import BingoBoard3 from '../components/BingoBoard3.vue';
-import PatternIcon from '../components/PatternIcon.vue';
-import PatternSellBar from '../components/PatternSellBar.vue';
-import PatternLegend from '../components/PatternLegend.vue';
-import ActionButton from '../components/ActionButton.vue';
-import TheBuyMenu from '../components/TheBuyMenu.vue';
-import ModalTransition from '../components/ModalTransition.vue';
-import ModalPlayerRank from '../components/ModalPlayerRank.vue';
+import ActionButton from '@/components/ActionButton.vue';
+import BingoBoard3 from '@/components/BingoBoard3.vue';
+import Icon, { chevronLeft, listOl } from '@/components/Icon';
+import ModalTransition from '@/components/ModalTransition.vue';
+import PatternLegend from '@/components/PatternLegend.vue';
+import PatternSellBar from '@/components/PatternSellBar.vue';
+import Tile from '@/components/Tile.vue';
+import { createBoardState } from '@/composables/createBoardState';
+import { useGameStateMachine } from '@/composables/createGameStateMachine';
 
-import game from '../store/game';
+const game = useGameStateMachine();
+const board = createBoardState(
+  'player' in game.state ? game.state.player.board : (null as never)
+);
 
-const props = defineProps({
-  resetGameOnLoad: Boolean,
+const props = defineProps<{
+  resetGameOnLoad: boolean;
+}>();
+
+const state = reactive<{ modal: string | null }>({
+  modal: '',
 });
-
-const state = reactive({
-  modal: ''
-});
-
-function handleTileSelect(i) {
-  if (i === 4) return;
-
-  if (game.boughtTile) game.placeTile(i);
-  else game.toggleTile(i);
-}
 </script>
 
-
-
 <template>
-  <div class="GamePage">
+  <div class="GamePage" v-if="'player' in game.state">
     <header class="header">
       <Tile color="yellow" class="room-tile">
         <div class="room">
@@ -42,13 +35,14 @@ function handleTileSelect(i) {
           </router-link>
           <p class="room-details">
             <span class="room-title">Room</span>
-            <span class="room-id">{{ game.room.id }}</span>
+            <span class="room-id">{{ game.state.room.code }}</span>
           </p>
         </div>
       </Tile>
-      <Tile class="score-tile" color="white">  
+
+      <Tile class="score-tile">
         <div class="scores">
-          <div class="my-score">{{ game.playerData.score }}</div>
+          <div class="my-score">{{ game.state.player.score }}</div>
           <a class="players" @click="state.modal = 'ModalPlayerRank'">
             <Icon :icon="listOl" />
           </a>
@@ -59,36 +53,36 @@ function handleTileSelect(i) {
     <div class="board-container">
       <BingoBoard3
         class="board"
-        :tiles="game.playerData.tiles"
-        @select="handleTileSelect"
+        :cells="board.cells"
+        @select="i => board.toggleCell(i)"
       />
     </div>
 
-    <PatternSellBar v-if="game.sellablePatterns.length" />
-    <PatternLegend v-else-if="!game.boughtTile" />
+    <PatternSellBar v-if="board.sellablePatternIds.length" />
+    <PatternLegend v-else />
 
     <transition name="action-group">
-      <TheBuyMenu v-if="game.boughtTile" />
-      <div v-else class="action-group">
+      <!-- <TheBuyMenu v-if="game.boughtTile" /> -->
+      <div class="action-group">
         <ActionButton
           class="action"
-          icon="spell-replace"
+          iconSrc="spell-replace"
           label="Replace"
           color="green"
           cost="5"
-          :enabled="game.playerData.score >= 5"
-          @select="game.spells.buy()"
+          :enabled="game.state.player.score >= 5"
         />
+        <!-- @select="game.spells.buy()" -->
 
         <ActionButton
           class="action"
-          icon="spell-reset"
+          iconSrc="spell-reset"
           label="Reset"
           color="red"
           cost="10"
-          :enabled="game.playerData.score >= 10"
-          @select="game.spells.reset()"
+          :enabled="game.state.player.score >= 10"
         />
+        <!-- @select="game.spells.reset()" -->
       </div>
     </transition>
 
@@ -101,8 +95,6 @@ function handleTileSelect(i) {
     </ModalTransition>
   </div>
 </template>
-
-
 
 <style scoped>
 .GamePage {
@@ -251,3 +243,4 @@ function handleTileSelect(i) {
   mix-blend-mode: multiply;
 }
 </style>
+../composables/game

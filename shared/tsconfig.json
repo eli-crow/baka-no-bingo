@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "resolveJsonModule": true,
+    "lib": ["ESNext"],
+    "baseUrl": "."
+  },
+  "include": ["./**/*.d.ts", "./src/**/*.ts", "./src/**/*.json"]
+}

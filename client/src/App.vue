@@ -1,26 +1,38 @@
-<script setup>
-import { computed } from "vue"
-import DebugView from './components/DebugView.vue'
-import game from './store/game'
+<script setup lang="ts">
+import DebugView from './components/DebugView.vue';
 
-const showDebug = import.meta.env.DEV
+import {
+  createGameStateMachine,
+  provideGameStateMachine,
+} from './composables/createGameStateMachine';
 
-const ambientColorStyle = computed(() => {
-  return {
-    '--ambient': `var(--${game.boughtTile ? 'green' :
-      game.sellablePatterns.length ? 'blue' :
-        'yellow'
-      })`,
-    '--ambient-dark': `var(--${game.boughtTile ? 'green-dark' :
-      game.sellablePatterns.length ? 'blue-dark' :
-        'yellow-dark'
-      })`,
-  };
-})
+const showDebug = import.meta.env.DEV;
+
+const gameStateMachine = createGameStateMachine();
+provideGameStateMachine(gameStateMachine);
+
+// const ambientColorStyle = computed(() => {
+//   return {
+//     '--ambient': `var(--${
+//       game.boughtTile
+//         ? 'green'
+//         : game.sellablePatterns.length
+//         ? 'blue'
+//         : 'yellow'
+//     })`,
+//     '--ambient-dark': `var(--${
+//       game.boughtTile
+//         ? 'green-dark'
+//         : game.sellablePatterns.length
+//         ? 'blue-dark'
+//         : 'yellow-dark'
+//     })`,
+//   };
+// });
 </script>
 
 <template>
-  <div class="App" :style="ambientColorStyle">
+  <div class="App">
     <router-view v-slot="{ Component }" class="view">
       <transition name="wipe">
         <component :is="Component" />
@@ -59,3 +71,4 @@ const ambientColorStyle = computed(() => {
   padding-bottom: 1rem;
 }
 </style>
+./composables/game

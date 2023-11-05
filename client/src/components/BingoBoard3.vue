@@ -1,96 +1,100 @@
-<script setup>
-import { computed, nextTick, reactive } from 'vue';
-import { star as starIcon } from './Icon'
-import Tile from './Tile.vue'
+<script setup lang="ts">
+import { ComponentPublicInstance, nextTick, reactive } from 'vue';
+// @ts-ignore
+import { ResolvedCell } from '@/composables/createBoardState';
+import { star as starIcon } from './Icon/icons';
+import Tile from './Tile.vue';
 
-const props = defineProps({
-  tiles: {
-    type: Array,
-    required: true
-  },
-  enabled: {
-    type: Boolean,
-    default: true,
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    enabled: boolean;
+    cells: readonly ResolvedCell[];
+  }>(),
+  {
+    enabled: true,
+  }
+);
 
-const emit = defineEmits([
-  'select'
-]);
+const emit = defineEmits<{
+  (e: 'select', cellIndex: number): void;
+}>();
 
 const state = reactive({
   animate: false,
-  tileMeasurements: new WeakMap(),
-  staggerIndex: 0
+  tileMeasurements: new WeakMap<HTMLElement, TileMeasurement>(),
+  staggerIndex: 0,
 });
 
-function setTileRef(tile) {
+function setTileRef(tile: ComponentPublicInstance<typeof Tile>) {
   if (tile) {
-    const el = tile.$el
-    state.tileMeasurements.set(el, measureTile(el))
+    const el = tile.$el;
+    state.tileMeasurements.set(el, measureTile(el));
   }
 }
 
-function beforeLeave(el) {
-  const measurements = state.tileMeasurements.get(el)
+function beforeLeave(el: HTMLElement) {
+  const measurements = state.tileMeasurements.get(el)!;
   Object.assign(el.style, measurements, {
     zIndex: Number(el.style.zIndex) + 1,
-  })
-  el.style.setProperty('--stagger-index', state.staggerIndex)
-  state.staggerIndex++
-}
-function leave(el) {
-  state.tileMeasurements.delete(el)
-  nextTick(() => {
-    state.staggerIndex--
-  })
+  });
+  el.style.setProperty('--stagger-index', state.staggerIndex.toString());
+  state.staggerIndex++;
 }
 
-function measureTile(el) {
+function leave(el: HTMLElement) {
+  state.tileMeasurements.delete(el);
+  nextTick(() => {
+    state.staggerIndex--;
+  });
+}
+
+interface TileMeasurement {
+  left: string;
+  top: string;
+  width: string;
+  height: string;
+}
+
+function measureTile(el: HTMLElement): TileMeasurement {
   const { marginLeft, marginTop, width, height } = window.getComputedStyle(el);
   const { offsetLeft, offsetTop } = el;
-  const left = `${offsetLeft - parseFloat(marginLeft, 10)}px`;
-  const top = `${offsetTop - parseFloat(marginTop, 10)}px`;
-  return {left, top, width, height}
-}
-
-function clearTileMeasurements() {
-  state.tileMeasurements.clear()
+  const left = `${offsetLeft - parseFloat(marginLeft)}px`;
+  const top = `${offsetTop - parseFloat(marginTop)}px`;
+  return { left, top, width, height };
 }
 </script>
-
-
 
 <template>
   <div class="tile-group-container">
     <div class="tile-group-aspect-ratio">
       <transition-group
-        :class="{'tile-group':true, '-animate': state.animate}"
+        :class="{ 'tile-group': true, '-animate': state.animate }"
         name="tile-group"
         tag="div"
-        @before-leave="beforeLeave"
-        @leave="leave"
+        @before-leave="el => beforeLeave(el as HTMLElement)"
+        @leave="el => leave(el as HTMLElement)"
       >
-        <Tile 
-          v-for="(tile, i) in props.tiles"
-          :ref="setTileRef"
-          :key="tile.key"
+        <Tile
+          v-for="(cell, i) in props.cells"
+          :ref="el => setTileRef(el as ComponentPublicInstance<typeof Tile>)"
+          :key="cell.key"
           tag="button"
-          :disabled="i === 4"
-          :color="tile.selected ? 'red' : 'white'"
-          :animate="i !== 4 && state.animate && tile.selected"
-          :icon="i === 4 ? starIcon : null"
-          :style="{zIndex: i}"
-          @select="emit('select', i); state.animate = true;"
+          :disabled="cell.type === 'free'"
+          :color="cell.selected ? 'red' : 'white'"
+          :animate="cell.type !== 'free' && state.animate && cell.selected"
+          :icon="cell.type === 'free' ? starIcon : undefined"
+          :style="{ zIndex: i }"
+          @select="
+            emit('select', i);
+            state.animate = true;
+          "
         >
-          {{ i === 4 ? '' : tile.text }}
+          {{ 'text' in cell ? cell.text : '' }}
         </Tile>
       </transition-group>
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 .tile-group-container {
@@ -110,7 +114,7 @@ function clearTileMeasurements() {
   max-width: 25rem;
 }
 .tile-group-aspect-ratio::before {
-  content: "";
+  content: '';
   width: 0;
   height: 0;
   padding-bottom: 100%;
@@ -139,7 +143,7 @@ function clearTileMeasurements() {
 }
 .tile-group-enter-active,
 .tile-group-enter-to {
-  transition: 
+  transition:
     opacity var(--duration-opacity) ease var(--stagger-delay),
     transform var(--duration-transform) var(--easing-transform)
       calc(
@@ -147,12 +151,13 @@ function clearTileMeasurements() {
       );
 }
 .tile-group-leave-active {
-  transition: 
+  transition:
     opacity var(--duration-opacity) ease
       calc(
         var(--duration-transform) + var(--duration-delay) + var(--stagger-delay)
       ),
-    transform var(--duration-transform) var(--easing-transform) var(--stagger-delay);
+    transform var(--duration-transform) var(--easing-transform)
+      var(--stagger-delay);
 }
 
 .tile-group-leave-from,

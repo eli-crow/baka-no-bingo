@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import ModalAction from './ModalAction.vue';
 import PlayerList from './PlayerList.vue';
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
 </script>
 
 <template>

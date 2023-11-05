@@ -1,18 +1,28 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
 export default createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory("/"),
   routes: [
     {
-      path: '/',
-      name: 'Home',
-      component: () => import('./home.vue'),
+      path: "/",
+      name: "Home",
+      component: () => import("./home.vue"),
     },
     {
-      path: '/game',
-      name: 'Game',
+      path: "/game",
+      name: "Game",
       props: true,
-      component: () => import('./game.vue'),
-    }
-  ]
-})
+      component: () => import("./game.vue"),
+    },
+    {
+      path: "/host",
+      name: "Host",
+      component: () => import("./host.vue"),
+    },
+    {
+      path: "/join",
+      name: "Join",
+      component: () => import("./join.vue"),
+    },
+  ],
+});
