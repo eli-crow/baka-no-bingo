@@ -16,31 +16,44 @@ const props = withDefaults(
     color?: TileColor;
     animate?: boolean;
     tag?: string;
+    action?: boolean;
   }>(),
   {
     color: 'white',
     animate: false,
     tag: 'div',
+    action: false,
   }
 );
 
 const emit = defineEmits<{
   (e: 'select'): void;
 }>();
+
+const slots = defineSlots<{
+  default?(): any;
+}>();
 </script>
 
 <template>
-  <component :is="tag" class="tile" @click="emit('select')">
+  <component :is="tag" class="tile" @click="emit('select')" draggable="false">
     <div class="shadow" />
     <div
       class="tile-inner"
       :data-animate="props.animate"
       :data-color="props.color"
+      :data-action="props.action"
     >
-      <Icon v-if="props.icon" class="icon" :icon="props.icon" />
-      <span v-if="$slots.default" class="content">
+      <Icon
+        v-if="props.icon"
+        class="icon"
+        :icon="props.icon"
+        :opacity="slots.default ? 0.25 : 1"
+        color="black"
+      />
+      <div v-if="slots.default" class="content">
         <slot />
-      </span>
+      </div>
     </div>
   </component>
 </template>
@@ -52,6 +65,14 @@ const emit = defineEmits<{
   --distance: 0.25rem;
   position: relative;
   z-index: 1;
+  display: flex;
+  text-decoration: none;
+  padding: 0;
+  user-select: none;
+}
+
+.tile * {
+  user-select: none;
 }
 
 .tile:is(button:not(:disabled), a) {
@@ -67,12 +88,7 @@ const emit = defineEmits<{
 }
 
 .tile-inner {
-  min-width: 0;
-  min-height: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
+  flex: 1 0 0;
   height: 100%;
   border-image-source: url('@/assets/images/tile-white.svg');
   border-image-slice: 36% 36% 50% 36% fill;
@@ -114,7 +130,7 @@ const emit = defineEmits<{
   pointer-events: none;
 }
 
-/* .tile-inner.-text {
+.tile-inner[data-action='true'] {
   position: relative;
   font-size: 1rem;
   text-transform: uppercase;
@@ -123,6 +139,8 @@ const emit = defineEmits<{
   color: black;
   text-decoration: none;
 }
+
+/*
 .tile-inner.-text::after {
   position: absolute;
   content: "";

@@ -7,7 +7,7 @@ import Tile from './Tile.vue';
 
 const props = withDefaults(
   defineProps<{
-    enabled: boolean;
+    enabled?: boolean;
     cells: readonly ResolvedCell[];
   }>(),
   {

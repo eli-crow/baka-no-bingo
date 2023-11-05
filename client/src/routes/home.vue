@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { ba, bi, ka, ng, no, o, star as starIcon } from '@/components/Icon';
+import { ba, bi, circle, ka, ng, no, o, star } from '@/components/Icon';
 import Tile from '@/components/Tile.vue';
 
 import specialThanks from '@/data/specialThanks.json';
@@ -17,10 +17,7 @@ const specialThanksList = computed(() => {
 <template>
   <div class="HomePage">
     <div class="width">
-      <h1 class="title">
-        Baka no Bingo
-        <span class="and-other-games">And Other Games</span>
-      </h1>
+      <h1 class="title">Baka no Bingo</h1>
 
       <div class="tile-group-container">
         <div class="tile-group-aspect-ratio">
@@ -28,9 +25,19 @@ const specialThanksList = computed(() => {
             <Tile color="blue" :icon="ba" />
             <Tile color="blue" :icon="ka" />
             <Tile color="white" :icon="no" />
-            <Tile tag="a" href="/host" color="blue-light">Host</Tile>
-            <Tile color="red" :icon="starIcon" />
-            <Tile tag="a" href="/join" color="yellow-light">Join</Tile>
+            <Tile tag="a" href="/host" color="blue-light" :icon="circle" action>
+              Host
+            </Tile>
+            <Tile color="red" :icon="star" />
+            <Tile
+              tag="a"
+              href="/join"
+              color="yellow-light"
+              :icon="circle"
+              action
+            >
+              Join
+            </Tile>
             <Tile color="yellow" :icon="bi" />
             <Tile color="yellow" :icon="ng" />
             <Tile color="yellow" :icon="o" />
@@ -70,16 +77,6 @@ const specialThanksList = computed(() => {
   margin-bottom: 2.5rem;
   margin-left: -0.045em;
   font-weight: 900;
-}
-
-.and-other-games {
-  display: inline-block;
-  max-width: 8rem;
-  min-width: 0;
-  font-size: 1.375rem;
-  line-height: 1.25;
-  opacity: 0.3;
-  letter-spacing: normal;
 }
 
 .tile-group-container {
@@ -154,19 +151,4 @@ button.tile::after {
 .special-thanks {
   margin-top: 0;
 }
-
-.button {
-  display: flex;
-  width: max-content;
-  margin-top: 1.5rem;
-  margin-bottom: 1rem;
-  padding: 12px 16px;
-  border-radius: var(--radius-small);
-  box-shadow: 0 6px 0 0 var(--green-dark);
-  background-color: var(--green);
-  font-weight: 700;
-  color: white;
-  text-decoration: inherit;
-}
 </style>
-../composables/game

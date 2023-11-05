@@ -3,7 +3,7 @@ import Icon, { IconDefinition } from './Icon';
 
 const props = withDefaults(
   defineProps<{
-    color: string;
+    color?: string;
     icon?: IconDefinition;
     cost?: string | number;
     href?: string;
@@ -12,29 +12,28 @@ const props = withDefaults(
     color: 'green',
   }
 );
-
-const emit = defineEmits(['select']);
 </script>
 
 <template>
-  <a
-    class="ButtonSquare Button"
+  <button
+    class="Button"
     :href="href"
     :style="{
       '--bg': `var(--${color})`,
       '--bg-dark': `var(--${color}-dark)`,
       '--fg': `var(--white)`,
     }"
-    @click="emit('select')"
   >
     <Icon v-if="icon" class="icon" :icon="icon" />
     <span class="slot-content"><slot /></span>
     <span v-if="cost === 0 || cost" class="cost">-{{ cost }}</span>
-  </a>
+  </button>
 </template>
 
 <style scoped>
-.ButtonSquare {
+.Button {
+  cursor: pointer;
+  user-select: none;
   width: max-content;
   max-width: 100%;
   display: flex;
@@ -46,13 +45,16 @@ const emit = defineEmits(['select']);
   font-size: 16px;
   font-weight: 700;
 }
+
 .icon {
   color: var(--fg);
   font-size: 20px;
   margin-right: 12px;
 }
+
 .slot-content {
 }
+
 .cost {
   margin-left: 12px;
   color: black;

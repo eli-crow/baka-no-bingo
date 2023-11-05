@@ -1,27 +1,34 @@
 <script setup lang="ts">
-import { defineProps, reactive } from 'vue';
-
 import ActionButton from '@/components/ActionButton.vue';
 import BingoBoard3 from '@/components/BingoBoard3.vue';
 import Icon, { chevronLeft, listOl } from '@/components/Icon';
+import ModalPlayerRank from '@/components/ModalPlayerRank.vue';
 import ModalTransition from '@/components/ModalTransition.vue';
 import PatternLegend from '@/components/PatternLegend.vue';
 import PatternSellBar from '@/components/PatternSellBar.vue';
 import Tile from '@/components/Tile.vue';
-import { createBoardState } from '@/composables/createBoardState';
+import {
+  createBoardState,
+  provideBoardState,
+} from '@/composables/createBoardState';
 import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import router from '@/routes';
+import { ref, watchEffect } from 'vue';
 
 const game = useGameStateMachine();
-const board = createBoardState(
-  'player' in game.state ? game.state.player.board : (null as never)
-);
+const board = createBoardState(game);
+provideBoardState(board);
 
-const props = defineProps<{
-  resetGameOnLoad: boolean;
-}>();
+const playerRankShown = ref(false);
 
-const state = reactive<{ modal: string | null }>({
-  modal: '',
+function leave() {
+  game.leave();
+}
+
+watchEffect(() => {
+  if (game.state.type === 'left') {
+    router.push('/');
+  }
 });
 </script>
 
@@ -30,9 +37,9 @@ const state = reactive<{ modal: string | null }>({
     <header class="header">
       <Tile color="yellow" class="room-tile">
         <div class="room">
-          <router-link class="back" to="/">
+          <button class="back" @click="leave">
             <Icon :icon="chevronLeft" />
-          </router-link>
+          </button>
           <p class="room-details">
             <span class="room-title">Room</span>
             <span class="room-id">{{ game.state.room.code }}</span>
@@ -43,7 +50,7 @@ const state = reactive<{ modal: string | null }>({
       <Tile class="score-tile">
         <div class="scores">
           <div class="my-score">{{ game.state.player.score }}</div>
-          <a class="players" @click="state.modal = 'ModalPlayerRank'">
+          <a class="players" @click="playerRankShown = !playerRankShown">
             <Icon :icon="listOl" />
           </a>
         </div>
@@ -87,10 +94,9 @@ const state = reactive<{ modal: string | null }>({
     </transition>
 
     <ModalTransition>
-      <component
-        :is="state.modal"
-        v-if="state.modal"
-        @close="state.modal = null"
+      <ModalPlayerRank
+        v-if="playerRankShown"
+        @close="playerRankShown = false"
       />
     </ModalTransition>
   </div>
@@ -113,6 +119,7 @@ const state = reactive<{ modal: string | null }>({
   margin-left: -8rem;
 }
 .back {
+  cursor: pointer;
   flex: 0 0 2.25rem;
   width: 2.25rem;
   height: 2.25rem;
@@ -243,4 +250,3 @@ const state = reactive<{ modal: string | null }>({
   mix-blend-mode: multiply;
 }
 </style>
-../composables/game

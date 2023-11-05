@@ -1,13 +1,12 @@
 import {
   CellPatternId,
-  ClientToServerEvents,
   PlayerData,
   PlayerDataOptions,
   RoomData,
-  ServerToClientEvents,
 } from '@shared';
-import { Socket, io as createSocket } from 'socket.io-client';
+
 import { InjectionKey, inject, provide, ref } from 'vue';
+import { SocketState } from './createSocketState';
 
 const GAME_STATE_INJECTION_KEY: InjectionKey<GameStateMachine> =
   Symbol('gameState');
@@ -25,46 +24,16 @@ function clearStoredPlayerId() {
   localStorage.removeItem(LOCAL_STORAGE_PLAYER_ID_KEY);
 }
 
-export function createGameStateMachine() {
-  const socket: Socket<ServerToClientEvents, ClientToServerEvents> =
-    createSocket(import.meta.env.VITE_WEBSOCKET_URL);
-
-  const state = ref<Readonly<GameState>>({ type: 'idle', connected: false });
-
-  socket.on('connect', () => {
-    if (state.value.type === 'disconnected') {
-      state.value = {
-        type: 'joined',
-        room: state.value.room,
-        player: state.value.player,
-        connected: true,
-      };
-    } else if (state.value.type === 'idle') {
-      state.value = { type: 'idle', connected: true };
-    }
-  });
-
-  socket.on('disconnect', () => {
-    if (state.value.type == 'joined') {
-      state.value = {
-        type: 'disconnected',
-        room: state.value.room,
-        player: state.value.player,
-        connected: false,
-      };
-    } else if (state.value.type === 'idle') {
-      state.value = { type: 'idle', connected: false };
-    }
-  });
+export function createGameStateMachine(socket: SocketState) {
+  const state = ref<Readonly<GameState>>({ type: 'idle' });
 
   socket.on('joined', (playerData, roomData) => {
-    if (state.value.type === 'idle') {
+    if (state.value.type === 'joining') {
       setStoredPlayerId(playerData.id);
       state.value = {
         type: 'joined',
         room: roomData,
         player: playerData,
-        connected: true,
       };
     }
   });
@@ -83,7 +52,7 @@ export function createGameStateMachine() {
 
   socket.on('left', () => {
     clearStoredPlayerId();
-    state.value = { type: 'idle', connected: state.value.connected };
+    state.value = { type: 'left' };
   });
 
   socket.on('otherLeft', id => {
@@ -125,41 +94,51 @@ export function createGameStateMachine() {
     host(playerDataOptions: PlayerDataOptions) {
       if (state.value.type === 'idle') {
         socket.emit('host', playerDataOptions);
+        state.value = { type: 'joining' };
       }
     },
 
     join(roomCode: RoomData['code'], playerDataOptions: PlayerDataOptions) {
-      if (state.value.type === 'idle') {
-        socket.emit('join', roomCode, playerDataOptions);
-      }
+      return new Promise<void>((resolve, reject) => {
+        if (state.value.type === 'idle') {
+          state.value = { type: 'joining' };
+          socket.emit('join', roomCode, playerDataOptions, ack => {
+            if ('success' in ack) {
+              resolve();
+            } else {
+              reject(ack.error);
+            }
+          });
+        }
+      });
     },
 
     leave() {
-      if (state.value.type !== 'idle') {
+      if (state.value.type === 'joined') {
         socket.emit('leave');
       }
     },
 
     updatePlayer(playerDataOptions: PlayerDataOptions) {
-      if (state.value.type !== 'idle') {
+      if (state.value.type === 'joined') {
         socket.emit('updatePlayer', playerDataOptions);
       }
     },
 
     requestCell() {
-      if (state.value.type !== 'idle') {
+      if (state.value.type !== 'joined') {
         socket.emit('requestCell');
       }
     },
 
     requestSellPattern(patternId: CellPatternId) {
-      if (state.value.type !== 'idle') {
+      if (state.value.type !== 'joined') {
         socket.emit('sellPattern', patternId);
       }
     },
 
     resetBoard() {
-      if (state.value.type !== 'idle') {
+      if (state.value.type !== 'joined') {
         socket.emit('resetBoard');
       }
     },
@@ -177,23 +156,20 @@ export function useGameStateMachine() {
   }
   return stateMachine;
 }
-
 type GameState =
   | {
       type: 'idle';
-      connected: boolean;
     }
   | {
-      type: 'disconnected';
-      room: RoomData;
-      player: PlayerData;
-      connected: false;
+      type: 'joining';
     }
   | {
       type: 'joined';
       room: RoomData;
       player: PlayerData;
-      connected: true;
+    }
+  | {
+      type: 'left';
     };
 
 export type GameStateMachine = ReturnType<typeof createGameStateMachine>;

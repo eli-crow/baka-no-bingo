@@ -94,4 +94,3 @@ const game = useGameStateMachine();
   margin-bottom: 0.5rem;
 }
 </style>
-../composables/game

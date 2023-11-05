@@ -13,7 +13,11 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
   host(playerDataOptions: PlayerDataOptions): void;
-  join(roomCode: RoomData['code'], playerDataOptions: PlayerDataOptions): void;
+  join(
+    roomCode: RoomData['code'],
+    playerDataOptions: PlayerDataOptions,
+    ack?: (payload: { error: string } | { success: true }) => void
+  ): void;
   leave(): void;
   updatePlayer(options: PlayerDataOptions): void;
   requestCell(): void;

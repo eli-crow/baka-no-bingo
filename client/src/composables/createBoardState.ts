@@ -1,14 +1,16 @@
-import { BoardData, Cell, getMatchingPatternIds } from '@shared';
+import { GameStateMachine } from '@/composables/createGameStateMachine';
+import { Cell, getMatchingPatternIds } from '@shared';
 import { InjectionKey, computed, inject, provide, reactive } from 'vue';
 
 const BOARD_STATE_INJECTION_KEY: InjectionKey<BoardState> =
   Symbol('boardState');
 
-export function createBoardState(board: BoardData) {
+export function createBoardState(game: GameStateMachine) {
   const selectedStatefulCells = reactive<Set<number>>(new Set([]));
 
   const resolvedCells = computed(() => {
-    const statefulCells = board.cells;
+    const statefulCells =
+      'player' in game.state ? game.state.player.board.cells : [];
     const resolvedStatefulCells = statefulCells.map((cell, index) => {
       return <ResolvedCell>{
         ...cell,
@@ -56,8 +58,8 @@ export function createBoardState(board: BoardData) {
   } as const;
 }
 
-export function provideBoardState(board: BoardData) {
-  provide(BOARD_STATE_INJECTION_KEY, createBoardState(board));
+export function provideBoardState(board: BoardState) {
+  provide(BOARD_STATE_INJECTION_KEY, board);
 }
 
 export function useBoardState() {

@@ -42,12 +42,7 @@ const patternLines = computed(() => PATTERN_PATHS[props.patternId]);
     <g class="grid">
       <path v-for="(path, i) in GRID_LINES" :key="i" :d="path" class="line" />
     </g>
-    <path
-      v-for="(path, i) in patternLines"
-      :key="'active' + i"
-      :d="path"
-      class="line-active"
-    />
+    <path :d="patternLines" class="line-active" />
   </svg>
 </template>
 

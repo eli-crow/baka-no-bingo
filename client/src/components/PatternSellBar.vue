@@ -68,4 +68,3 @@ const board = useBoardState();
   font-weight: 700;
 }
 </style>
-../composables/game

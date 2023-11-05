@@ -1,34 +1,22 @@
 <script setup lang="ts">
 import DebugView from './components/DebugView.vue';
-
 import {
   createGameStateMachine,
   provideGameStateMachine,
 } from './composables/createGameStateMachine';
 
+import {
+  createSocketState,
+  provideSocketState,
+} from './composables/createSocketState';
+
 const showDebug = import.meta.env.DEV;
 
-const gameStateMachine = createGameStateMachine();
-provideGameStateMachine(gameStateMachine);
+const socket = createSocketState();
+provideSocketState(socket);
 
-// const ambientColorStyle = computed(() => {
-//   return {
-//     '--ambient': `var(--${
-//       game.boughtTile
-//         ? 'green'
-//         : game.sellablePatterns.length
-//         ? 'blue'
-//         : 'yellow'
-//     })`,
-//     '--ambient-dark': `var(--${
-//       game.boughtTile
-//         ? 'green-dark'
-//         : game.sellablePatterns.length
-//         ? 'blue-dark'
-//         : 'yellow-dark'
-//     })`,
-//   };
-// });
+const game = createGameStateMachine(socket);
+provideGameStateMachine(game);
 </script>
 
 <template>
@@ -51,20 +39,6 @@ provideGameStateMachine(gameStateMachine);
   flex-direction: column;
   position: relative;
 }
-
-/* .App::after {
-  position: fixed;
-  z-index: 1000;
-  content: "";
-  top: 1px;
-  left: 1px;
-  width: calc(100% - 2px);
-  height: calc(100% - 2px);
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), 50%, black);
-  opacity: 0.25;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-} */
 
 .view {
   flex: 1 0 auto;

@@ -1,9 +1,11 @@
 import { generateRoomCode } from '../../shared/src/index.js';
 import { Room } from './Room.js';
-import { AppSocketServer } from './type.js';
+import { AppSocket, AppSocketServer } from './type.js';
 
 export default class RoomCoordinator {
   private rooms: { [roomCode: string]: Room | undefined } = {};
+  private socketToRoomCode: WeakMap<AppSocket, string> = new WeakMap();
+  private socketToPlayerId: WeakMap<AppSocket, string> = new WeakMap();
 
   private server: AppSocketServer;
 
@@ -14,30 +16,58 @@ export default class RoomCoordinator {
 
   private setupEvents() {
     this.server.on('connection', socket => {
-      socket.on('disconnecting', () => {
-        // leave rooms
-      });
+      if (process.env.NODE_ENV === 'development') {
+        socket.onAny((event, ...args) => {
+          console.log(event, args);
+        });
+      }
+
+      // handle 'disconnectiong' ?
 
       socket.on('host', playerOptions => {
         const code = generateRoomCode(code => !this.rooms[code]);
         const room = new Room(code, this.server);
-        room.addPlayer(socket, playerOptions);
+        const player = room.addPlayer(socket, playerOptions);
+        this.rooms[code] = room;
+        this.socketToRoomCode.set(socket, code);
+        this.socketToPlayerId.set(socket, player.id);
       });
 
-      socket.on('join', (code, playerOptions) => {
-        const room = this.getRoomOrThrow(code);
-        room.addPlayer(socket, playerOptions);
+      socket.on('join', (code, playerOptions, ack) => {
+        const room = this.getRoom(code);
+        if (!room) {
+          ack?.({ error: 'Room does not exist.' });
+          return;
+        }
+
+        const player = room.addPlayer(socket, playerOptions);
+        this.socketToRoomCode.set(socket, code);
+        this.socketToPlayerId.set(socket, player.id);
+
+        ack?.({ success: true });
+      });
+
+      socket.on('leave', () => {
+        const code = this.socketToRoomCode.get(socket);
+        const playerId = this.socketToPlayerId.get(socket);
+        if (!code || !playerId) {
+          return;
+        }
+        const room = this.getRoom(code);
+
+        if (!room) {
+          return;
+        }
+
+        room.removePlayer(playerId);
+        socket.emit('left');
       });
 
       socket.on('updatePlayer', options => {});
     });
   }
 
-  private getRoomOrThrow(code: string) {
-    const room = this.rooms[code.toLowerCase()];
-    if (!room) {
-      throw new Error(`Room ${code} does not exist`);
-    }
-    return room;
+  private getRoom(code: string) {
+    return this.rooms[code.toLowerCase()];
   }
 }

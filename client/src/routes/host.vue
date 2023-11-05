@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AvatarSelector from '@/components/AvatarSelector.vue';
+import Button from '@/components/Button.vue';
 import { x } from '@/components/Icon';
 import Icon from '@/components/Icon/Icon.vue';
 import Tile from '@/components/Tile.vue';
@@ -31,13 +32,16 @@ watchEffect(() => {
     </router-link>
 
     <div class="content">
-      <Tile class="player-info" color="blue">
-        <AvatarSelector v-model="options.avatar" />
-        <input v-model.lazy.trim="options.name" type="text" />
-        {{ options.avatar }}
+      <Tile color="blue">
+        <div class="player-info">
+          <p>Choose your Avatar</p>
+          <AvatarSelector v-model="options.avatar" class="avatar-selector" />
+          <div class="player-inputs">
+            <input v-model.lazy.trim="options.name" type="text" />
+          </div>
+        </div>
+        <Button class="host tile tile--yellow" @click="host">Host</Button>
       </Tile>
-
-      <button class="host tile tile--yellow" @click="host">Host</button>
     </div>
   </div>
 </template>
@@ -52,15 +56,6 @@ watchEffect(() => {
     'title close' 3rem
     'content content' 1fr
     / 1fr 3rem;
-}
-
-.title {
-  grid-area: title;
-  margin: 0;
-  align-self: center;
-  justify-self: start;
-  padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 .close {
@@ -78,11 +73,19 @@ watchEffect(() => {
 }
 
 .player-info {
-  padding: 1rem;
+  padding: 1.5rem;
+}
+
+.player-inputs {
+  position: relative;
+  z-index: 4;
+}
+
+.avatar-selector {
+  margin: 2rem 0;
 }
 
 .host {
   color: var(--black);
 }
 </style>
-../composables/game

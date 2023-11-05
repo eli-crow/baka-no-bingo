@@ -1,21 +1,25 @@
 <script setup lang="ts">
 import AvatarSelector from '@/components/AvatarSelector.vue';
+import Button from '@/components/Button.vue';
+import Icon, { x } from '@/components/Icon';
+import TextInput from '@/components/TextInput.vue';
+import Tile from '@/components/Tile.vue';
 import { useGameStateMachine } from '@/composables/createGameStateMachine';
 import router from '@/routes';
-import { PlayerDataOptions } from '@shared';
-import { computed, reactive, ref, watchEffect } from 'vue';
+import { PlayerDataOptions, ROOM_CODE_PATTERN } from '@shared';
+import { reactive, ref, watchEffect } from 'vue';
 
 const game = useGameStateMachine();
 
 const options = reactive<PlayerDataOptions>({});
 
 const code = ref('');
-const codeIsValid = computed(() => code.value.length === 4);
 
 function join() {
-  if (codeIsValid.value) {
-    game.join(code.value, options);
-  }
+  console.log('sending code', code.value);
+  game.join(code.value, options).catch(err => {
+    alert(err);
+  });
 }
 
 watchEffect(() => {
@@ -29,19 +33,32 @@ watchEffect(() => {
   <div class="Join">
     <h1 class="title">Join</h1>
     <router-link class="close" to="/">
-      <Icon icon="x" />
+      <Icon :icon="x" />
     </router-link>
     <div class="content">
-      <div class="code tile tile--blue">
-        Room code:
-        <input v-model="code" type="text" maxlength="4" />
-      </div>
-      <div class="player-info tile tile--blue">
-        <AvatarSelector v-model="options.avatar" />
-        <input v-model.lazy.trim="options.name" type="text" />
-      </div>
+      <Tile color="blue">
+        <form @submit.prevent="join" action="">
+          <div class="code tile tile--blue">
+            Room code:
+            <TextInput
+              maxlength="4"
+              v-model="code"
+              required
+              :pattern="ROOM_CODE_PATTERN"
+              validation-message="Room code must be 4 letters or numbers"
+            />
+          </div>
+          <div class="player-info tile tile--blue">
+            <AvatarSelector v-model="options.avatar" />
+            <label>
+              <span>Your Name: </span>
+              <TextInput type="text" v-model.lazy.trim="options.name" />
+            </label>
+          </div>
 
-      <button class="join tile tile--yellow" @click="join">Join</button>
+          <Button type="submit" class="join tile tile--yellow">Join</Button>
+        </form>
+      </Tile>
     </div>
   </div>
 </template>
@@ -89,4 +106,3 @@ watchEffect(() => {
   color: var(--black);
 }
 </style>
-../composables/game

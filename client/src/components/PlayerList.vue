@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useBoardState } from '@/composables/createBoardState';
 import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import { PlayerData } from '@shared';
 import { computed } from 'vue';
 import PatternChips from './PatternChips.vue';
 
@@ -15,7 +16,7 @@ const playersRanked = computed(() => {
   if ('room' in game.state) {
     return Object.values(game.state.room.players).sort(
       (a, b) => b!.score - a!.score
-    );
+    ) as PlayerData[];
   }
   return [];
 });
@@ -26,16 +27,16 @@ const playersRanked = computed(() => {
     <ol class="list">
       <li
         v-for="player in playersRanked"
-        :key="game.state.player.id"
+        :key="player.id"
         class="player"
-        @click="emit('select', game.state.player.id)"
+        @click="emit('select', player.id)"
       >
         <PatternChips class="icon" :cells="board.cells" />
         <div class="name">
-          {{ game.state.player.name || 'Guest' }}
+          {{ player.name || 'Guest' }}
         </div>
         <div class="score">
-          {{ game.state.player.score }}
+          {{ player.score }}
         </div>
       </li>
     </ol>
@@ -70,4 +71,3 @@ const playersRanked = computed(() => {
   font-weight: 700;
 }
 </style>
-../composables/game

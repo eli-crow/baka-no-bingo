@@ -6,6 +6,13 @@ import nina from '@/assets/avatars/nina.svg';
 import { AvatarName } from '@shared';
 import Tile from './Tile.vue';
 
+const AVATARS = [
+  { name: 'cal', image: cal },
+  { name: 'cat', image: cat },
+  { name: 'ein', image: ein },
+  { name: 'nina', image: nina },
+];
+
 const props = defineProps<{
   modelValue?: AvatarName;
 }>();
@@ -14,78 +21,27 @@ const emit = defineEmits<(e: 'update:modelValue', value: string) => void>();
 </script>
 
 <template>
-  <Tile class="AvatarSelector">
+  <div class="grid">
     <Tile
+      v-for="avatar in AVATARS"
+      :key="avatar.name"
       class="avatar"
-      :color="props.modelValue === 'cal' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'cal')"
+      :color="props.modelValue === avatar.name ? 'red' : 'white'"
+      @select="emit('update:modelValue', avatar.name)"
     >
-      <img class="avatar-image" :src="cal" />
+      <img class="avatar-image" draggable="false" :src="avatar.image" />
     </Tile>
-    <Tile
-      class="avatar"
-      :color="props.modelValue === 'cat' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'cat')"
-    >
-      <img class="avatar-image" :src="cat" />
-    </Tile>
-    <Tile
-      class="avatar"
-      :color="props.modelValue === 'ein' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'ein')"
-    >
-      <img class="avatar-image" :src="ein" />
-    </Tile>
-    <Tile
-      class="avatar"
-      :color="props.modelValue === 'nina' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'nina')"
-    >
-      <img class="avatar-image" :src="nina" />
-    </Tile>
-    <Tile
-      class="avatar"
-      :color="props.modelValue === 'cal' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'cal')"
-    >
-      <img class="avatar-image" :src="cal" />
-    </Tile>
-    <Tile
-      class="avatar"
-      :color="props.modelValue === 'cat' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'cat')"
-    >
-      <img class="avatar-image" :src="cat" />
-    </Tile>
-    <Tile
-      class="avatar"
-      :color="props.modelValue === 'ein' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'ein')"
-    >
-      <img class="avatar-image" :src="ein" />
-    </Tile>
-    <Tile
-      class="avatar"
-      :color="props.modelValue === 'nina' ? 'red' : 'white'"
-      @click="emit('update:modelValue', 'nina')"
-    >
-      <img class="avatar-image" :src="nina" />
-    </Tile>
-  </Tile>
+  </div>
 </template>
 
 <style scoped>
-.AvatarSelector {
+.grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   margin-bottom: 1rem;
 }
 
 .avatar {
-  padding: 1rem;
-}
-
-.avatar[data-selected] {
 }
 
 .avatar-image {

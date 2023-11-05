@@ -32,13 +32,20 @@ export class Room {
     socket.join(this.data.code);
     socket.emit('joined', playerData, this.data);
     this.broadcast('otherJoined', playerData);
+
+    return playerData;
   }
 
   removePlayer(id: string) {
     delete this.sockets[id];
     delete this.data.players[id];
 
-    const socket = this.sockets[id]!;
+    const socket = this.sockets[id];
+
+    if (!socket) {
+      return;
+    }
+
     socket.leave(this.data.code);
 
     socket.emit('left');
@@ -47,8 +54,13 @@ export class Room {
 
   sellPattern(playerId: string, patternId: CellPatternId) {
     const pattern = PATTERNS[patternId];
-    const player = this.data.players[playerId]!;
-    const socket = this.sockets[playerId]!;
+    const player = this.data.players[playerId];
+    const socket = this.sockets[playerId];
+
+    if (!pattern || !player || !socket) {
+      return;
+    }
+
     const newPlayerData = {
       ...player,
       board: replaceBoardPattern(player.board, pattern),
