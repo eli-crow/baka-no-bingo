@@ -34,7 +34,7 @@ export function createSocketState(): SocketState {
 
   if (import.meta.env.DEV) {
     socket.onAny((event, ...args) => {
-      console.log('--->', event, args);
+      console.log(event, args);
     });
   }
 
@@ -54,6 +54,14 @@ export function createSocketState(): SocketState {
     socket.disconnect();
   });
 
+  const emit: AppSocket['emit'] = (event, ...args) => {
+    if (import.meta.env.DEV) {
+      console.log('--->', event, args);
+    }
+    socket.emit(event, ...args);
+    return socket;
+  };
+
   return {
     socket,
     firstConnection,
@@ -69,6 +77,6 @@ export function createSocketState(): SocketState {
 
       return socket;
     },
-    emit: socket.emit.bind(socket),
+    emit,
   };
 }
