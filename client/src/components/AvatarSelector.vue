@@ -1,17 +1,7 @@
 <script setup lang="ts">
-import cal from '@/assets/avatars/cal.svg';
-import cat from '@/assets/avatars/cat.svg';
-import ein from '@/assets/avatars/ein.svg';
-import nina from '@/assets/avatars/nina.svg';
-import { AvatarName } from '@shared';
+import { AVATAR_NAMES, AvatarName } from '@shared';
+import Avatar from './Avatar.vue';
 import Tile from './Tile.vue';
-
-const AVATARS = [
-  { name: 'cal', image: cal },
-  { name: 'cat', image: cat },
-  { name: 'ein', image: ein },
-  { name: 'nina', image: nina },
-];
 
 const props = defineProps<{
   modelValue?: AvatarName;
@@ -23,13 +13,13 @@ const emit = defineEmits<(e: 'update:modelValue', value: string) => void>();
 <template>
   <div class="grid">
     <Tile
-      v-for="avatar in AVATARS"
-      :key="avatar.name"
+      v-for="avatar in AVATAR_NAMES"
+      :key="avatar"
       class="avatar"
-      :color="props.modelValue === avatar.name ? 'red' : 'white'"
-      @select="emit('update:modelValue', avatar.name)"
+      :color="props.modelValue === avatar ? 'red' : 'white'"
+      @select="emit('update:modelValue', avatar)"
     >
-      <img class="avatar-image" draggable="false" :src="avatar.image" />
+      <Avatar class="avatar-image" draggable="false" :avatar="avatar" />
     </Tile>
   </div>
 </template>

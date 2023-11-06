@@ -4,7 +4,6 @@ import {
   PlayerData,
   PlayerDataOptions,
   RoomData,
-  ServerToClientEvents,
   createPlayerData,
   createRoomData,
   replaceBoardPattern,
@@ -32,7 +31,7 @@ export class Room {
 
     socket.join(this.data.code);
     socket.emit('joined', playerData, this.data);
-    this.broadcast('otherJoined', playerData);
+    socket.broadcast.in(this.data.code).emit('otherJoined', playerData);
 
     return playerData;
   }
@@ -50,7 +49,7 @@ export class Room {
     socket.leave(this.data.code);
 
     socket.emit('left');
-    this.broadcast('otherLeft', id);
+    socket.broadcast.in(this.data.code).emit('otherLeft', id);
   }
 
   sellPattern(playerId: string, patternId: CellPatternId) {
@@ -97,13 +96,6 @@ export class Room {
     this.data.players[playerData.id] = playerData;
 
     socket.emit('updated', playerData);
-    this.broadcast('otherUpdated', playerData);
-  }
-
-  private broadcast<K extends keyof ServerToClientEvents>(
-    event: K,
-    ...args: Parameters<ServerToClientEvents[K]>
-  ) {
-    this.server.in(this.data.code).emit(event, ...args);
+    socket.broadcast.in(this.data.code).emit('otherUpdated', playerData);
   }
 }

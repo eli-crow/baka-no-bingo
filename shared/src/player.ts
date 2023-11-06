@@ -1,7 +1,9 @@
 import { BoardData, createBoard } from './board.js';
 import { getUuid } from './uuid.js';
 
-export type AvatarName = 'ein' | 'nina' | 'cat' | 'cal';
+export const AVATAR_NAMES = ['ein', 'nina', 'cat', 'cal'] as const;
+
+export type AvatarName = (typeof AVATAR_NAMES)[number];
 
 export type PlayerData = {
   id: string;

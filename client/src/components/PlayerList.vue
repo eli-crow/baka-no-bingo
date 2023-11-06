@@ -2,6 +2,7 @@
 import { useGameStateMachine } from '@/composables/createGameStateMachine';
 import { PlayerData } from '@shared';
 import { computed } from 'vue';
+import Avatar from './Avatar.vue';
 import BingoBoard3Preview from './BingoBoard3Preview.vue';
 
 const emit = defineEmits<{
@@ -21,32 +22,32 @@ const playersRanked = computed(() => {
 </script>
 
 <template>
-  <div class="PlayerList" v-if="'room' in game.state">
-    <ol class="list">
-      <li
-        v-for="player in playersRanked"
-        :key="player.id"
-        class="player"
-        @click="emit('select', player.id)"
-      >
-        <BingoBoard3Preview class="icon" :board="player.board" />
-        <div class="name">
-          {{ player.name || 'Guest' }}
-        </div>
-        <div class="score">
-          {{ player.score }}
-        </div>
-      </li>
-    </ol>
-  </div>
+  <ol class="player-group" v-if="'room' in game.state">
+    <li
+      v-for="player in playersRanked"
+      :key="player.id"
+      class="player"
+      @click="emit('select', player.id)"
+    >
+      <BingoBoard3Preview class="icon" :board="player.board" />
+      <Avatar class="icon" :avatar="player.avatar" />
+      <div class="name">
+        {{ player.name || 'Guest' }}
+      </div>
+      <div class="score">
+        {{ player.score }}
+      </div>
+    </li>
+  </ol>
 </template>
 
 <style scoped>
-.list {
+.player-group {
   padding: 0;
   margin: 0;
   list-style-type: none;
 }
+
 .player {
   display: flex;
   align-items: center;
@@ -56,13 +57,20 @@ const playersRanked = computed(() => {
   border: solid 1px var(--gray-light);
   box-shadow: 0 4px 0 0 var(--gray-light);
 }
+
 .icon {
   flex: 0 0 auto;
   margin-right: 12px;
+  height: 2.5rem;
+  width: 2.5rem;
 }
+
 .name {
   flex: 1 1 0px;
+  text-align: left;
+  font-weight: 100;
 }
+
 .score {
   flex: 0 1 auto;
   font-size: 24px;
