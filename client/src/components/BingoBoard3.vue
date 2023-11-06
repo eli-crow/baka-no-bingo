@@ -1,7 +1,6 @@
 <script setup lang="ts">
+import { ResolvedCell } from '@shared';
 import { ComponentPublicInstance, nextTick, reactive } from 'vue';
-// @ts-ignore
-import { ResolvedCell } from '@/composables/createBoardState';
 import { star as starIcon } from './Icon/icons';
 import Tile from './Tile.vue';
 

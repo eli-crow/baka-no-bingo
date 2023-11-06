@@ -7,17 +7,11 @@ import ModalTransition from '@/components/ModalTransition.vue';
 import PatternLegend from '@/components/PatternLegend.vue';
 import PatternSellBar from '@/components/PatternSellBar.vue';
 import Tile from '@/components/Tile.vue';
-import {
-  createBoardState,
-  provideBoardState,
-} from '@/composables/createBoardState';
 import { useGameStateMachine } from '@/composables/createGameStateMachine';
 import router from '@/routes';
 import { ref, watchEffect } from 'vue';
 
 const game = useGameStateMachine();
-const board = createBoardState(game);
-provideBoardState(board);
 
 const playerRankShown = ref(false);
 
@@ -60,12 +54,12 @@ watchEffect(() => {
     <div class="board-container">
       <BingoBoard3
         class="board"
-        :cells="board.cells"
-        @select="i => board.toggleCell(i)"
+        :cells="game.cells"
+        @select="i => game.toggleCell(i)"
       />
     </div>
 
-    <PatternSellBar v-if="board.sellablePatternIds.length" />
+    <PatternSellBar v-if="game.sellablePatternIds.length" />
     <PatternLegend v-else />
 
     <transition name="action-group">

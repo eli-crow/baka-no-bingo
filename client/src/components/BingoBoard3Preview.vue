@@ -1,24 +1,31 @@
 <script setup lang="ts">
-import { ResolvedCell } from '@/composables/createBoardState';
+import { BoardData, getResolvedCells } from '@shared';
+import { computed } from 'vue';
 
 const props = defineProps<{
-  cells: ResolvedCell[];
+  board: BoardData;
 }>();
+
+const cells = computed(() =>
+  getResolvedCells(props.board.cells, props.board.selectedIndices)
+);
 </script>
 
 <template>
-  <div class="pattern-chips">
+  <div class="board">
     <div
-      v-for="cell in props.cells"
+      v-for="cell in cells"
+      class="cell"
       :key="cell.key"
-      class="pattern-chip"
       :data-selected="cell.selected"
     />
   </div>
 </template>
 
 <style scoped>
-.pattern-chips {
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   width: 2rem;
   height: 2rem;
   position: relative;
@@ -27,15 +34,13 @@ const props = defineProps<{
   border-radius: 3px;
 }
 
-.pattern-chip {
-  float: left;
-  width: 33.333333%;
-  height: 33.333333%;
+.cell {
   border: solid 1px var(--black);
-  background: var(--white);
+  background: white;
   border-radius: 3px;
 }
-.pattern-chip[data-selected] {
+
+.cell[data-selected='true'] {
   background-color: var(--red);
 }
 </style>

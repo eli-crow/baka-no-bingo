@@ -14,12 +14,11 @@ export type FreeCell = {
   type: 'free';
 };
 
-export type StatefulCell = TropeCell;
-
 export type Cell = TropeCell | FreeCell;
 
 export type BoardData = {
-  cells: StatefulCell[];
+  cells: Cell[];
+  selectedIndices: number[];
 };
 
 export function getRandomTropeCells(count: number) {
@@ -32,8 +31,15 @@ export function getRandomTropeCell() {
 }
 
 export function createBoard(): BoardData {
+  const tropeCells = getRandomTropeCells(8);
+  const freeIndex = 4;
   return {
-    cells: getRandomTropeCells(8),
+    cells: [
+      ...tropeCells.slice(0, freeIndex),
+      { type: 'free' },
+      ...tropeCells.slice(freeIndex),
+    ],
+    selectedIndices: [freeIndex],
   };
 }
 
@@ -83,15 +89,37 @@ export function replaceBoardPattern(
 ): BoardData {
   const newBoard = structuredClone(board);
 
-  pattern.indices.forEach(i => {
-    if (i === 4) {
-      return;
-    } else if (i < 4) {
-      newBoard.cells[i] = getRandomTropeCell();
-    } else {
-      newBoard.cells[i - 1] = getRandomTropeCell();
-    }
+  const replacements = getRandomTropeCells(pattern.indices.length);
+
+  const newSelectedIndices = new Set(newBoard.selectedIndices);
+  pattern.indices.forEach(cellIndex => {
+    newBoard.cells[cellIndex] = replacements.pop()!;
+    newSelectedIndices.delete(cellIndex);
   });
+
+  newBoard.cells[4] = { type: 'free' };
+  newSelectedIndices.add(4);
+
+  newBoard.selectedIndices = Array.from(newSelectedIndices);
+
+  return newBoard;
+}
+
+export function toggleCell(board: BoardData, index: number): BoardData {
+  const freeIndex = 4;
+  if (index === freeIndex) {
+    return board;
+  }
+
+  const newBoard = structuredClone(board);
+  const selected = newBoard.selectedIndices.includes(index);
+  if (selected) {
+    newBoard.selectedIndices = newBoard.selectedIndices.filter(
+      i => i !== index
+    );
+  } else {
+    newBoard.selectedIndices.push(index);
+  }
 
   return newBoard;
 }
@@ -99,8 +127,23 @@ export function replaceBoardPattern(
 export function getMatchingPatternIds(
   activeCellIndices: readonly number[]
 ): CellPatternId[] {
-  return CELL_PATTERN_IDS.filter(id => {
-    const pattern = PATTERNS[id];
-    return pattern.indices.every(i => activeCellIndices.includes(i));
-  });
+  return CELL_PATTERN_IDS.filter(id =>
+    PATTERNS[id].indices.every(i => activeCellIndices.includes(i))
+  );
 }
+
+export function getResolvedCells(
+  cells: readonly Cell[],
+  selectedIndices: readonly number[]
+): ResolvedCell[] {
+  return cells.map((cell, index) => ({
+    ...cell,
+    selected: selectedIndices.includes(index),
+    key: index,
+  }));
+}
+
+export type ResolvedCell = Cell & {
+  selected: boolean;
+  key: number;
+};

@@ -8,6 +8,7 @@ import {
   createPlayerData,
   createRoomData,
   replaceBoardPattern,
+  toggleCell,
 } from '../../shared/src/index.js';
 import { AppSocket, AppSocketServer } from './type.js';
 
@@ -53,32 +54,41 @@ export class Room {
   }
 
   sellPattern(playerId: string, patternId: CellPatternId) {
-    const pattern = PATTERNS[patternId];
-    const player = this.data.players[playerId];
-    const socket = this.sockets[playerId];
+    this.doForPlayer(playerId, player => {
+      const pattern = PATTERNS[patternId];
 
-    if (!pattern || !player || !socket) {
-      return;
-    }
+      const newPlayerData = structuredClone(player);
+      newPlayerData.score += pattern.score;
+      newPlayerData.board = replaceBoardPattern(player.board, pattern);
+      this.updatePlayerData(newPlayerData);
+    });
+  }
 
-    const newPlayerData = {
-      ...player,
-      board: replaceBoardPattern(player.board, pattern),
-    };
-    this.updatePlayerData(newPlayerData);
-
-    socket.emit('updated', newPlayerData);
-    this.broadcast('otherUpdated', newPlayerData);
+  toggleCell(playerId: string, index: number) {
+    this.doForPlayer(playerId, player => {
+      const newPlayerData = structuredClone(player);
+      newPlayerData.board = toggleCell(player.board, index);
+      this.updatePlayerData(newPlayerData);
+    });
   }
 
   updatePlayerOptions(playerId: string, options: PlayerDataOptions) {
-    const player = this.data.players[playerId]!;
-    const socket = this.sockets[playerId]!;
-    const newPlayerData = { ...player, options };
-    this.updatePlayerData(newPlayerData);
+    this.doForPlayer(playerId, player => {
+      const newPlayerData = { ...player, options };
+      this.updatePlayerData(newPlayerData);
+    });
+  }
 
-    socket.emit('updated', newPlayerData);
-    this.broadcast('otherUpdated', newPlayerData);
+  private doForPlayer(
+    playerId: string,
+    callback: (player: PlayerData, socket: AppSocket) => void
+  ) {
+    const player = this.data.players[playerId];
+    const socket = this.sockets[playerId];
+    if (!player || !socket) {
+      throw new Error('Invalid player or socket.');
+    }
+    callback(player, socket);
   }
 
   private updatePlayerData(playerData: PlayerData) {

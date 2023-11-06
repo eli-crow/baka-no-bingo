@@ -3,9 +3,11 @@ import {
   PlayerData,
   PlayerDataOptions,
   RoomData,
+  getMatchingPatternIds,
+  getResolvedCells,
 } from '@shared';
 
-import { InjectionKey, inject, provide, ref } from 'vue';
+import { InjectionKey, computed, inject, provide, reactive, ref } from 'vue';
 import { SocketState } from './createSocketState';
 
 const GAME_STATE_INJECTION_KEY: InjectionKey<GameStateMachine> =
@@ -26,6 +28,7 @@ function clearStoredPlayerId() {
 
 export function createGameStateMachine(socket: SocketState) {
   const state = ref<Readonly<GameState>>({ type: 'idle' });
+  const clearCallbacks = reactive<Set<() => void>>(new Set());
 
   socket.on('joined', (playerData, roomData) => {
     if (state.value.type === 'joining') {
@@ -86,59 +89,113 @@ export function createGameStateMachine(socket: SocketState) {
     }
   });
 
+  const resolvedCells = computed(() => {
+    if (state.value.type !== 'joined') {
+      return [];
+    }
+
+    const { cells, selectedIndices } = state.value.player.board;
+
+    return getResolvedCells(cells, selectedIndices);
+  });
+
+  const sellablePatternIds = computed(() => {
+    if (state.value.type !== 'joined') {
+      return [];
+    }
+
+    return getMatchingPatternIds(state.value.player.board.selectedIndices);
+  });
+
   return {
     get state() {
       return state.value;
     },
 
+    get cells() {
+      return resolvedCells.value;
+    },
+
+    get sellablePatternIds() {
+      return sellablePatternIds.value;
+    },
+
     host(playerDataOptions: PlayerDataOptions) {
-      if (state.value.type === 'idle') {
-        socket.emit('host', playerDataOptions);
-        state.value = { type: 'joining' };
+      if (state.value.type !== 'idle') {
+        return;
       }
+
+      socket.emit('host', playerDataOptions);
+      state.value = { type: 'joining' };
     },
 
     join(roomCode: RoomData['code'], playerDataOptions: PlayerDataOptions) {
       return new Promise<void>((resolve, reject) => {
-        if (state.value.type === 'idle') {
-          state.value = { type: 'joining' };
-          socket.emit('join', roomCode, playerDataOptions, ack => {
-            if ('success' in ack) {
-              resolve();
-            } else {
-              reject(ack.error);
-            }
-          });
+        if (state.value.type !== 'idle') {
+          resolve();
+          return;
         }
+
+        state.value = { type: 'joining' };
+        socket.emit('join', roomCode, playerDataOptions, ack => {
+          if (ack.success) {
+            resolve();
+          } else {
+            reject(ack.message ?? `Error: ${ack.error}`);
+          }
+        });
       });
     },
 
     leave() {
-      if (state.value.type === 'joined') {
-        socket.emit('leave');
+      if (state.value.type !== 'joined') {
+        return;
       }
+      socket.emit('leave');
     },
 
     updatePlayer(playerDataOptions: PlayerDataOptions) {
-      if (state.value.type === 'joined') {
-        socket.emit('updatePlayer', playerDataOptions);
+      if (state.value.type !== 'joined') {
+        return;
       }
+      socket.emit('updatePlayer', playerDataOptions);
     },
 
-    requestCell() {
+    toggleCell(index: number) {
       if (state.value.type !== 'joined') {
-        socket.emit('requestCell');
+        return;
       }
+      socket.emit('toggleCell', index);
+    },
+
+    getRandomCell() {
+      if (state.value.type !== 'joined') {
+        return;
+      }
+      socket.emit('getRandomCell');
     },
 
     requestSellPattern(patternId: CellPatternId) {
-      if (state.value.type !== 'joined') {
-        socket.emit('sellPattern', patternId);
-      }
+      // TODO: move selected stateful cells to PlayerData board state
+      return new Promise<void>((resolve, reject) => {
+        if (state.value.type !== 'joined') {
+          resolve();
+          return;
+        }
+
+        socket.emit('sellPattern', patternId, ack => {
+          if (ack.success) {
+            clearCallbacks.forEach(cb => cb());
+            resolve();
+          } else {
+            reject(ack.message ?? `Error: ${ack.error}`);
+          }
+        });
+      });
     },
 
     resetBoard() {
-      if (state.value.type !== 'joined') {
+      if (state.value.type === 'joined') {
         socket.emit('resetBoard');
       }
     },

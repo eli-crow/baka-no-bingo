@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { useBoardState } from '@/composables/createBoardState';
 import { useGameStateMachine } from '@/composables/createGameStateMachine';
 import { PlayerData } from '@shared';
 import { computed } from 'vue';
-import PatternChips from './PatternChips.vue';
+import BingoBoard3Preview from './BingoBoard3Preview.vue';
 
 const emit = defineEmits<{
   (e: 'select', id: string): void;
 }>();
 
 const game = useGameStateMachine();
-const board = useBoardState();
 
 const playersRanked = computed(() => {
   if ('room' in game.state) {
@@ -31,7 +29,7 @@ const playersRanked = computed(() => {
         class="player"
         @click="emit('select', player.id)"
       >
-        <PatternChips class="icon" :cells="board.cells" />
+        <BingoBoard3Preview class="icon" :board="player.board" />
         <div class="name">
           {{ player.name || 'Guest' }}
         </div>

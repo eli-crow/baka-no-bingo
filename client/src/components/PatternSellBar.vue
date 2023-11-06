@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { useBoardState } from '@/composables/createBoardState';
 import { useGameStateMachine } from '@/composables/createGameStateMachine';
 import { PATTERNS } from '@shared';
 import PatternIcon from './PatternIcon.vue';
 
 const game = useGameStateMachine();
-const board = useBoardState();
 </script>
 
 <template>
@@ -13,7 +11,7 @@ const board = useBoardState();
     <div class="title"> 売る Sell! </div>
     <div class="pattern-group">
       <div
-        v-for="p in board.sellablePatternIds"
+        v-for="p in game.sellablePatternIds"
         :key="p"
         class="pattern"
         @click="game.requestSellPattern(p)"
@@ -56,6 +54,7 @@ const board = useBoardState();
   align-items: center;
   font: var(--font-default);
   margin-right: 0.5rem;
+  cursor: pointer;
 }
 
 .pattern-icon {
