@@ -2,13 +2,13 @@
   "name": "baka-no-bingo-server",
   "type": "module",
   "scripts": {
-    "dev": "node --loader ts-node/esm ./src/index.ts"
+    "start": "node --loader ts-node/esm ./src/index.ts",
+    "dev": "node --watch --loader ts-node/esm ./src/index.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "nanoid": "^5.0.2",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {

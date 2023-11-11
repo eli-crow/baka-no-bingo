@@ -6,28 +6,25 @@ import ModalPlayerRank from '@/components/ModalPlayerRank.vue';
 import ModalTransition from '@/components/ModalTransition.vue';
 import PatternLegend from '@/components/PatternLegend.vue';
 import PatternSellBar from '@/components/PatternSellBar.vue';
+import PlayerPresence from '@/components/PlayerPresence.vue';
 import Tile from '@/components/Tile.vue';
-import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import { useClientGameState } from '@/composables/createClientGameState';
 import router from '@/routes';
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 
-const game = useGameStateMachine();
+const game = useClientGameState();
 
 const playerRankShown = ref(false);
 
 function leave() {
-  game.leave();
-}
-
-watchEffect(() => {
-  if (game.state.type === 'left') {
+  game.leave().then(() => {
     router.push('/');
-  }
-});
+  });
+}
 </script>
 
-<template>
-  <div class="GamePage" v-if="'player' in game.state">
+<template v-if="game.player">
+  <div class="GamePage">
     <header class="header">
       <Tile color="yellow" class="room-tile">
         <div class="room">
@@ -36,14 +33,15 @@ watchEffect(() => {
           </button>
           <p class="room-details">
             <span class="room-title">Room</span>
-            <span class="room-id">{{ game.state.room.code }}</span>
+            <span class="room-id">{{ game.code }}</span>
           </p>
+          <PlayerPresence />
         </div>
       </Tile>
 
       <Tile class="score-tile">
         <div class="scores">
-          <div class="my-score">{{ game.state.player.score }}</div>
+          <div class="my-score">{{ game.player?.score }}</div>
           <a class="players" @click="playerRankShown = !playerRankShown">
             <Icon :icon="listOl" />
           </a>
@@ -71,7 +69,7 @@ watchEffect(() => {
           label="Replace"
           color="green"
           cost="5"
-          :enabled="game.state.player.score >= 5"
+          :enabled="game.canReplace"
         />
         <!-- @select="game.spells.buy()" -->
 
@@ -81,7 +79,7 @@ watchEffect(() => {
           label="Reset"
           color="red"
           cost="10"
-          :enabled="game.state.player.score >= 10"
+          :enabled="game.canReset"
         />
         <!-- @select="game.spells.reset()" -->
       </div>
@@ -132,6 +130,7 @@ watchEffect(() => {
   align-items: center;
 }
 .room-details {
+  margin-right: 1rem;
 }
 .room-title {
   display: block;

@@ -2,37 +2,44 @@ import { CellPatternId } from './board';
 import { PlayerData, PlayerDataOptions } from './player';
 import { RoomData } from './room';
 
-type Ack<E extends string = 'unknown'> = (
-  payload:
-    | {
-        success: false;
-        error: E;
-        message: string;
-      }
-    | { success: true }
-) => void;
-
 export interface ServerToClientEvents {
-  joined(playerData: PlayerData, roomData: RoomData): void;
   otherJoined(otherPlayerData: PlayerData): void;
-  left(): void;
   otherLeft(otherPlayerId: string): void;
-  updated(myData: PlayerData): void;
-  otherUpdated(otherPlayerData: PlayerData): void;
+  playerUpdated(otherPlayerData: PlayerData): void;
 }
 
 export interface ClientToServerEvents {
-  host(playerDataOptions: PlayerDataOptions): void;
+  host(
+    playerDataOptions: PlayerDataOptions | undefined,
+    ack?: (
+      response:
+        | { success: true; myPlayerId: PlayerData['id']; room: RoomData }
+        | { success: false }
+    ) => void
+  ): void;
+
   join(
     roomCode: RoomData['code'],
-    playerDataOptions: PlayerDataOptions,
-    ack?: Ack<'noroom'>
+    playerDataOptions: PlayerDataOptions | undefined,
+    ack?: (
+      response:
+        | { success: true; myPlayerId: PlayerData['id']; room: RoomData }
+        | { success: false }
+    ) => void
   ): void;
-  leave(): void;
-  updatePlayer(options: PlayerDataOptions): void;
-  requestCell(): void;
-  resetBoard(): void;
-  sellPattern(patternId: CellPatternId, ack?: Ack<'cant' | 'noroom'>): void;
-  toggleCell(index: number): void;
-  getRandomCell(): void;
+
+  leave(ack?: (response: { success: boolean }) => void): void;
+
+  sellPattern(
+    patternId: CellPatternId,
+    // ack?: Ack<void, 'cant' | 'noroom'>
+    ack?: (
+      response: { success: true } | { success: false; error: 'cant' | 'noroom' }
+    ) => void
+  ): void;
+
+  toggleCell(
+    index: number,
+    ack?: (response: { success: boolean }) => void
+  ): void;
 }

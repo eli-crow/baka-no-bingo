@@ -4,24 +4,20 @@ import Button from '@/components/Button.vue';
 import { x } from '@/components/Icon';
 import Icon from '@/components/Icon/Icon.vue';
 import Tile from '@/components/Tile.vue';
-import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import { useClientGameState } from '@/composables/createClientGameState';
 import router from '@/routes';
 import { PlayerDataOptions } from '@shared';
-import { reactive, watchEffect } from 'vue';
+import { reactive } from 'vue';
 
-const game = useGameStateMachine();
+const game = useClientGameState();
 
 const options = reactive<PlayerDataOptions>({});
 
 function host() {
-  game.host(options);
-}
-
-watchEffect(() => {
-  if (game.state.type === 'joined') {
+  game.host(options).then(() => {
     router.push('/game');
-  }
-});
+  });
+}
 </script>
 
 <template>

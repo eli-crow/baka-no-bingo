@@ -22,15 +22,24 @@ export default class RoomCoordinator {
         });
       }
 
-      // handle 'disconnectiong' ?
+      if (socket.recovered) {
+      }
 
-      socket.on('host', playerOptions => {
+      // handle 'disconnection' ?
+
+      socket.on('host', (playerOptions, ack) => {
         const code = generateRoomCode(code => !this.rooms[code]);
         const room = new Room(code, this.server);
         const player = room.addPlayer(socket, playerOptions);
         this.rooms[code] = room;
         this.socketToRoomCode.set(socket, code);
         this.socketToPlayerId.set(socket, player.id);
+
+        ack?.({
+          success: true,
+          myPlayerId: player.id,
+          room: room.data,
+        });
       });
 
       socket.on('join', (code, playerOptions, ack) => {
@@ -38,8 +47,6 @@ export default class RoomCoordinator {
         if (!room) {
           ack?.({
             success: false,
-            error: 'noroom',
-            message: 'Room does not exist.',
           });
           return;
         }
@@ -48,23 +55,29 @@ export default class RoomCoordinator {
         this.socketToRoomCode.set(socket, code);
         this.socketToPlayerId.set(socket, player.id);
 
-        ack?.({ success: true });
+        ack?.({
+          success: true,
+          myPlayerId: player.id,
+          room: room.data,
+        });
       });
 
-      socket.on('leave', () => {
+      socket.on('leave', ack => {
         const code = this.socketToRoomCode.get(socket);
         const playerId = this.socketToPlayerId.get(socket);
         if (!code || !playerId) {
+          ack?.({ success: false });
           return;
         }
         const room = this.getRoom(code);
 
         if (!room) {
+          ack?.({ success: false });
           return;
         }
 
         room.removePlayer(playerId);
-        socket.emit('left');
+        ack?.({ success: true });
       });
 
       socket.on('sellPattern', (patternId, ack) => {
@@ -74,7 +87,6 @@ export default class RoomCoordinator {
           ack?.({
             success: false,
             error: 'noroom',
-            message: 'Player is not in a room.',
           });
           return;
         }
@@ -85,7 +97,6 @@ export default class RoomCoordinator {
           ack?.({
             success: false,
             error: 'noroom',
-            message: 'Room does not exist.',
           });
           return;
         }
@@ -97,27 +108,27 @@ export default class RoomCoordinator {
           ack?.({
             success: false,
             error: 'cant',
-            message: e.message,
           });
         }
       });
 
-      socket.on('toggleCell', index => {
+      socket.on('toggleCell', (index, ack) => {
         const code = this.socketToRoomCode.get(socket);
         const playerId = this.socketToPlayerId.get(socket);
         if (!code || !playerId) {
+          ack?.({ success: false });
           return;
         }
 
         const room = this.getRoom(code);
         if (!room) {
+          ack?.({ success: false });
           return;
         }
 
         room.toggleCell(playerId, index);
+        ack?.({ success: true });
       });
-
-      socket.on('updatePlayer', options => {});
     });
   }
 

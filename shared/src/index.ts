@@ -1,3 +1,4 @@
+export * from './ClientGameState.js';
 export * from './board.js';
 export * from './events.js';
 export * from './player.js';

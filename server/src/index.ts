@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 const http = createServer(app);
-const port = 8080;
+const port = Number(process.env.PORT);
 
 const io = new SocketIoServer<ClientToServerEvents, ServerToClientEvents>(
   http,
@@ -20,6 +20,12 @@ const io = new SocketIoServer<ClientToServerEvents, ServerToClientEvents>(
     cors: {
       origin: process.env.CLIENT_URL,
       methods: ['GET', 'POST'],
+    },
+    connectionStateRecovery: {
+      maxDisconnectionDuration: Number(
+        process.env.MAX_DISCONNECTION_DURATION_MS
+      ),
+      skipMiddlewares: true,
     },
   }
 );

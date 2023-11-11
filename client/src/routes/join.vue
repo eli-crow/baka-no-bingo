@@ -4,29 +4,22 @@ import Button from '@/components/Button.vue';
 import Icon, { x } from '@/components/Icon';
 import TextInput from '@/components/TextInput.vue';
 import Tile from '@/components/Tile.vue';
-import { useGameStateMachine } from '@/composables/createGameStateMachine';
-import router from '@/routes';
+import { useClientGameState } from '@/composables/createClientGameState';
 import { PlayerDataOptions, ROOM_CODE_PATTERN } from '@shared';
-import { reactive, ref, watchEffect } from 'vue';
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const game = useGameStateMachine();
-
-const options = reactive<PlayerDataOptions>({});
+const game = useClientGameState();
+const router = useRouter();
 
 const code = ref('');
+const options = reactive<PlayerDataOptions>({});
 
 function join() {
-  console.log('sending code', code.value);
-  game.join(code.value, options).catch(err => {
-    alert(err);
+  game.join(code.value, options).then(() => {
+    router.push('/game');
   });
 }
-
-watchEffect(() => {
-  if (game.state.type === 'joined') {
-    router.push('/game');
-  }
-});
 </script>
 
 <template>

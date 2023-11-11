@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import { useClientGameState } from '@/composables/createClientGameState';
 import { onMounted, reactive } from '@vue/runtime-core';
 
-const game = useGameStateMachine();
+const game = useClientGameState();
 
 const state = reactive({
   show: false,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import { useClientGameState } from '@/composables/createClientGameState';
 
-const game = useGameStateMachine();
+const game = useClientGameState();
 </script>
 
 <template>

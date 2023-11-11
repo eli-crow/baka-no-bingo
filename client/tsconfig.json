@@ -20,7 +20,8 @@
     "./src/**/*.tsx",
     "./src/**/*.jsx",
     "./src/**/*.json",
-    "./src/**/*.vue"
+    "./src/**/*.vue",
+    "../shared/src/gameStateReducer.ts"
   ],
   "references": [
     {

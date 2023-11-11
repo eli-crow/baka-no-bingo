@@ -18,11 +18,14 @@ export type PlayerDataOptions = {
   avatar?: AvatarName;
 };
 
-export function createPlayerData(options: PlayerDataOptions): PlayerData {
+export function createPlayerData({
+  name = 'Anonymous',
+  avatar = 'cal',
+}: PlayerDataOptions = {}): PlayerData {
   return {
     id: getUuid(),
-    name: options.name ?? 'Unnamed',
-    avatar: options.avatar ?? 'cal',
+    name,
+    avatar,
     score: 0,
     board: createBoard(),
   };

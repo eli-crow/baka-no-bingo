@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import DebugView from './components/DebugView.vue';
 import {
-  createGameStateMachine,
-  provideGameStateMachine,
-} from './composables/createGameStateMachine';
+  createClientGameState,
+  provideClientGameState,
+} from './composables/createClientGameState';
 
 import {
   createSocketState,
   provideSocketState,
 } from './composables/createSocketState';
 
-const showDebug = import.meta.env.DEV;
+const SHOW_DEBUG = import.meta.env.DEV;
 
 const socket = createSocketState();
 provideSocketState(socket);
 
-const game = createGameStateMachine(socket);
-provideGameStateMachine(game);
+const game = createClientGameState(socket);
+provideClientGameState(game);
 </script>
 
 <template>
@@ -27,7 +27,7 @@ provideGameStateMachine(game);
       </transition>
     </router-view>
 
-    <DebugView v-if="showDebug" />
+    <DebugView v-if="SHOW_DEBUG" />
   </div>
 </template>
 
@@ -45,4 +45,3 @@ provideGameStateMachine(game);
   padding-bottom: 1rem;
 }
 </style>
-./composables/game

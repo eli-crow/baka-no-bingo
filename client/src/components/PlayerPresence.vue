@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useClientGameState } from '@/composables/createClientGameState';
 import Avatar from './Avatar.vue';
-import BingoBoard3Preview from './BingoBoard3Preview.vue';
 
 const emit = defineEmits<{
   (e: 'select', id: string): void;
@@ -18,51 +17,28 @@ const game = useClientGameState();
       class="player"
       @click="emit('select', player.id)"
     >
-      <BingoBoard3Preview class="icon" :board="player.board" />
       <Avatar class="icon" :avatar="player.avatar" />
-      <div class="name">
-        {{ player.name || 'Guest' }}
-      </div>
-      <div class="score">
-        {{ player.score }}
-      </div>
     </li>
   </ol>
 </template>
 
 <style scoped>
 .player-group {
-  padding: 0;
-  margin: 0;
   list-style-type: none;
+  padding: 0;
+  display: flex;
 }
 
 .player {
-  display: flex;
-  align-items: center;
-  border-radius: var(--radius-small);
-  padding: 4px 8px;
-  background-color: var(--white);
-  border: solid 1px var(--gray-light);
-  box-shadow: 0 4px 0 0 var(--gray-light);
+  display: contents;
 }
 
 .icon {
   flex: 0 0 auto;
-  margin-right: 12px;
   height: 2.5rem;
   width: 2.5rem;
 }
-
-.name {
-  flex: 1 1 0px;
-  text-align: left;
-  font-weight: 100;
-}
-
-.score {
-  flex: 0 1 auto;
-  font-size: 24px;
-  font-weight: 700;
+.player:not(:last-child) > .icon {
+  margin-right: -1rem;
 }
 </style>

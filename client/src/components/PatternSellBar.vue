@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { useGameStateMachine } from '@/composables/createGameStateMachine';
+import { useClientGameState } from '@/composables/createClientGameState';
 import { PATTERNS } from '@shared';
 import PatternIcon from './PatternIcon.vue';
 
-const game = useGameStateMachine();
+const game = useClientGameState();
 </script>
 
 <template>
-  <div class="PatternSellBar" v-if="'player' in game.state">
+  <div class="PatternSellBar">
     <div class="title"> 売る Sell! </div>
     <div class="pattern-group">
       <div
         v-for="p in game.sellablePatternIds"
         :key="p"
         class="pattern"
-        @click="game.requestSellPattern(p)"
+        @click="game.sellPattern(p)"
       >
         <PatternIcon class="pattern-icon" :pattern-id="p" />
         <span class="pattern-score">+{{ PATTERNS[p].score }}</span>

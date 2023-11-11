@@ -1,5 +1,8 @@
 {
   "private": true,
   "scripts": {},
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "nanoid": "^5.0.2"
+  }
 }

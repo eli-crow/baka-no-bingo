@@ -12,7 +12,10 @@ import {
 import { AppSocket, AppSocketServer } from './type.js';
 
 export class Room {
-  private data: RoomData;
+  private _data: RoomData;
+  get data() {
+    return this._data;
+  }
 
   private sockets: { [playerId: string]: AppSocket | undefined } = {};
 
@@ -20,25 +23,24 @@ export class Room {
     code: string,
     private server: AppSocketServer
   ) {
-    this.data = createRoomData(code);
+    this._data = createRoomData(code);
   }
 
-  addPlayer(socket: AppSocket, options: PlayerDataOptions) {
+  addPlayer(socket: AppSocket, options?: PlayerDataOptions) {
     const playerData = createPlayerData(options);
 
     this.sockets[playerData.id] = socket;
-    this.data.players[playerData.id] = playerData;
+    this._data.players[playerData.id] = playerData;
 
-    socket.join(this.data.code);
-    socket.emit('joined', playerData, this.data);
-    socket.broadcast.in(this.data.code).emit('otherJoined', playerData);
+    socket.join(this._data.code);
+    socket.broadcast.in(this._data.code).emit('otherJoined', playerData);
 
     return playerData;
   }
 
   removePlayer(id: string) {
     delete this.sockets[id];
-    delete this.data.players[id];
+    delete this._data.players[id];
 
     const socket = this.sockets[id];
 
@@ -46,10 +48,9 @@ export class Room {
       return;
     }
 
-    socket.leave(this.data.code);
+    socket.leave(this._data.code);
 
-    socket.emit('left');
-    socket.broadcast.in(this.data.code).emit('otherLeft', id);
+    socket.broadcast.in(this._data.code).emit('otherLeft', id);
   }
 
   sellPattern(playerId: string, patternId: CellPatternId) {
@@ -82,7 +83,7 @@ export class Room {
     playerId: string,
     callback: (player: PlayerData, socket: AppSocket) => void
   ) {
-    const player = this.data.players[playerId];
+    const player = this._data.players[playerId];
     const socket = this.sockets[playerId];
     if (!player || !socket) {
       throw new Error('Invalid player or socket.');
@@ -91,11 +92,7 @@ export class Room {
   }
 
   private updatePlayerData(playerData: PlayerData) {
-    const socket = this.sockets[playerData.id]!;
-
-    this.data.players[playerData.id] = playerData;
-
-    socket.emit('updated', playerData);
-    socket.broadcast.in(this.data.code).emit('otherUpdated', playerData);
+    this._data.players[playerData.id] = playerData;
+    this.server.in(this._data.code).emit('playerUpdated', playerData);
   }
 }
