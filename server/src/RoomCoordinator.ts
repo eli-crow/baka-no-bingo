@@ -22,11 +22,6 @@ export default class RoomCoordinator {
         });
       }
 
-      if (socket.recovered) {
-      }
-
-      // handle 'disconnection' ?
-
       socket.on('host', (playerOptions, ack) => {
         const code = generateRoomCode(code => !this.rooms[code]);
         const room = new Room(code, this.server);
@@ -54,6 +49,34 @@ export default class RoomCoordinator {
         const player = room.addPlayer(socket, playerOptions);
         this.socketToRoomCode.set(socket, code);
         this.socketToPlayerId.set(socket, player.id);
+
+        ack?.({
+          success: true,
+          myPlayerId: player.id,
+          room: room.data,
+        });
+      });
+
+      socket.on('rejoin', (playerId, code, ack) => {
+        const room = this.getRoom(code);
+        if (!room) {
+          ack?.({
+            success: false,
+          });
+          return;
+        }
+
+        const player = room.data.players[playerId];
+        if (!player || !player) {
+          ack?.({
+            success: false,
+          });
+          return;
+        }
+
+        this.socketToRoomCode.set(socket, code);
+        this.socketToPlayerId.set(socket, player.id);
+        room.rejoinPlayer(socket, playerId);
 
         ack?.({
           success: true,

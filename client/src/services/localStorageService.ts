@@ -1,6 +1,8 @@
+import type { PlayerData, RoomData } from '@shared';
+
 interface LocalStorageData {
-  playerId: string | undefined;
-  roomCode: string | undefined;
+  playerId: PlayerData['id'] | undefined;
+  roomCode: RoomData['code'] | undefined;
 }
 
 const LOCAL_STORAGE_REVIVERS: {
@@ -12,7 +14,7 @@ const LOCAL_STORAGE_REVIVERS: {
 
 export default new Proxy({} as LocalStorageData, {
   get: (_, prop) => {
-    const data = localStorage.getItem('data');
+    const data = localStorage.getItem(prop as string);
     if (data === null) {
       return undefined;
     }
@@ -27,8 +29,7 @@ export default new Proxy({} as LocalStorageData, {
     return true;
   },
   deleteProperty: (_, prop) => {
-    let didDelete = localStorage.getItem('data') !== null;
     localStorage.removeItem('data');
-    return didDelete;
+    return true;
   },
 });

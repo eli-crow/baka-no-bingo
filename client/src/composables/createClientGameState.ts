@@ -1,27 +1,28 @@
 import localStorageService from '@/services/localStorageService';
 import {
   CellPatternId,
+  ClientGame,
   ClientGameAction,
-  ClientGameData,
   PlayerData,
   PlayerDataOptions,
   RoomData,
   getMatchingPatternIds,
   getResolvedCells,
-  nextClientGameState,
+  nextClientGame,
 } from '@shared';
 import { InjectionKey, computed, inject, provide, ref } from 'vue';
-import { SocketState, useSocketState } from './createSocketState';
+import { SocketState } from './createSocketState';
 
 const GAME_STATE_INJECTION_KEY: InjectionKey<ClientGameState> =
   Symbol('gameState');
 
 function createClientGameStateMachine() {
-  let state: ClientGameData = { status: 'idle' };
-  const reactiveState = ref<ClientGameData>(state);
+  const initial: ClientGame = { status: 'idle' };
+  let state: ClientGame = initial;
+  const reactiveState = ref<ClientGame>(initial);
 
   function send(action: ClientGameAction) {
-    const newState = nextClientGameState(state, action);
+    const newState = nextClientGame(state, action);
     state = newState;
     reactiveState.value = newState;
   }
@@ -34,10 +35,9 @@ function createClientGameStateMachine() {
   };
 }
 
-export function createClientGameState(initialSocket?: SocketState) {
+export function createClientGameState(socket: SocketState) {
   const machine = createClientGameStateMachine();
 
-  const socket = initialSocket ?? useSocketState();
   socket.on('otherJoined', player => {
     machine.send({ type: 'otherJoined', player });
   });
@@ -49,6 +49,17 @@ export function createClientGameState(initialSocket?: SocketState) {
   socket.on('playerUpdated', player => {
     machine.send({ type: 'playerUpdated', player });
   });
+
+  function _join(myPlayerId: PlayerData['id'], room: RoomData) {
+    machine.send({ type: 'joined', myPlayerId, room });
+    localStorageService.playerId = myPlayerId;
+    localStorageService.roomCode = room.code;
+  }
+
+  function _leave() {
+    delete localStorageService.playerId;
+    delete localStorageService.roomCode;
+  }
 
   const playersRankedByScore = computed(() => {
     if ('room' in machine.state) {
@@ -106,6 +117,14 @@ export function createClientGameState(initialSocket?: SocketState) {
       }
     },
 
+    get canJoin() {
+      return this.status === 'idle';
+    },
+
+    get canHost() {
+      return this.status === 'idle';
+    },
+
     get canReplace() {
       if (this.player) {
         return this.player.score >= 5;
@@ -126,17 +145,27 @@ export function createClientGameState(initialSocket?: SocketState) {
       return playersRankedByScore.value;
     },
 
+    rejoin(myPlayerId: PlayerData['id'], roomCode: RoomData['code']) {
+      return new Promise<void>((resolve, reject) => {
+        machine.send({ type: 'rejoining' });
+
+        socket.emit('rejoin', myPlayerId, roomCode, ack => {
+          if (ack.success) {
+            _join(ack.myPlayerId, ack.room);
+            resolve();
+          } else {
+            machine.send({ type: 'reset' });
+            reject();
+          }
+        });
+      });
+    },
+
     host(options?: PlayerDataOptions) {
       return new Promise<void>((resolve, reject) => {
         socket.emit('host', options, ack => {
           if (ack.success) {
-            machine.send({
-              type: 'joined',
-              myPlayerId: ack.myPlayerId,
-              room: ack.room,
-            });
-            localStorageService.playerId = ack.myPlayerId;
-            localStorageService.roomCode = ack.room.code;
+            _join(ack.myPlayerId, ack.room);
             resolve();
           } else {
             reject();
@@ -149,13 +178,7 @@ export function createClientGameState(initialSocket?: SocketState) {
       return new Promise<void>((resolve, reject) => {
         socket.emit('join', code, options, ack => {
           if (ack.success) {
-            machine.send({
-              type: 'joined',
-              myPlayerId: ack.myPlayerId,
-              room: ack.room,
-            });
-            localStorageService.playerId = ack.myPlayerId;
-            localStorageService.roomCode = ack.room.code;
+            _join(ack.myPlayerId, ack.room);
             resolve();
           } else {
             reject();
@@ -168,9 +191,8 @@ export function createClientGameState(initialSocket?: SocketState) {
       return new Promise<void>((resolve, reject) => {
         socket.emit('leave', ack => {
           if (ack.success) {
+            _leave();
             resolve();
-            delete localStorageService.playerId;
-            delete localStorageService.roomCode;
           } else {
             reject();
           }

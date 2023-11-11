@@ -28,6 +28,16 @@ export interface ClientToServerEvents {
     ) => void
   ): void;
 
+  rejoin(
+    roomCode: RoomData['code'],
+    myPlayerId: PlayerData['id'],
+    ack?: (
+      response:
+        | { success: true; myPlayerId: PlayerData['id']; room: RoomData }
+        | { success: false }
+    ) => void
+  ): void;
+
   leave(ack?: (response: { success: boolean }) => void): void;
 
   sellPattern(

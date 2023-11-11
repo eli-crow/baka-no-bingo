@@ -38,6 +38,18 @@ export class Room {
     return playerData;
   }
 
+  rejoinPlayer(socket: AppSocket, playerId: string) {
+    const playerData = this._data.players[playerId];
+    if (!playerData) {
+      throw new Error('Invalid player.');
+    }
+
+    this.sockets[playerData.id] = socket;
+
+    socket.join(this._data.code);
+    this.server.in(this._data.code).emit('playerUpdated', playerData);
+  }
+
   removePlayer(id: string) {
     delete this.sockets[id];
     delete this._data.players[id];

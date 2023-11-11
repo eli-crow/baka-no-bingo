@@ -27,7 +27,7 @@ export function createSocketState(): SocketState {
 
   if (import.meta.env.DEV) {
     socket.onAny((event, ...args) => {
-      console.log(event, ...args);
+      console.log(event, args);
     });
   }
 

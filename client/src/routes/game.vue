@@ -17,14 +17,13 @@ const game = useClientGameState();
 const playerRankShown = ref(false);
 
 function leave() {
-  game.leave().then(() => {
-    router.push('/');
-  });
+  game.leave();
+  router.push('/');
 }
 </script>
 
-<template v-if="game.player">
-  <div class="GamePage">
+<template>
+  <div class="GamePage" v-if="game.player">
     <header class="header">
       <Tile color="yellow" class="room-tile">
         <div class="room">

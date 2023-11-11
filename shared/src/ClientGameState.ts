@@ -1,35 +1,33 @@
-import { BoardData } from './board';
 import { PlayerData } from './player';
 import { RoomData } from './room';
 
-export type ClientGameData =
+export type ClientGame =
   | {
       readonly status: 'idle';
+    }
+  | {
+      readonly status: 'rejoining';
     }
   | {
       readonly status: 'playing';
       readonly room: RoomData;
       readonly myPlayerId: PlayerData['id'];
-    }
-  | {
-      readonly status: 'pendingBoard';
-      readonly room: RoomData;
-      readonly pendingBoard: BoardData;
-      readonly myPlayerId: PlayerData['id'];
     };
 
 export type ClientGameAction =
+  | { type: 'rejoining' }
+  | { type: 'reset' }
   | { type: 'joined'; room: RoomData; myPlayerId: PlayerData['id'] }
   | { type: 'updated'; player: PlayerData }
   | { type: 'otherJoined'; player: PlayerData }
   | { type: 'otherLeft'; playerId: string }
   | { type: 'playerUpdated'; player: PlayerData };
 
-export function nextClientGameState(
-  state: ClientGameData,
+export function nextClientGame(
+  state: ClientGame,
   action: ClientGameAction
-): ClientGameData {
-  // the player has not yet joined a room
+): ClientGame {
+  // player has not yet joined a room
   if ('idle' === state.status) {
     if ('joined' === action.type) {
       return {
@@ -37,10 +35,29 @@ export function nextClientGameState(
         room: action.room,
         myPlayerId: action.myPlayerId,
       };
+    } else if ('rejoining' === action.type) {
+      return {
+        status: 'rejoining',
+      };
     }
   }
 
-  // player has joined a room and their board is in a confirmed state
+  // player is attempting to rejoin a room
+  if ('rejoining' === state.status) {
+    if ('joined' === action.type) {
+      return {
+        status: 'playing',
+        room: action.room,
+        myPlayerId: action.myPlayerId,
+      };
+    } else if ('reset' === action.type) {
+      return {
+        status: 'idle',
+      };
+    }
+  }
+
+  // player has joined a room
   else if ('playing' === state.status) {
     if ('otherJoined' === action.type) {
       return produce(state, draft => {
@@ -57,31 +74,20 @@ export function nextClientGameState(
     }
   }
 
-  // player has joined a room and their board is in an optimisitc state, awaiting confirmation from the server
-  else if ('pendingBoard' === state.status) {
-    if ('updated' === action.type) {
-      return {
-        status: 'playing',
-        room: state.room,
-        myPlayerId: action.player.id,
-      };
-    }
-  }
-
   return state;
 }
 
-type MutableClientGameState<G extends ClientGameData> = {
+type MutableClientGame<G extends ClientGame> = {
   -readonly [K in keyof G]: G[K];
 } & {
   type: G['status'];
 };
 
-function produce<G extends ClientGameData>(
+function produce<G extends ClientGame>(
   state: G,
-  modifier: (draft: MutableClientGameState<G>) => void
+  modifier: (draft: MutableClientGame<G>) => void
 ): G {
-  const draft = structuredClone(state) as MutableClientGameState<G>;
+  const draft = structuredClone(state) as MutableClientGame<G>;
   modifier(draft);
   return draft;
 }

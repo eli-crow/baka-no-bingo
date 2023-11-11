@@ -9,6 +9,8 @@ import {
   createSocketState,
   provideSocketState,
 } from './composables/createSocketState';
+import router from './routes';
+import localStorageService from './services/localStorageService';
 
 const SHOW_DEBUG = import.meta.env.DEV;
 
@@ -17,6 +19,20 @@ provideSocketState(socket);
 
 const game = createClientGameState(socket);
 provideClientGameState(game);
+
+const storedPlayerId = localStorageService.playerId;
+const storedRoomCode = localStorageService.roomCode;
+if (storedPlayerId && storedRoomCode) {
+  game
+    .rejoin(storedPlayerId, storedRoomCode)
+    .then(() => {
+      router.replace('/game');
+    })
+    .catch(e => {
+      delete localStorageService.playerId;
+      delete localStorageService.roomCode;
+    });
+}
 </script>
 
 <template>

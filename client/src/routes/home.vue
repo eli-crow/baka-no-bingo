@@ -3,8 +3,10 @@ import { computed } from 'vue';
 
 import { ba, bi, circle, ka, ng, no, o, star } from '@/components/Icon';
 import Tile from '@/components/Tile.vue';
-
+import { useClientGameState } from '@/composables/createClientGameState';
 import specialThanks from '@/data/specialThanks.json';
+
+const game = useClientGameState();
 
 const specialThanksList = computed(() => {
   return new Intl.ListFormat('en-US', {
@@ -25,19 +27,35 @@ const specialThanksList = computed(() => {
             <Tile color="blue" :icon="ba" />
             <Tile color="blue" :icon="ka" />
             <Tile color="white" :icon="no" />
-            <Tile tag="a" href="/host" color="blue-light" :icon="circle" action>
+
+            <Tile
+              tag="a"
+              href="/host"
+              :style="{
+                'pointer-events': game.canHost ? undefined : 'none',
+              }"
+              :aria-disabled="!game.canHost"
+              color="blue-light"
+              :icon="circle"
+              action
+            >
               Host
             </Tile>
             <Tile color="red" :icon="star" />
             <Tile
               tag="a"
               href="/join"
+              :style="{
+                'pointer-events': game.canJoin ? undefined : 'none',
+              }"
+              :aria-disabled="!game.canJoin"
               color="yellow-light"
               :icon="circle"
               action
             >
               Join
             </Tile>
+
             <Tile color="yellow" :icon="bi" />
             <Tile color="yellow" :icon="ng" />
             <Tile color="yellow" :icon="o" />
@@ -46,7 +64,7 @@ const specialThanksList = computed(() => {
       </div>
 
       <div class="credits">
-        <p class="byline"> A game by Eli Crow </p>
+        <p class="byline">A game by Eli Crow</p>
         <p class="special-thanks">
           Special thanks to: {{ specialThanksList }}.
         </p>
