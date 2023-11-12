@@ -23,7 +23,7 @@ function leave() {
 </script>
 
 <template>
-  <div class="GamePage" v-if="game.player">
+  <div class="GamePage">
     <header class="header">
       <Tile color="yellow" class="room-tile">
         <div class="room">

@@ -5,7 +5,7 @@ export const AVATAR_NAMES = ['ein', 'nina', 'cat', 'cal'] as const;
 
 export type AvatarName = (typeof AVATAR_NAMES)[number];
 
-export type PlayerData = {
+export type Player = {
   id: string;
   name: string;
   avatar: AvatarName;
@@ -13,15 +13,15 @@ export type PlayerData = {
   board: BoardData;
 };
 
-export type PlayerDataOptions = {
+export type PlayerOptions = {
   name?: string;
   avatar?: AvatarName;
 };
 
-export function createPlayerData({
+export function createPlayer({
   name = 'Anonymous',
   avatar = 'cal',
-}: PlayerDataOptions = {}): PlayerData {
+}: PlayerOptions = {}): Player {
   return {
     id: getUuid(),
     name,

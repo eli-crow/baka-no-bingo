@@ -1,39 +1,39 @@
+import { GameData } from './ServerGame';
 import { CellPatternId } from './board';
-import { PlayerData, PlayerDataOptions } from './player';
-import { RoomData } from './room';
+import { Player, PlayerOptions } from './player';
 
 export interface ServerToClientEvents {
-  otherJoined(otherPlayerData: PlayerData): void;
-  otherLeft(otherPlayerId: string): void;
-  playerUpdated(otherPlayerData: PlayerData): void;
+  playerJoined(otherPlayerData: Player): void;
+  playerLeft(playerId: string): void;
+  playerUpdated(otherPlayerData: Player): void;
 }
 
 export interface ClientToServerEvents {
   host(
-    playerDataOptions: PlayerDataOptions | undefined,
+    playerDataOptions: PlayerOptions | undefined,
     ack?: (
       response:
-        | { success: true; myPlayerId: PlayerData['id']; room: RoomData }
+        | { success: true; myPlayerId: Player['id']; game: GameData }
         | { success: false }
     ) => void
   ): void;
 
   join(
-    roomCode: RoomData['code'],
-    playerDataOptions: PlayerDataOptions | undefined,
+    roomCode: GameData['code'],
+    playerDataOptions: PlayerOptions | undefined,
     ack?: (
       response:
-        | { success: true; myPlayerId: PlayerData['id']; room: RoomData }
+        | { success: true; myPlayerId: Player['id']; game: GameData }
         | { success: false }
     ) => void
   ): void;
 
   rejoin(
-    roomCode: RoomData['code'],
-    myPlayerId: PlayerData['id'],
+    roomCode: GameData['code'],
+    myPlayerId: Player['id'],
     ack?: (
       response:
-        | { success: true; myPlayerId: PlayerData['id']; room: RoomData }
+        | { success: true; myPlayerId: Player['id']; game: GameData }
         | { success: false }
     ) => void
   ): void;

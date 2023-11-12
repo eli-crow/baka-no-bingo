@@ -10,7 +10,8 @@
     "./**/*.d.ts",
     "./src/**/*.ts",
     "./src/**/*.json",
-    "src/index.mts"
+    "src/index.mts",
+    "../shared/src/ServerGame.ts"
   ],
   "references": [
     {

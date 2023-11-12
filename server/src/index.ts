@@ -6,7 +6,7 @@ import {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../shared/src/index.js';
-import RoomCoordinator from './RoomCoordinator.js';
+import Coordinator from './Coordinator.js';
 
 dotenv.config();
 
@@ -30,7 +30,7 @@ const io = new SocketIoServer<ClientToServerEvents, ServerToClientEvents>(
   }
 );
 
-new RoomCoordinator(io);
+new Coordinator(io);
 
 http.listen(port, () => {
   console.log(`listening on *:${port}`);

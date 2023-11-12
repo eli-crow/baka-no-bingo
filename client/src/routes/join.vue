@@ -5,7 +5,7 @@ import Icon, { x } from '@/components/Icon';
 import TextInput from '@/components/TextInput.vue';
 import Tile from '@/components/Tile.vue';
 import { useClientGameState } from '@/composables/createClientGameState';
-import { PlayerDataOptions, ROOM_CODE_PATTERN } from '@shared';
+import { PlayerOptions, ROOM_CODE_PATTERN } from '@shared';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -13,7 +13,7 @@ const game = useClientGameState();
 const router = useRouter();
 
 const code = ref('');
-const options = reactive<PlayerDataOptions>({});
+const options = reactive<PlayerOptions>({});
 
 function join() {
   game.join(code.value, options).then(() => {

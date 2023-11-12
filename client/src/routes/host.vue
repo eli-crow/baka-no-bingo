@@ -6,12 +6,12 @@ import Icon from '@/components/Icon/Icon.vue';
 import Tile from '@/components/Tile.vue';
 import { useClientGameState } from '@/composables/createClientGameState';
 import router from '@/routes';
-import { PlayerDataOptions } from '@shared';
+import { PlayerOptions } from '@shared';
 import { reactive } from 'vue';
 
 const game = useClientGameState();
 
-const options = reactive<PlayerDataOptions>({});
+const options = reactive<PlayerOptions>({});
 
 function host() {
   game.host(options).then(() => {

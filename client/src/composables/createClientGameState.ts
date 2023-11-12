@@ -1,11 +1,12 @@
-import localStorageService from '@/services/localStorageService';
+import localStorageService from '@/services/storage';
 import {
   CellPatternId,
   ClientGame,
   ClientGameAction,
-  PlayerData,
-  PlayerDataOptions,
-  RoomData,
+  GameData,
+  Player,
+  PlayerOptions,
+  ServerGame,
   getMatchingPatternIds,
   getResolvedCells,
   nextClientGame,
@@ -21,16 +22,15 @@ function createClientGameStateMachine() {
   let state: ClientGame = initial;
   const reactiveState = ref<ClientGame>(initial);
 
-  function send(action: ClientGameAction) {
-    const newState = nextClientGame(state, action);
-    state = newState;
-    reactiveState.value = newState;
-  }
-
   return {
-    send,
     get state() {
       return reactiveState.value;
+    },
+
+    send(action: ClientGameAction) {
+      const newState = nextClientGame(state, action);
+      state = newState;
+      reactiveState.value = newState;
     },
   };
 }
@@ -38,34 +38,35 @@ function createClientGameStateMachine() {
 export function createClientGameState(socket: SocketState) {
   const machine = createClientGameStateMachine();
 
-  socket.on('otherJoined', player => {
-    machine.send({ type: 'otherJoined', player });
+  socket.on('playerJoined', player => {
+    machine.send({ type: 'playerJoined', player });
   });
 
-  socket.on('otherLeft', playerId => {
-    machine.send({ type: 'otherLeft', playerId });
+  socket.on('playerLeft', playerId => {
+    machine.send({ type: 'playerLeft', playerId });
   });
 
   socket.on('playerUpdated', player => {
     machine.send({ type: 'playerUpdated', player });
   });
 
-  function _join(myPlayerId: PlayerData['id'], room: RoomData) {
-    machine.send({ type: 'joined', myPlayerId, room });
+  function _join(myPlayerId: Player['id'], game: GameData) {
+    machine.send({ type: 'joined', myPlayerId, game });
     localStorageService.playerId = myPlayerId;
-    localStorageService.roomCode = room.code;
+    localStorageService.gameCode = game.code;
   }
 
   function _leave() {
+    machine.send({ type: 'leave' });
     delete localStorageService.playerId;
-    delete localStorageService.roomCode;
+    delete localStorageService.gameCode;
   }
 
   const playersRankedByScore = computed(() => {
-    if ('room' in machine.state) {
-      return Object.values(machine.state.room.players).sort(
+    if ('game' in machine.state) {
+      return Object.values(machine.state.game.players).sort(
         (a, b) => b!.score - a!.score
-      ) as PlayerData[];
+      ) as Player[];
     } else {
       return [];
     }
@@ -77,16 +78,16 @@ export function createClientGameState(socket: SocketState) {
     },
 
     get code() {
-      if ('room' in machine.state) {
-        return machine.state.room.code;
+      if ('game' in machine.state) {
+        return machine.state.game.code;
       } else {
         return '';
       }
     },
 
     get players() {
-      if ('room' in machine.state) {
-        return machine.state.room.players;
+      if ('game' in machine.state) {
+        return machine.state.game.players;
       } else {
         return null;
       }
@@ -94,7 +95,7 @@ export function createClientGameState(socket: SocketState) {
 
     get player() {
       if ('myPlayerId' in machine.state) {
-        return machine.state.room.players[machine.state.myPlayerId]!;
+        return machine.state.game.players[machine.state.myPlayerId]!;
       } else {
         return null;
       }
@@ -145,13 +146,13 @@ export function createClientGameState(socket: SocketState) {
       return playersRankedByScore.value;
     },
 
-    rejoin(myPlayerId: PlayerData['id'], roomCode: RoomData['code']) {
+    rejoin(myPlayerId: Player['id'], gameCode: ServerGame['code']) {
       return new Promise<void>((resolve, reject) => {
         machine.send({ type: 'rejoining' });
 
-        socket.emit('rejoin', myPlayerId, roomCode, ack => {
+        socket.emit('rejoin', myPlayerId, gameCode, ack => {
           if (ack.success) {
-            _join(ack.myPlayerId, ack.room);
+            _join(ack.myPlayerId, ack.game);
             resolve();
           } else {
             machine.send({ type: 'reset' });
@@ -161,11 +162,11 @@ export function createClientGameState(socket: SocketState) {
       });
     },
 
-    host(options?: PlayerDataOptions) {
+    host(options?: PlayerOptions) {
       return new Promise<void>((resolve, reject) => {
         socket.emit('host', options, ack => {
           if (ack.success) {
-            _join(ack.myPlayerId, ack.room);
+            _join(ack.myPlayerId, ack.game);
             resolve();
           } else {
             reject();
@@ -174,11 +175,11 @@ export function createClientGameState(socket: SocketState) {
       });
     },
 
-    join(code: RoomData['code'], options?: PlayerDataOptions) {
+    join(code: ServerGame['code'], options?: PlayerOptions) {
       return new Promise<void>((resolve, reject) => {
         socket.emit('join', code, options, ack => {
           if (ack.success) {
-            _join(ack.myPlayerId, ack.room);
+            _join(ack.myPlayerId, ack.game);
             resolve();
           } else {
             reject();

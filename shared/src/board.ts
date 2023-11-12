@@ -4,13 +4,13 @@ const ALL_TROPES = Object.entries(tropes).map(
   ([id, text]) => <TropeCell>{ type: 'trope', id, text }
 );
 
-export type TropeCell = {
+type TropeCell = {
   type: 'trope';
   id: string;
   text: string;
 };
 
-export type FreeCell = {
+type FreeCell = {
   type: 'free';
 };
 
@@ -24,10 +24,6 @@ export type BoardData = {
 export function getRandomTropeCells(count: number) {
   ALL_TROPES.sort(() => Math.random() - 0.5);
   return ALL_TROPES.slice(0, count);
-}
-
-export function getRandomTropeCell() {
-  return ALL_TROPES[Math.floor(Math.random() * ALL_TROPES.length)];
 }
 
 export function createBoard(): BoardData {
@@ -65,7 +61,7 @@ export type CellPattern = {
   name: string;
 };
 
-export const PATTERNS: Record<CellPatternId, CellPattern> = {
+export const CELL_PATTERNS: Record<CellPatternId, CellPattern> = {
   all: {
     indices: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     score: 250,
@@ -124,12 +120,19 @@ export function toggleCell(board: BoardData, index: number): BoardData {
   return newBoard;
 }
 
-export function getMatchingPatternIds(
-  activeCellIndices: readonly number[]
-): CellPatternId[] {
-  return CELL_PATTERN_IDS.filter(id =>
-    PATTERNS[id].indices.every(i => activeCellIndices.includes(i))
+export function matchesPatternId(
+  selectedIndices: readonly number[],
+  patternId: CellPatternId
+): boolean {
+  return CELL_PATTERNS[patternId].indices.every(i =>
+    selectedIndices.includes(i)
   );
+}
+
+export function getMatchingPatternIds(
+  selectedIndices: readonly number[]
+): CellPatternId[] {
+  return CELL_PATTERN_IDS.filter(id => matchesPatternId(selectedIndices, id));
 }
 
 export function getResolvedCells(

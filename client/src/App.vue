@@ -10,7 +10,7 @@ import {
   provideSocketState,
 } from './composables/createSocketState';
 import router from './routes';
-import localStorageService from './services/localStorageService';
+import storage from './services/storage';
 
 const SHOW_DEBUG = import.meta.env.DEV;
 
@@ -20,8 +20,8 @@ provideSocketState(socket);
 const game = createClientGameState(socket);
 provideClientGameState(game);
 
-const storedPlayerId = localStorageService.playerId;
-const storedRoomCode = localStorageService.roomCode;
+const storedPlayerId = storage.playerId;
+const storedRoomCode = storage.gameCode;
 if (storedPlayerId && storedRoomCode) {
   game
     .rejoin(storedPlayerId, storedRoomCode)
@@ -29,8 +29,8 @@ if (storedPlayerId && storedRoomCode) {
       router.replace('/game');
     })
     .catch(e => {
-      delete localStorageService.playerId;
-      delete localStorageService.roomCode;
+      delete storage.playerId;
+      delete storage.gameCode;
     });
 }
 </script>
@@ -61,3 +61,4 @@ if (storedPlayerId && storedRoomCode) {
   padding-bottom: 1rem;
 }
 </style>
+./services/storage

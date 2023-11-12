@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useClientGameState } from '@/composables/createClientGameState';
-import { PATTERNS } from '@shared';
+import { CELL_PATTERNS } from '@shared';
 import PatternIcon from './PatternIcon.vue';
 
 const game = useClientGameState();
@@ -17,7 +17,7 @@ const game = useClientGameState();
         @click="game.sellPattern(p)"
       >
         <PatternIcon class="pattern-icon" :pattern-id="p" />
-        <span class="pattern-score">+{{ PATTERNS[p].score }}</span>
+        <span class="pattern-score">+{{ CELL_PATTERNS[p].score }}</span>
       </div>
     </div>
   </div>

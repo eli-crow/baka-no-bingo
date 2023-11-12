@@ -1,3 +1,4 @@
+import storage from '@/services/storage';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -12,6 +13,13 @@ const router = createRouter({
       path: '/game',
       name: 'Game',
       component: () => import('./game.vue'),
+      beforeEnter: (to, from, next) => {
+        if (storage.playerId && storage.gameCode) {
+          next();
+        } else {
+          next('/');
+        }
+      },
     },
     {
       path: '/host',
