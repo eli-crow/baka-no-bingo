@@ -3,6 +3,7 @@ import { computed } from 'vue';
 
 import { ba, bi, circle, ka, ng, no, o, star } from '@/components/Icon';
 import Tile from '@/components/Tile.vue';
+import TileLink from '@/components/TileLink.vue';
 import { useClientGameState } from '@/composables/createClientGameState';
 import specialThanks from '@/data/specialThanks.json';
 
@@ -28,33 +29,23 @@ const specialThanksList = computed(() => {
             <Tile color="blue" :icon="ka" />
             <Tile color="white" :icon="no" />
 
-            <Tile
-              tag="a"
+            <TileLink
               href="/host"
-              :style="{
-                'pointer-events': game.canHost ? undefined : 'none',
-              }"
-              :aria-disabled="!game.canHost"
               color="blue-light"
+              :disabled="!game.canHost"
               :icon="circle"
-              action
             >
               Host
-            </Tile>
+            </TileLink>
             <Tile color="red" :icon="star" />
-            <Tile
-              tag="a"
+            <TileLink
               href="/join"
-              :style="{
-                'pointer-events': game.canJoin ? undefined : 'none',
-              }"
-              :aria-disabled="!game.canJoin"
               color="yellow-light"
+              :disabled="!game.canJoin"
               :icon="circle"
-              action
             >
               Join
-            </Tile>
+            </TileLink>
 
             <Tile color="yellow" :icon="bi" />
             <Tile color="yellow" :icon="ng" />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AVATAR_NAMES, AvatarName } from '@shared';
 import Avatar from './Avatar.vue';
-import Tile from './Tile.vue';
+import TileButton from './TileButton.vue';
 
 const props = defineProps<{
   modelValue?: AvatarName;
@@ -12,23 +12,22 @@ const emit = defineEmits<(e: 'update:modelValue', value: string) => void>();
 
 <template>
   <div class="grid">
-    <Tile
+    <TileButton
       v-for="avatar in AVATAR_NAMES"
       :key="avatar"
       class="avatar"
       :color="props.modelValue === avatar ? 'red' : 'white'"
-      @select="emit('update:modelValue', avatar)"
+      @click="emit('update:modelValue', avatar)"
     >
       <Avatar class="avatar-image" draggable="false" :avatar="avatar" />
-    </Tile>
+    </TileButton>
   </div>
 </template>
 
 <style scoped>
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin-bottom: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
 }
 
 .avatar {

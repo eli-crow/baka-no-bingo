@@ -1,4 +1,4 @@
-import { BoardData, createBoard } from './board.js';
+import { Board, createBoard } from './board.js';
 import { getUuid } from './uuid.js';
 
 export const AVATAR_NAMES = ['ein', 'nina', 'cat', 'cal'] as const;
@@ -10,7 +10,7 @@ export type Player = {
   name: string;
   avatar: AvatarName;
   score: number;
-  board: BoardData;
+  board: Board;
 };
 
 export type PlayerOptions = {

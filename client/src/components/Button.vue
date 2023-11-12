@@ -38,7 +38,7 @@ const props = withDefaults(
   max-width: 100%;
   display: flex;
   padding: 12px 16px;
-  border-radius: var(--radius-small);
+  border-radius: var(--radius-medium);
   background: var(--bg);
   box-shadow: 0 6px 0 0 var(--bg-dark);
   color: var(--fg);
@@ -53,6 +53,8 @@ const props = withDefaults(
 }
 
 .slot-content {
+  text-align: center;
+  flex: 1 0 0;
 }
 
 .cost {

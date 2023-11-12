@@ -29,6 +29,8 @@ if (storedPlayerId && storedRoomCode) {
       router.replace('/game');
     })
     .catch(e => {
+      router.replace('/');
+
       delete storage.playerId;
       delete storage.gameCode;
     });
@@ -38,9 +40,7 @@ if (storedPlayerId && storedRoomCode) {
 <template>
   <div class="App">
     <router-view v-slot="{ Component }" class="view">
-      <transition name="wipe">
-        <component :is="Component" />
-      </transition>
+      <component :is="Component" />
     </router-view>
 
     <DebugView v-if="SHOW_DEBUG" />
@@ -61,4 +61,3 @@ if (storedPlayerId && storedRoomCode) {
   padding-bottom: 1rem;
 }
 </style>
-./services/storage

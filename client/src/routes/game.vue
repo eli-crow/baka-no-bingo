@@ -60,30 +60,28 @@ function leave() {
     <PatternSellBar v-if="game.sellablePatternIds.length" />
     <PatternLegend v-else />
 
-    <transition name="action-group">
-      <!-- <TheBuyMenu v-if="game.boughtTile" /> -->
-      <div class="action-group">
-        <ActionButton
-          class="action"
-          iconSrc="spell-replace"
-          label="Replace"
-          color="green"
-          cost="5"
-          :enabled="game.canReplace"
-        />
-        <!-- @select="game.spells.buy()" -->
+    <!-- <TheBuyMenu v-if="game.boughtTile" /> -->
+    <div class="action-group">
+      <ActionButton
+        class="action"
+        iconSrc="spell-replace"
+        label="Replace"
+        color="green"
+        cost="5"
+        :enabled="game.canReplace"
+      />
+      <!-- @select="game.spells.buy()" -->
 
-        <ActionButton
-          class="action"
-          iconSrc="spell-reset"
-          label="Reset"
-          color="red"
-          cost="10"
-          :enabled="game.canReset"
-        />
-        <!-- @select="game.spells.reset()" -->
-      </div>
-    </transition>
+      <ActionButton
+        class="action"
+        iconSrc="spell-reset"
+        label="Reset"
+        color="red"
+        cost="10"
+        :enabled="game.canReset"
+      />
+      <!-- @select="game.spells.reset()" -->
+    </div>
 
     <ModalTransition>
       <ModalPlayerRank
@@ -104,13 +102,14 @@ function leave() {
   display: flex;
   height: 80px;
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   --distance: 0;
 }
 .room-tile {
-  flex: 1 1 0;
   display: flex;
+  flex: 1 0 0;
   margin-left: -8rem;
+  min-height: 0;
 }
 .back {
   cursor: pointer;
@@ -132,7 +131,7 @@ function leave() {
   align-items: center;
 }
 .room-details {
-  margin-right: 1rem;
+  margin-right: 0.5rem;
 }
 .room-title {
   display: block;
@@ -144,9 +143,10 @@ function leave() {
   font-weight: 700;
   margin-bottom: 2px;
   opacity: 0.5;
+  min-height: 0;
 }
 .score-tile {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   margin-right: -8rem;
 }
 .room-id {
@@ -158,15 +158,18 @@ function leave() {
   line-height: 1;
 }
 .scores {
-  text-align: center;
+  text-align: right;
   display: flex;
   align-items: center;
   font: var(--font-title);
-  font-size: 2rem;
+  font-size: 1.5rem;
   line-height: 1;
+  justify-content: flex-end;
+  padding-right: 8rem;
+  padding-left: 0.5rem;
 }
 .my-score {
-  padding: 8px 12px 8px 20px;
+  padding-right: 0.75rem;
   border-right: solid 1px var(--gray-light);
 }
 .players {

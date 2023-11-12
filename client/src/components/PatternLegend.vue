@@ -32,20 +32,18 @@ import PatternIcon from './PatternIcon.vue';
   height: 3.5rem;
   justify-content: space-between;
   padding: 0 1rem;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .pattern {
   display: flex;
   align-items: center;
-}
-
-.pattern-icon + .pattern-icon {
-  margin-left: 0.5rem;
+  gap: 0.5rem;
 }
 
 .pattern-score {
-  padding-left: 0.5rem;
   font-weight: 700;
-  color: var(--color-text-light);
+  font-size: 13px;
 }
 </style>

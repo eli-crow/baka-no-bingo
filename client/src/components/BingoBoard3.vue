@@ -75,15 +75,15 @@ function measureTile(el: HTMLElement): TileMeasurement {
       >
         <Tile
           v-for="(cell, i) in props.cells"
+          tag="button"
           :ref="el => setTileRef(el as ComponentPublicInstance<typeof Tile>)"
           :key="cell.key"
-          tag="button"
           :disabled="cell.type === 'free'"
           :color="cell.selected ? 'red' : 'white'"
           :animate="cell.type !== 'free' && state.animate && cell.selected"
           :icon="cell.type === 'free' ? starIcon : undefined"
-          :style="{ zIndex: i }"
-          @select="
+          :style="{ zIndex: i + 1 }"
+          @click="
             emit('select', i);
             state.animate = true;
           "

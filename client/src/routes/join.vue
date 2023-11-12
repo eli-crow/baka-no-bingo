@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import AvatarSelector from '@/components/AvatarSelector.vue';
-import Button from '@/components/Button.vue';
+import GameCodeEditor from '@/components/GameCodeEditor.vue';
 import Icon, { x } from '@/components/Icon';
-import TextInput from '@/components/TextInput.vue';
-import Tile from '@/components/Tile.vue';
+import PlayerOptionsEditor from '@/components/PlayerOptionsEditor.vue';
+import TileButton from '@/components/TileButton.vue';
 import { useClientGameState } from '@/composables/createClientGameState';
-import { PlayerOptions, ROOM_CODE_PATTERN } from '@shared';
+import { PlayerOptions } from '@shared';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -13,59 +12,48 @@ const game = useClientGameState();
 const router = useRouter();
 
 const code = ref('');
-const options = reactive<PlayerOptions>({});
+const options = reactive<PlayerOptions>({ avatar: 'cal' });
 
 function join() {
-  game.join(code.value, options).then(() => {
-    router.push('/game');
-  });
+  game
+    .join(code.value, options)
+    .then(() => {
+      router.push('/game');
+    })
+    .catch(e => {
+      console.error(e);
+    });
 }
 </script>
 
 <template>
-  <div class="Join">
+  <div class="page">
     <h1 class="title">Join</h1>
     <router-link class="close" to="/">
       <Icon :icon="x" />
     </router-link>
-    <div class="content">
-      <Tile color="blue">
-        <form @submit.prevent="join" action="">
-          <div class="code tile tile--blue">
-            Room code:
-            <TextInput
-              maxlength="4"
-              v-model="code"
-              required
-              :pattern="ROOM_CODE_PATTERN"
-              validation-message="Room code must be 4 letters or numbers"
-            />
-          </div>
-          <div class="player-info tile tile--blue">
-            <AvatarSelector v-model="options.avatar" />
-            <label>
-              <span>Your Name: </span>
-              <TextInput type="text" v-model.lazy.trim="options.name" />
-            </label>
-          </div>
 
-          <Button type="submit" class="join tile tile--yellow">Join</Button>
-        </form>
-      </Tile>
-    </div>
+    <form class="content" @submit.prevent="join">
+      <GameCodeEditor v-model="code" />
+      <PlayerOptionsEditor v-model="options" />
+      <TileButton class="join" type="submit" color="yellow">Join</TileButton>
+    </form>
   </div>
 </template>
 
 <style scoped>
-.Join {
-  --shadow-color: var(--blue-dark);
-  background-color: var(--blue);
+.page {
+  --ambient: var(--blue);
+  --ambient-dark: var(--blue-dark);
+  background-color: var(--ambient);
   color: var(--white);
   display: grid;
   grid-template:
     'title close' 3rem
     'content content' 1fr
     / 1fr 3rem;
+  padding: 1rem;
+  gap: 1rem;
 }
 
 .title {
@@ -87,15 +75,10 @@ function join() {
 
 .content {
   grid-area: content;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.player-info {
-  padding: 1rem;
 }
 
 .join {
-  color: var(--black);
+  width: 100%;
+  margin-top: 1rem;
 }
 </style>

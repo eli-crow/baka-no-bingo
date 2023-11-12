@@ -1,7 +1,7 @@
 import {
   CELL_PATTERNS,
-  Cell,
   CellPatternId,
+  TropeCell,
   matchesPatternId,
   replaceBoardPattern,
 } from './board.js';
@@ -17,8 +17,9 @@ export type GameData = {
 
 export type ServerGameEvents = {
   playerUpdated(player: Player): void;
+  manyPlayersUpdated(players: Player[]): void;
   playerLeft(playerId: Player['id']): void;
-  playerActivatedCell(playerId: Player['id'], cell: Cell): void;
+  proposedCell(playerId: Player['id'], cell: TropeCell): void;
 };
 
 export class ServerGame {
@@ -34,7 +35,8 @@ export class ServerGame {
   } = {
     playerLeft: new Set(),
     playerUpdated: new Set(),
-    playerActivatedCell: new Set(),
+    proposedCell: new Set(),
+    manyPlayersUpdated: new Set(),
   };
 
   constructor(code: string) {
@@ -74,16 +76,39 @@ export class ServerGame {
       return;
     }
 
+    let proposedCell: TropeCell | null = null;
     const indexOfSelected = player.board.selectedIndices.indexOf(cellIndex);
     if (indexOfSelected !== -1) {
       player.board.selectedIndices.splice(indexOfSelected, 1);
     } else {
       player.board.selectedIndices.push(cellIndex);
       const cell = player.board.cells[cellIndex];
-      this.emit('playerActivatedCell', playerId, cell);
+      if (cell.type === 'trope') {
+        proposedCell = cell;
+      }
     }
 
     this.emit('playerUpdated', player);
+    if (proposedCell) {
+      this.emit('proposedCell', playerId, proposedCell);
+    }
+  }
+
+  deactivateCellForAllPlayers(cellId: TropeCell['id']) {
+    const updatedPlayers: Player[] = [];
+    for (const player of this.players.values()) {
+      const indexOfSelected = player.board.selectedIndices.indexOf(
+        player.board.cells.findIndex(
+          cell => cell.type === 'trope' && cell.id === cellId
+        )
+      );
+      if (indexOfSelected !== -1) {
+        player.board.selectedIndices.splice(indexOfSelected, 1);
+        updatedPlayers.push(player);
+      }
+    }
+
+    this.emit('manyPlayersUpdated', updatedPlayers);
   }
 
   getData(): GameData {

@@ -4,19 +4,19 @@ const ALL_TROPES = Object.entries(tropes).map(
   ([id, text]) => <TropeCell>{ type: 'trope', id, text }
 );
 
-type TropeCell = {
+export type TropeCell = {
   type: 'trope';
   id: string;
   text: string;
 };
 
-type FreeCell = {
+export type FreeCell = {
   type: 'free';
 };
 
 export type Cell = TropeCell | FreeCell;
 
-export type BoardData = {
+export type Board = {
   cells: Cell[];
   selectedIndices: number[];
 };
@@ -26,7 +26,7 @@ export function getRandomTropeCells(count: number) {
   return ALL_TROPES.slice(0, count);
 }
 
-export function createBoard(): BoardData {
+export function createBoard(): Board {
   const tropeCells = getRandomTropeCells(8);
   const freeIndex = 4;
   return {
@@ -79,10 +79,7 @@ export const CELL_PATTERNS: Record<CellPatternId, CellPattern> = {
   diagonal2: { indices: [2, 4, 6], score: 20, name: 'Kiru' },
 };
 
-export function replaceBoardPattern(
-  board: BoardData,
-  pattern: CellPattern
-): BoardData {
+export function replaceBoardPattern(board: Board, pattern: CellPattern): Board {
   const newBoard = structuredClone(board);
 
   const replacements = getRandomTropeCells(pattern.indices.length);

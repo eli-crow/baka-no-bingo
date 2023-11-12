@@ -50,6 +50,12 @@ export function createClientGameState(socket: SocketState) {
     machine.send({ type: 'playerUpdated', player });
   });
 
+  socket.on('manyPlayersUpdated', players => {
+    for (const player of players) {
+      machine.send({ type: 'playerUpdated', player });
+    }
+  });
+
   function _join(myPlayerId: Player['id'], game: GameData) {
     machine.send({ type: 'joined', myPlayerId, game });
     localStorageService.playerId = myPlayerId;

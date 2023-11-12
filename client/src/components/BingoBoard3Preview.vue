@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { BoardData, getResolvedCells } from '@shared';
+import { Board, getResolvedCells } from '@shared';
 import { computed } from 'vue';
 
 const props = defineProps<{
-  board: BoardData;
+  board: Board;
 }>();
 
 const cells = computed(() =>

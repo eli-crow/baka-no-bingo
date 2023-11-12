@@ -16,7 +16,7 @@
   --green-dark: hsl(140, 100%, 26%);
   --green-light: hsl(146, 90%, 44%);
   --yellow: hsl(49, 100%, 50%);
-  --yellow-dark: hsl(27, 97%, 48%);
+  --yellow-dark: hsl(36, 97%, 48%);
   --yellow-light: hsl(54, 100%, 78%);
   --purple: hsl(269, 100%, 59%);
   --purple-dark: hsl(275, 83%, 35%);
@@ -114,6 +114,7 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+p {
   margin: 0;
 }

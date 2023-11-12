@@ -52,13 +52,13 @@ const patternLines = computed(() => PATTERN_PATHS[props.patternId]);
   --active-color: var(--color-text-dark);
   overflow: visible;
   display: inline-block;
-  width: 1.33333rem;
-  height: 1.33333rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .line {
   fill: none;
-  stroke-width: 2px;
+  stroke-width: 1px;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke: var(--grid-color);
@@ -66,12 +66,12 @@ const patternLines = computed(() => PATTERN_PATHS[props.patternId]);
 }
 
 .grid {
-  opacity: 0.08;
+  opacity: 0.25;
 }
 
 .line-active {
   fill: none;
-  stroke-width: 3.5px;
+  stroke-width: 2.5px;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke: var(--active-color);

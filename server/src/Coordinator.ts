@@ -34,6 +34,9 @@ export default class Coordinator {
     game.on('playerUpdated', player => {
       this.server.to(game.code).emit('playerUpdated', player);
     });
+    game.on('manyPlayersUpdated', players => {
+      this.server.to(game.code).emit('manyPlayersUpdated', players);
+    });
     game.on('playerLeft', playerId => {
       this.server.to(game.code).emit('playerLeft', playerId);
       if (game.isEmpty) {
@@ -45,8 +48,8 @@ export default class Coordinator {
         });
       }
     });
-    game.on('playerActivatedCell', (playerId, cell) => {
-      this.server.to(game.code).emit('playerActivatedCell', playerId, cell);
+    game.on('proposedCell', (playerId, cell) => {
+      this.server.to(game.code).emit('proposedCell', playerId, cell);
     });
     this.games.set(game.code.toLowerCase(), game);
     return game;
@@ -119,6 +122,14 @@ export default class Coordinator {
       });
     });
 
+    socket.on('disconnect', () => {
+      try {
+        const { playerId, game } = this.tryGetInfo(socket.id);
+        game.removePlayer(playerId);
+        this.socketIdToPlayerInfo.delete(socket.id);
+      } catch (e) {}
+    });
+
     socket.on('leave', ack => {
       try {
         const { playerId, game } = this.tryGetInfo(socket.id);
@@ -153,6 +164,12 @@ export default class Coordinator {
       } catch (e) {
         ack?.({ success: false });
       }
+    });
+
+    socket.on('denyProposedCell', cellId => {
+      const { game } = this.tryGetInfo(socket.id);
+      game.deactivateCellForAllPlayers(cellId);
+      this.server.in(game.code).emit('proposedCellDenied', cellId);
     });
   }
 

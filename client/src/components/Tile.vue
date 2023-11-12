@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Icon, { IconDefinition } from './Icon';
 
-type TileColor =
+export type TileColor =
   | 'white'
   | 'yellow'
   | 'blue-light'
@@ -10,25 +10,18 @@ type TileColor =
   | 'red'
   | 'purple';
 
-const props = withDefaults(
-  defineProps<{
-    icon?: IconDefinition;
-    color?: TileColor;
-    animate?: boolean;
-    tag?: string;
-    action?: boolean;
-  }>(),
-  {
-    color: 'white',
-    animate: false,
-    tag: 'div',
-    action: false,
-  }
-);
+export type TileProps = {
+  icon?: IconDefinition;
+  color?: TileColor;
+  animate?: boolean;
+  tag?: string;
+};
 
-const emit = defineEmits<{
-  (e: 'select'): void;
-}>();
+const props = withDefaults(defineProps<TileProps>(), {
+  color: 'white',
+  animate: false,
+  tag: 'div',
+});
 
 const slots = defineSlots<{
   default?(): any;
@@ -36,13 +29,12 @@ const slots = defineSlots<{
 </script>
 
 <template>
-  <component :is="tag" class="tile" @click="emit('select')" draggable="false">
+  <component :is="tag" class="tile" draggable="false">
     <div class="shadow" />
     <div
       class="tile-inner"
       :data-animate="props.animate"
       :data-color="props.color"
-      :data-action="props.action"
     >
       <Icon
         v-if="props.icon"
@@ -60,7 +52,7 @@ const slots = defineSlots<{
 
 <style scoped>
 .tile {
-  --tile-padding-inner: var(--tile-padding, 6px);
+  --tile-padding-inner: var(--tile-padding, 4px 6px 6px);
   --border-scale-inner: var(--border-scale, 0.95);
   --distance: 0.25rem;
   position: relative;
@@ -69,6 +61,7 @@ const slots = defineSlots<{
   text-decoration: none;
   padding: 0;
   user-select: none;
+  min-width: 0;
 }
 
 .tile * {
@@ -110,12 +103,13 @@ const slots = defineSlots<{
   transform: translateY(calc(var(--distance) * -1));
   transition: 0.35s ease;
   transition-property: transform;
+  min-width: 0;
 }
 
 .shadow {
   content: '';
   display: block;
-  background: #f3961c;
+  background: var(--ambient-dark);
   border-radius: calc(var(--border-scale-inner) * 36px);
   left: 0;
   top: 0;
@@ -128,16 +122,6 @@ const slots = defineSlots<{
   transition: 0.35s ease;
   transition-property: transform;
   pointer-events: none;
-}
-
-.tile-inner[data-action='true'] {
-  position: relative;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  color: black;
-  text-decoration: none;
 }
 
 /*
@@ -157,31 +141,44 @@ const slots = defineSlots<{
 
 .tile-inner[data-color='yellow'] {
   --circle: var(--yellow);
+  --ambient: var(--yellow);
+  --ambient-dark: var(--yellow-dark);
   border-image-source: url('@/assets/images/tile-yellow.svg');
 }
 
 .tile-inner[data-color='white'] {
   --circle: var(--white);
+  --ambient: var(--white);
+  --ambient-dark: var(--gray-light);
   border-image-source: url('@/assets/images/tile-white.svg');
 }
 
 .tile-inner[data-color='blue-light'] {
   --circle: var(--blue);
+  --ambient: var(--blue-light);
+  --ambient-dark: var(--blue);
+  color: white;
   border-image-source: url('@/assets/images/tile-light-blue.svg');
 }
 
 .tile-inner[data-color='yellow-light'] {
   --circle: var(--yellow);
+  --ambient: var(--yellow-light);
+  --ambient-dark: var(--yellow);
   border-image-source: url('@/assets/images/tile-light-yellow.svg');
 }
 
 .tile-inner[data-color='blue'] {
   --circle: var(--blue);
+  --ambient: var(--blue);
+  --ambient-dark: var(--blue-dark);
   border-image-source: url('@/assets/images/tile-blue.svg');
 }
 
 .tile-inner[data-color='red'] {
   --circle: var(--red);
+  --ambient: var(--red);
+  --ambient-dark: var(--red-dark);
   color: white;
   border-image-source: url('@/assets/images/tile-red.svg');
 }
@@ -192,6 +189,8 @@ const slots = defineSlots<{
 
 .tile-inner[data-color='purple'] {
   --circle: var(--purple);
+  --ambient: var(--purple);
+  --ambient-dark: var(--purple-dark);
   color: white;
   border-image-source: url('@/assets/images/tile-purple.svg');
 }

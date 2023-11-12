@@ -1,12 +1,14 @@
 import { GameData } from './ServerGame';
-import { Cell, CellPatternId } from './board';
+import { CellPatternId, TropeCell } from './board';
 import { Player, PlayerOptions } from './player';
 
 export interface ServerToClientEvents {
   playerJoined(otherPlayerData: Player): void;
   playerLeft(playerId: string): void;
   playerUpdated(otherPlayerData: Player): void;
-  playerActivatedCell(playerId: string, cell: Cell): void;
+  manyPlayersUpdated(players: Player[]): void;
+  proposedCell(playerId: string, cell: TropeCell): void;
+  proposedCellDenied(cellId: TropeCell['id']): void;
 }
 
 export interface ClientToServerEvents {
@@ -53,4 +55,6 @@ export interface ClientToServerEvents {
     index: number,
     ack?: (response: { success: boolean }) => void
   ): void;
+
+  denyProposedCell(cellId: TropeCell['id']): void;
 }
