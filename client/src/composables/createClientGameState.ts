@@ -146,6 +146,14 @@ export function createClientGameState(socket: SocketState) {
       return playersRankedByScore.value;
     },
 
+    get myPlayerId() {
+      if ('myPlayerId' in machine.state) {
+        return machine.state.myPlayerId;
+      } else {
+        return null;
+      }
+    },
+
     rejoin(myPlayerId: Player['id'], gameCode: ServerGame['code']) {
       return new Promise<void>((resolve, reject) => {
         machine.send({ type: 'rejoining' });

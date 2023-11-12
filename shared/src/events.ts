@@ -1,11 +1,12 @@
 import { GameData } from './ServerGame';
-import { CellPatternId } from './board';
+import { Cell, CellPatternId } from './board';
 import { Player, PlayerOptions } from './player';
 
 export interface ServerToClientEvents {
   playerJoined(otherPlayerData: Player): void;
   playerLeft(playerId: string): void;
   playerUpdated(otherPlayerData: Player): void;
+  playerActivatedCell(playerId: string, cell: Cell): void;
 }
 
 export interface ClientToServerEvents {

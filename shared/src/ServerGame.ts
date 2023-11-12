@@ -1,9 +1,9 @@
 import {
   CELL_PATTERNS,
+  Cell,
   CellPatternId,
   matchesPatternId,
   replaceBoardPattern,
-  toggleCell,
 } from './board.js';
 import { ActionNotAllowedError, PlayerNotFoundError } from './errors.js';
 import { Player } from './player.js';
@@ -18,6 +18,7 @@ export type GameData = {
 export type ServerGameEvents = {
   playerUpdated(player: Player): void;
   playerLeft(playerId: Player['id']): void;
+  playerActivatedCell(playerId: Player['id'], cell: Cell): void;
 };
 
 export class ServerGame {
@@ -33,6 +34,7 @@ export class ServerGame {
   } = {
     playerLeft: new Set(),
     playerUpdated: new Set(),
+    playerActivatedCell: new Set(),
   };
 
   constructor(code: string) {
@@ -67,7 +69,20 @@ export class ServerGame {
 
   toggleCell(playerId: string, cellIndex: number) {
     const player = this.tryGetPlayer(playerId);
-    player.board = toggleCell(player.board, cellIndex);
+
+    if (cellIndex === 4) {
+      return;
+    }
+
+    const indexOfSelected = player.board.selectedIndices.indexOf(cellIndex);
+    if (indexOfSelected !== -1) {
+      player.board.selectedIndices.splice(indexOfSelected, 1);
+    } else {
+      player.board.selectedIndices.push(cellIndex);
+      const cell = player.board.cells[cellIndex];
+      this.emit('playerActivatedCell', playerId, cell);
+    }
+
     this.emit('playerUpdated', player);
   }
 

@@ -45,6 +45,9 @@ export default class Coordinator {
         });
       }
     });
+    game.on('playerActivatedCell', (playerId, cell) => {
+      this.server.to(game.code).emit('playerActivatedCell', playerId, cell);
+    });
     this.games.set(game.code.toLowerCase(), game);
     return game;
   }

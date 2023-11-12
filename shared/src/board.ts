@@ -100,26 +100,6 @@ export function replaceBoardPattern(
 
   return newBoard;
 }
-
-export function toggleCell(board: BoardData, index: number): BoardData {
-  const freeIndex = 4;
-  if (index === freeIndex) {
-    return board;
-  }
-
-  const newBoard = structuredClone(board);
-  const selected = newBoard.selectedIndices.includes(index);
-  if (selected) {
-    newBoard.selectedIndices = newBoard.selectedIndices.filter(
-      i => i !== index
-    );
-  } else {
-    newBoard.selectedIndices.push(index);
-  }
-
-  return newBoard;
-}
-
 export function matchesPatternId(
   selectedIndices: readonly number[],
   patternId: CellPatternId
@@ -142,11 +122,11 @@ export function getResolvedCells(
   return cells.map((cell, index) => ({
     ...cell,
     selected: selectedIndices.includes(index),
-    key: index,
+    key: cell.type === 'trope' ? `index_${cell.id}` : index.toString(),
   }));
 }
 
 export type ResolvedCell = Cell & {
   selected: boolean;
-  key: number;
+  key: any;
 };

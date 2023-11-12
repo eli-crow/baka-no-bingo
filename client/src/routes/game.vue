@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ActionButton from '@/components/ActionButton.vue';
+import ActivatedCell from '@/components/ActivatedCell.vue';
 import BingoBoard3 from '@/components/BingoBoard3.vue';
 import Icon, { chevronLeft, listOl } from '@/components/Icon';
 import ModalPlayerRank from '@/components/ModalPlayerRank.vue';
@@ -90,6 +91,8 @@ function leave() {
         @close="playerRankShown = false"
       />
     </ModalTransition>
+
+    <ActivatedCell />
   </div>
 </template>
 
