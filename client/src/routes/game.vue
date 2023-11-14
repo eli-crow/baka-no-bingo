@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import ActionButton from '@/components/ActionButton.vue';
-import ActivatedCell from '@/components/ActivatedCell.vue';
 import BingoBoard3 from '@/components/BingoBoard3.vue';
 import Icon, { chevronLeft, listOl } from '@/components/Icon';
 import ModalPlayerRank from '@/components/ModalPlayerRank.vue';
@@ -8,6 +6,7 @@ import ModalTransition from '@/components/ModalTransition.vue';
 import PatternLegend from '@/components/PatternLegend.vue';
 import PatternSellBar from '@/components/PatternSellBar.vue';
 import PlayerPresence from '@/components/PlayerPresence.vue';
+import ProposedCell from '@/components/ProposedCell.vue';
 import Tile from '@/components/Tile.vue';
 import { useClientGameState } from '@/composables/createClientGameState';
 import router from '@/routes';
@@ -35,7 +34,6 @@ function leave() {
             <span class="room-title">Room</span>
             <span class="room-id">{{ game.code }}</span>
           </p>
-          <PlayerPresence />
         </div>
       </Tile>
 
@@ -60,28 +58,7 @@ function leave() {
     <PatternSellBar v-if="game.sellablePatternIds.length" />
     <PatternLegend v-else />
 
-    <!-- <TheBuyMenu v-if="game.boughtTile" /> -->
-    <div class="action-group">
-      <ActionButton
-        class="action"
-        iconSrc="spell-replace"
-        label="Replace"
-        color="green"
-        cost="5"
-        :enabled="game.canReplace"
-      />
-      <!-- @select="game.spells.buy()" -->
-
-      <ActionButton
-        class="action"
-        iconSrc="spell-reset"
-        label="Reset"
-        color="red"
-        cost="10"
-        :enabled="game.canReset"
-      />
-      <!-- @select="game.spells.reset()" -->
-    </div>
+    <PlayerPresence />
 
     <ModalTransition>
       <ModalPlayerRank
@@ -90,7 +67,7 @@ function leave() {
       />
     </ModalTransition>
 
-    <ActivatedCell />
+    <ProposedCell />
   </div>
 </template>
 
@@ -109,7 +86,6 @@ function leave() {
   display: flex;
   flex: 1 0 0;
   margin-left: -8rem;
-  min-height: 0;
 }
 .back {
   cursor: pointer;
@@ -146,7 +122,7 @@ function leave() {
   min-height: 0;
 }
 .score-tile {
-  flex: 0 1 auto;
+  flex: 1 0 0;
   margin-right: -8rem;
 }
 .room-id {

@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import { useClientGameState } from './createClientGameState';
 import { useSocketState } from './createSocketState';
 
-const SHOW_FOR_DURATION_MS = 15_000;
+const SHOW_CELL_DURATION_MS = 15_000;
+const SHOW_BAKA_DURATION_MS = 3_000;
 
 type ProposedCellInfo = {
   text: string;
@@ -12,24 +13,28 @@ type ProposedCellInfo = {
   board: Board;
 };
 
+export type BakaBubble = { x: number; y: number; rotation: string };
+
 export function createProposedCellState() {
   const socket = useSocketState();
   const game = useClientGameState();
 
   const info = ref<ProposedCellInfo | null>(null);
-  let timeout: number | null = null;
+  const bakaPosition = ref<BakaBubble | null>(null);
+  let proposedCellTimeout: number | null = null;
+  let bakaTimeout: number | null = null;
 
   function hideCell() {
-    if (timeout) {
-      clearTimeout(timeout);
+    if (proposedCellTimeout) {
+      clearTimeout(proposedCellTimeout);
     }
     info.value = null;
-    timeout = null;
+    proposedCellTimeout = null;
   }
 
   function showCell(playerId: Player['id'], cell: TropeCell) {
-    if (timeout) {
-      clearTimeout(timeout);
+    if (proposedCellTimeout) {
+      clearTimeout(proposedCellTimeout);
     }
 
     const player = game.players?.[playerId];
@@ -45,10 +50,25 @@ export function createProposedCellState() {
       info.value = null;
     }
 
-    timeout = setTimeout(() => {
+    proposedCellTimeout = setTimeout(() => {
       info.value = null;
-      timeout = null;
-    }, SHOW_FOR_DURATION_MS);
+      proposedCellTimeout = null;
+    }, SHOW_CELL_DURATION_MS);
+  }
+
+  function showBaka() {
+    if (bakaTimeout) {
+      clearTimeout(bakaTimeout);
+    }
+    bakaPosition.value = {
+      x: Math.random(),
+      y: Math.random(),
+      rotation: `${Math.round(-15 + Math.random() * 30)}deg`,
+    };
+    bakaTimeout = setTimeout(() => {
+      bakaPosition.value = null;
+      bakaTimeout = null;
+    }, SHOW_BAKA_DURATION_MS);
   }
 
   socket.on('proposedCell', (playerId, cell) => {
@@ -59,22 +79,24 @@ export function createProposedCellState() {
   });
 
   socket.on('proposedCellDenied', cellId => {
-    console.log('denied', cellId, info.value?.cellId);
     if (info.value?.cellId === cellId) {
       hideCell();
     }
 
-    // if the current player has it, show an alert saying "Baka!"
-    if (
-      game.player?.board.cells.some(c => c.type === 'trope' && c.id === cellId)
-    ) {
-      alert('Baka!');
+    const isOtherPlayersCell = game.player?.board.cells.some(
+      c => c.type === 'trope' && c.id === cellId
+    );
+    if (isOtherPlayersCell) {
+      showBaka();
     }
   });
 
   return {
     get info() {
       return info.value;
+    },
+    get baka() {
+      return bakaPosition.value;
     },
     accept() {
       hideCell();

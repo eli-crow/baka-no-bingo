@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { createProposedCellState } from '@/composables/createActivatedCellState';
+import {
+  BakaBubble,
+  createProposedCellState,
+} from '@/composables/createProposedCellState';
 import { ref, watch } from 'vue';
 import Avatar from './Avatar.vue';
 import BingoBoard3Preview from './BingoBoard3Preview.vue';
@@ -8,16 +11,23 @@ import Tile from './Tile.vue';
 
 const state = createProposedCellState();
 
-const localState = ref(state.info);
+const info = ref(state.info);
+const baka = ref<BakaBubble | null>(null);
 
 watch(
   () => state.info,
-  (info, old) => {
-    // if ((info && old && info.key === old.key) || info === old) {
-    //   return;
-    // }
+  value => {
     document.startViewTransition(() => {
-      localState.value = info;
+      info.value = value;
+    });
+  }
+);
+
+watch(
+  () => state.baka,
+  value => {
+    document.startViewTransition(() => {
+      baka.value = value;
     });
   }
 );
@@ -25,16 +35,28 @@ watch(
 
 <template>
   <Teleport to="body">
-    <div class="ActivatedCell" v-if="localState">
+    <div class="ProposedCell" v-if="info">
       <div class="cell">
-        <Tile class="tile">{{ localState.text }}</Tile>
-        <Avatar class="avatar" :avatar="localState.avatar" />
-        <BingoBoard3Preview class="board" :board="localState.board" />
+        <Tile class="tile">{{ info.text }}</Tile>
+        <Avatar class="avatar" :avatar="info.avatar" />
+        <BingoBoard3Preview class="board" :board="info.board" />
       </div>
       <div class="buttons">
         <Button color="green" @click="state.accept">👍</Button>
         <Button color="red" @click="state.deny">👎</Button>
       </div>
+    </div>
+
+    <div
+      v-if="baka"
+      class="baka"
+      :style="{
+        '--x': baka.x,
+        '--y': baka.y,
+        '--rotation': baka.rotation,
+      }"
+    >
+      <img src="@/assets/images/baka.svg" alt="Baka!" class="baka-image" />
     </div>
   </Teleport>
 </template>
@@ -62,10 +84,37 @@ watch(
     transform: translateY(100%);
   }
 }
+
+::view-transition-old(baka) {
+  animation: baka-old 0.25s both var(--spring-easing);
+}
+::view-transition-new(baka) {
+  animation: baka-new 0.35s both var(--spring-easing);
+}
+@keyframes baka-old {
+  from {
+    transform: none;
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+}
+@keyframes baka-new {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
 </style>
 
 <style scoped>
-.ActivatedCell {
+.ProposedCell {
   position: fixed;
   padding: 1rem 1rem 1.5rem;
   bottom: 0;
@@ -116,5 +165,21 @@ watch(
 
 .buttons > * {
   flex: 1 0 0;
+}
+
+.baka {
+  position: fixed;
+  left: calc(100vw * (0.1 + var(--x) * 0.8) - 5rem);
+  top: calc(100vh * (0.1 + var(--y) * 0.8) - 3rem);
+  z-index: 1001;
+  pointer-events: none;
+  view-transition-name: baka;
+}
+
+.baka-image {
+  transform-origin: center;
+  transform: rotate(var(--rotation));
+  height: 10rem;
+  width: auto;
 }
 </style>

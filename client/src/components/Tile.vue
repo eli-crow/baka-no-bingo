@@ -157,7 +157,6 @@ const slots = defineSlots<{
   --circle: var(--blue);
   --ambient: var(--blue-light);
   --ambient-dark: var(--blue);
-  color: white;
   border-image-source: url('@/assets/images/tile-light-blue.svg');
 }
 

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { PlayerOptions } from '@shared';
-import { defineProps } from 'vue';
 import AvatarSelector from './AvatarSelector.vue';
 import TextInput from './TextInput.vue';
 import Tile from './Tile.vue';

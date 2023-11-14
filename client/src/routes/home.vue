@@ -32,6 +32,7 @@ const specialThanksList = computed(() => {
             <TileLink
               href="/host"
               color="blue-light"
+              class="button"
               :disabled="!game.canHost"
               :icon="circle"
             >
@@ -41,6 +42,7 @@ const specialThanksList = computed(() => {
             <TileLink
               href="/join"
               color="yellow-light"
+              class="button"
               :disabled="!game.canJoin"
               :icon="circle"
             >
@@ -80,10 +82,10 @@ const specialThanksList = computed(() => {
 
 .title {
   font: var(--font-title);
-  font-size: 5.5rem;
+  font-size: 5rem;
   letter-spacing: -0.05em;
   line-height: 0.9;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   margin-left: -0.045em;
   font-weight: 900;
 }
@@ -94,7 +96,7 @@ const specialThanksList = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: calc(var(--border-scale) * 14.88px);
+  padding-bottom: calc(var(--border-scale) * 14.88px + 1rem);
 }
 
 .tile-group-aspect-ratio {
@@ -150,6 +152,18 @@ button.tile::after {
   pointer-events: none;
   /* HACK: you can do better than this */
   mix-blend-mode: darken;
+}
+
+:global(.button *) {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: black;
+}
+
+.credits {
+  position: relative;
+  z-index: 1;
 }
 
 .byline {

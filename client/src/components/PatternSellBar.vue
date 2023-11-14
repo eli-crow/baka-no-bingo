@@ -31,6 +31,7 @@ const game = useClientGameState();
   font: var(--font-title);
   padding-left: 1rem;
   height: 3.5rem;
+  overflow-x: auto;
 }
 
 .title {
@@ -42,7 +43,7 @@ const game = useClientGameState();
 
 .pattern-group {
   display: flex;
-  overflow-x: hidden;
+
   flex: 1 0 0;
 }
 

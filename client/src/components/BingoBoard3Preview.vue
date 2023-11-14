@@ -31,13 +31,15 @@ const cells = computed(() =>
   position: relative;
   background-color: var(--black);
   border: solid 1px var(--black);
-  border-radius: 3px;
+  border-radius: 4px;
+  box-shadow: 0.25rem 0.25rem 0 var(--ambient-dark);
 }
 
 .cell {
-  border: solid 1px var(--black);
   background: white;
+  border: solid 0.5px var(--black);
   border-radius: 3px;
+  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.2);
 }
 
 .cell[data-selected='true'] {
