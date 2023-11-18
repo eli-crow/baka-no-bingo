@@ -2,8 +2,7 @@
   "name": "baka-no-bingo",
   "private": true,
   "scripts": {
-    "prettier": "prettier --write **/*.{js,ts,vue,json}",
-    "download-db": "curl -s https://raw.githubusercontent.com/manami-project/anime-offline-database/master/anime-offline-database-minified.json -o data.json"
+    "prettier": "prettier --write **/*.{js,ts,vue,json,html}"
   },
   "workspaces": [
     "server",
@@ -14,6 +13,7 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "eslint": "^8.54.0",
+    "eslint-plugin-import": "^2.29.0",
     "prettier": "^3.0.3"
   }
 }

@@ -31,6 +31,11 @@ const router = createRouter({
       name: 'Join',
       component: () => import('./join.vue'),
     },
+    {
+      path: '/anime',
+      name: 'Anime',
+      component: () => import('./anime.vue'),
+    },
   ],
 });
 

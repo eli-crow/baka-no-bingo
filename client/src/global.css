@@ -126,3 +126,29 @@ h6,
 p {
   margin: 0;
 }
+
+.springy-enter-active {
+  animation: springy-in 0.5s var(--spring-easing);
+}
+.springy-leave-active {
+  transition: opacity 0.5s var(--spring-easing);
+  position: absolute;
+}
+.springy-enter {
+  transform: scale(0);
+}
+.springy-leave-to {
+  opacity: 0;
+}
+.springy-move {
+  transition: transform 0.5s var(--spring-easing);
+}
+
+@keyframes springy-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

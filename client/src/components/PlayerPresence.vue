@@ -12,7 +12,7 @@ const game = useClientGameState();
 </script>
 
 <template>
-  <TransitionGroup tag="ol" class="list" name="player">
+  <TransitionGroup tag="ol" class="list" name="springy">
     <li
       class="item"
       v-for="player in game.playersRankedByScore"
@@ -45,13 +45,16 @@ const game = useClientGameState();
 .list {
   list-style-type: none;
   padding: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+  grid-template-rows: 1fr;
+  grid-auto-flow: column;
   padding: 0 1rem;
+  overflow-x: auto;
 }
 
 .item {
   position: relative;
-  width: 7rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -66,31 +69,6 @@ const game = useClientGameState();
 
 .name {
   text-align: center;
-}
-
-.player-enter-active {
-  animation: pop-in 0.5s var(--spring-easing);
-}
-.player-leave-active {
-  transition: opacity 0.5s var(--spring-easing);
-}
-.player-enter {
-  transform: scale(0);
-}
-.player-leave-to {
-  opacity: 0;
-}
-.player-move {
-  transition: transform 0.5s var(--spring-easing);
-}
-
-@keyframes pop-in {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
 }
 
 .avatar {

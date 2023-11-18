@@ -1,0 +1,20 @@
+{
+  "env": {
+    "node": true
+  },
+  "extends": ["../.eslintrc.json"],
+  "plugins": ["import"],
+  "rules": {
+    "import/extensions": [
+      "error",
+      "always",
+      {
+        "js": "always",
+        "json": "always",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  }
+}
