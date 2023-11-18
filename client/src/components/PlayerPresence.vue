@@ -13,24 +13,31 @@ const game = useClientGameState();
 
 <template>
   <TransitionGroup tag="ol" class="list" name="player">
-    <Tile
-      is="li"
+    <li
+      class="item"
       v-for="player in game.playersRankedByScore"
       :key="player.id"
-      :color="player.id === game.myPlayerId ? 'blue-light' : 'white'"
-      @click="emit('select', player.id)"
     >
-      <div class="player">
-        <Avatar class="avatar" :avatar="player.avatar" />
+      <Tile
+        :color="player.id === game.myPlayerId ? 'blue-light' : 'white'"
+        @click="emit('select', player.id)"
+      >
+        <div class="player-tile">
+          <Avatar class="avatar" :avatar="player.avatar" />
 
-        <div v-if="player.id === game.myPlayerId" class="corner me">Me</div>
-        <BingoBoard3Preview v-else class="corner" :board="player.board" />
+          <div v-if="player.id === game.myPlayerId" class="corner me">Me</div>
+          <BingoBoard3Preview v-else class="corner" :board="player.board" />
 
-        <span class="score">
-          {{ player.score }}
-        </span>
-      </div>
-    </Tile>
+          <span class="score">
+            {{ player.score }}
+          </span>
+        </div>
+      </Tile>
+
+      <span class="name">
+        {{ player.name }}
+      </span>
+    </li>
   </TransitionGroup>
 </template>
 
@@ -42,11 +49,23 @@ const game = useClientGameState();
   padding: 0 1rem;
 }
 
-.player {
+.item {
+  position: relative;
+  width: 7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.player-tile {
   padding: 0.5rem 0.5rem 1.25rem;
   height: 8rem;
-  width: 6rem;
+  width: 100%;
   position: relative;
+}
+
+.name {
+  text-align: center;
 }
 
 .player-enter-active {
