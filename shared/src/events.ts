@@ -1,6 +1,7 @@
-import { GameData } from './ServerGame';
-import { CellPatternId, TropeCell } from './board';
-import { Player, PlayerOptions } from './player';
+import { TropeCell } from './Cell.js';
+import { CellPatternId } from './CellPattern.js';
+import { Player, PlayerOptions } from './Player.js';
+import { GameData } from './ServerGame.js';
 
 export interface ServerToClientEvents {
   playerJoined(otherPlayerData: Player): void;

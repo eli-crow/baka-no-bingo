@@ -2,6 +2,7 @@
 import { useClientGameState } from '@/composables/createClientGameState';
 import Avatar from './Avatar.vue';
 import BingoBoard3Preview from './BingoBoard3Preview.vue';
+import Tile from './Tile.vue';
 
 const emit = defineEmits<{
   (e: 'select', id: string): void;
@@ -11,23 +12,30 @@ const game = useClientGameState();
 </script>
 
 <template>
-  <ol class="player-group">
-    <li
+  <TransitionGroup tag="ol" class="list" name="player">
+    <Tile
+      is="li"
       v-for="player in game.playersRankedByScore"
       :key="player.id"
-      class="player"
+      :color="player.id === game.myPlayerId ? 'blue-light' : 'white'"
       @click="emit('select', player.id)"
     >
-      <Avatar class="avatar" :avatar="player.avatar" />
+      <div class="player">
+        <Avatar class="avatar" :avatar="player.avatar" />
 
-      <div v-if="player.id === game.myPlayerId" class="corner me">Me</div>
-      <BingoBoard3Preview v-else class="corner" :board="player.board" />
-    </li>
-  </ol>
+        <div v-if="player.id === game.myPlayerId" class="corner me">Me</div>
+        <BingoBoard3Preview v-else class="corner" :board="player.board" />
+
+        <span class="score">
+          {{ player.score }}
+        </span>
+      </div>
+    </Tile>
+  </TransitionGroup>
 </template>
 
 <style scoped>
-.player-group {
+.list {
   list-style-type: none;
   padding: 0;
   display: flex;
@@ -35,26 +43,63 @@ const game = useClientGameState();
 }
 
 .player {
+  padding: 0.5rem 0.5rem 1.25rem;
+  height: 8rem;
+  width: 6rem;
   position: relative;
 }
 
+.player-enter-active {
+  animation: pop-in 0.5s var(--spring-easing);
+}
+.player-leave-active {
+  transition: opacity 0.5s var(--spring-easing);
+}
+.player-enter {
+  transform: scale(0);
+}
+.player-leave-to {
+  opacity: 0;
+}
+.player-move {
+  transition: transform 0.5s var(--spring-easing);
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .avatar {
-  height: 5rem;
-  width: 5rem;
+  height: calc(100% - 1rem);
+  width: 100%;
+  top: 0;
+  left: 0;
+  object-fit: contain;
+  object-position: center;
 }
 
 .corner {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 0.25rem;
+  right: 0.25rem;
 }
 
 .me {
-  background-color: var(--red);
+  background-color: var(--blue);
   color: var(--white);
   padding: 0.25rem 0.5rem;
   border-radius: 99999px;
-  box-shadow: 0.25rem 0.25rem 0 var(--ambient-dark);
-  border: solid 1.5px var(--black);
+}
+
+.score {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 0.25rem;
+  font-weight: 600;
 }
 </style>

@@ -19,65 +19,86 @@ const specialThanksList = computed(() => {
 
 <template>
   <div class="HomePage">
-    <div class="width">
-      <h1 class="title">Baka no Bingo</h1>
+    <header class="header">
+      <h1 class="title">Baka&nbsp;no Bingo</h1>
+      <p class="subtitle">Dumb bingo for the reluctant otaku.</p>
+    </header>
 
-      <div class="tile-group-container">
-        <div class="tile-group-aspect-ratio">
-          <div class="tile-group">
-            <Tile color="blue" :icon="ba" />
-            <Tile color="blue" :icon="ka" />
-            <Tile color="white" :icon="no" />
+    <div class="tile-group-container">
+      <div class="tile-group-aspect-ratio">
+        <div class="tile-group">
+          <Tile color="blue" :icon="ba" />
+          <Tile color="blue" :icon="ka" />
+          <Tile color="white" :icon="no" />
 
-            <TileLink
-              href="/host"
-              color="blue-light"
-              class="button"
-              :disabled="!game.canHost"
-              :icon="circle"
-            >
-              Host
-            </TileLink>
-            <Tile color="red" :icon="star" />
-            <TileLink
-              href="/join"
-              color="yellow-light"
-              class="button"
-              :disabled="!game.canJoin"
-              :icon="circle"
-            >
-              Join
-            </TileLink>
+          <TileLink
+            href="/host"
+            color="blue-light"
+            class="button"
+            :disabled="!game.canHost"
+            :icon="circle"
+          >
+            Host
+          </TileLink>
+          <Tile color="red" :icon="star" />
+          <TileLink
+            href="/join"
+            color="yellow-light"
+            class="button"
+            :disabled="!game.canJoin"
+            :icon="circle"
+          >
+            Join
+          </TileLink>
 
-            <Tile color="yellow" :icon="bi" />
-            <Tile color="yellow" :icon="ng" />
-            <Tile color="yellow" :icon="o" />
-          </div>
+          <Tile color="yellow" :icon="bi" />
+          <Tile color="yellow" :icon="ng" />
+          <Tile color="yellow" :icon="o" />
         </div>
       </div>
+    </div>
 
-      <div class="credits">
-        <p class="byline">A game by Eli Crow</p>
-        <p class="special-thanks">
-          Special thanks to: {{ specialThanksList }}.
-        </p>
-      </div>
+    <div class="credits">
+      <p class="byline">A game by Eli Crow</p>
+      <p class="special-thanks">
+        Special thanks to: {{ specialThanksList }}.
+      </p>
     </div>
   </div>
 </template>
 
 <style scoped>
 .HomePage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  align-self: center;
+  grid-template:
+    'header' auto
+    '.' 2rem
+    'tiles' auto
+    '.' 1rem
+    'credits' 1fr
+    / 1fr;
   padding: 1.5rem;
-}
-
-.width {
   min-width: 0;
   width: 100%;
   max-width: 40rem;
+}
+
+@media (min-width: 60rem) {
+  .HomePage {
+    align-content: center;
+    padding: 2rem;
+    max-width: 68rem;
+    grid-template:
+      'header tiles' auto
+      '. tiles' 2rem
+      'credits tiles' auto
+      / 1fr 1fr;
+  }
+}
+
+.header {
+  grid-area: header;
 }
 
 .title {
@@ -85,12 +106,19 @@ const specialThanksList = computed(() => {
   font-size: 5rem;
   letter-spacing: -0.05em;
   line-height: 0.9;
-  margin-bottom: 2rem;
-  margin-left: -0.045em;
   font-weight: 900;
+  margin-top: 0;
+  margin-left: -0.045em;
+  margin-bottom: 1.5rem;
+}
+
+.subtitle {
+  font: var(--font-title);
+  font-weight: 600;
 }
 
 .tile-group-container {
+  grid-area: tiles;
   --border-scale: 1.1;
   --tile-padding: 8px;
   display: flex;
@@ -150,7 +178,6 @@ button.tile::after {
   background-color: var(--circle);
   border-radius: 99999px;
   pointer-events: none;
-  /* HACK: you can do better than this */
   mix-blend-mode: darken;
 }
 
@@ -162,8 +189,7 @@ button.tile::after {
 }
 
 .credits {
-  position: relative;
-  z-index: 1;
+  grid-area: credits;
 }
 
 .byline {

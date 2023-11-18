@@ -1,12 +1,12 @@
+import { replaceBoardPattern } from './Board.js';
+import { TropeCell } from './Cell.js';
 import {
   CELL_PATTERNS,
   CellPatternId,
-  TropeCell,
   matchesPatternId,
-  replaceBoardPattern,
-} from './board.js';
+} from './CellPattern.js';
 import { ActionNotAllowedError, PlayerNotFoundError } from './errors.js';
-import { Player } from './player.js';
+import { Player } from './Player.js';
 
 export type GameData = {
   readonly code: string;
@@ -138,7 +138,7 @@ export class ServerGame {
   ) {
     const set = this.listeners[event];
     for (const listener of set) {
-      // @ts-ignore
+      // @ts-expect-error - the arguments are guaranteed to match from the function signature
       listener(...args);
     }
   }

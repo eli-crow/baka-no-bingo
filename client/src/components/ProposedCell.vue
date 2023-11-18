@@ -5,7 +5,6 @@ import {
 } from '@/composables/createProposedCellState';
 import { ref, watch } from 'vue';
 import Avatar from './Avatar.vue';
-import BingoBoard3Preview from './BingoBoard3Preview.vue';
 import Button from './Button.vue';
 import Tile from './Tile.vue';
 
@@ -39,7 +38,6 @@ watch(
       <div class="cell">
         <Tile class="tile">{{ info.text }}</Tile>
         <Avatar class="avatar" :avatar="info.avatar" />
-        <BingoBoard3Preview class="board" :board="info.board" />
       </div>
       <div class="buttons">
         <Button color="green" @click="state.accept">👍</Button>
@@ -145,15 +143,6 @@ watch(
   top: -1rem;
   right: -2.5rem;
   width: 4rem;
-}
-
-.board {
-  position: absolute;
-  z-index: 1001;
-  top: 4rem;
-  right: -2rem;
-  width: 3rem;
-  height: 3rem;
 }
 
 .buttons {

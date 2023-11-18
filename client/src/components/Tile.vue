@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<TileProps>(), {
 });
 
 const slots = defineSlots<{
-  default?(): any;
+  default?(): {};
 }>();
 </script>
 
@@ -41,7 +41,6 @@ const slots = defineSlots<{
         class="icon"
         :icon="props.icon"
         :opacity="slots.default ? 0.25 : 1"
-        color="black"
       />
       <div v-if="slots.default" class="content">
         <slot />

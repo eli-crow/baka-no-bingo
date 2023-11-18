@@ -1,0 +1,10 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": ["../.eslintrc.json", "plugin:vue/vue3-essential"],
+  "plugins": ["vue"],
+  "rules": {
+    "vue/valid-component-name": "off"
+  }
+}

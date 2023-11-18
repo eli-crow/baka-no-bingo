@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ROOM_CODE_PATTERN } from '@shared';
-import { defineEmits, defineProps } from 'vue';
 import TextInput from './TextInput.vue';
 import Tile from './Tile.vue';
 

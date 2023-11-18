@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import BingoBoard3 from '@/components/BingoBoard3.vue';
 import Icon, { chevronLeft, listOl } from '@/components/Icon';
 import ModalPlayerRank from '@/components/ModalPlayerRank.vue';
@@ -25,7 +25,7 @@ function leave() {
 <template>
   <div class="GamePage">
     <header class="header">
-      <Tile color="yellow" class="room-tile">
+      <Tile class="room-tile" color="yellow">
         <div class="room">
           <button class="back" @click="leave">
             <Icon :icon="chevronLeft" />
@@ -49,8 +49,8 @@ function leave() {
 
     <div class="board-container">
       <BingoBoard3
-        class="board"
         :cells="game.cells"
+        class="board"
         @select="i => game.toggleCell(i)"
       />
     </div>
@@ -82,11 +82,13 @@ function leave() {
   margin-bottom: 1.5rem;
   --distance: 0;
 }
+
 .room-tile {
   display: flex;
   flex: 1 0 0;
   margin-left: -8rem;
 }
+
 .back {
   cursor: pointer;
   flex: 0 0 2.25rem;
@@ -100,15 +102,18 @@ function leave() {
   background-color: rgba(0, 0, 0, 0.1);
   color: var(--black);
 }
+
 .room {
   padding: 12px;
   padding-left: 8rem;
   display: flex;
   align-items: center;
 }
+
 .room-details {
   margin-right: 0.5rem;
 }
+
 .room-title {
   display: block;
   margin: 0;
@@ -121,10 +126,12 @@ function leave() {
   opacity: 0.5;
   min-height: 0;
 }
+
 .score-tile {
   flex: 1 0 0;
   margin-right: -8rem;
 }
+
 .room-id {
   display: block;
   margin: 0;
@@ -133,6 +140,7 @@ function leave() {
   font-weight: 700;
   line-height: 1;
 }
+
 .scores {
   text-align: right;
   display: flex;
@@ -144,10 +152,12 @@ function leave() {
   padding-right: 8rem;
   padding-left: 0.5rem;
 }
+
 .my-score {
   padding-right: 0.75rem;
   border-right: solid 1px var(--gray-light);
 }
+
 .players {
   padding: 8px 16px 8px 12px;
   font-size: 24px;
@@ -162,18 +172,22 @@ function leave() {
   display: flex;
   justify-content: space-around;
 }
+
 .action {
   flex: 0 1 auto;
 }
+
 .action-group-enter-active,
 .action-group-leave-active {
   transition: 250ms ease;
   transition-property: opacity, transform;
 }
+
 .action-group-leave-active {
   position: absolute;
   width: 100%;
 }
+
 .action-group-enter,
 .action-group-leave-to {
   opacity: 0;
@@ -183,6 +197,7 @@ function leave() {
 .button-group {
   display: flex;
 }
+
 .button {
   height: 33.33333vw;
   flex: 1 0 0;
@@ -195,15 +210,19 @@ function leave() {
   font: var(--font-title);
   font-size: 1rem;
 }
+
 .button.-red {
   --color: var(--red);
 }
+
 .button.-blue {
   --color: var(--blue);
 }
+
 .button.-green {
   --color: var(--green);
 }
+
 .button-icon {
   width: 2.5rem;
   height: 2.5rem;

@@ -1,6 +1,6 @@
-import type { GameData } from './ServerGame';
-import { produce } from './immutable';
-import { Player } from './player';
+import { Player } from './Player.js';
+import type { GameData } from './ServerGame.js';
+import { produce } from './immutable.js';
 
 export type ClientGame =
   | {

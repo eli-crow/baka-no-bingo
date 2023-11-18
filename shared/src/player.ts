@@ -1,4 +1,4 @@
-import { Board, createBoard } from './board.js';
+import { Board, createBoard } from './Board.js';
 import { getUuid } from './uuid.js';
 
 export const AVATAR_NAMES = ['ein', 'nina', 'cat', 'cal'] as const;
