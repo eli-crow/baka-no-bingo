@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/game',
       name: 'Game',
-      component: () => import('./game.vue'),
+      component: () => import('./game/game.vue'),
       beforeEnter: (to, from, next) => {
         if (storage.playerId && storage.gameCode) {
           next();
