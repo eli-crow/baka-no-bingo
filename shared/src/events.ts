@@ -10,6 +10,7 @@ export interface ServerToClientEvents {
   manyPlayersUpdated(players: Player[]): void;
   proposedCell(playerId: string, cell: TropeCell): void;
   proposedCellDenied(cellId: TropeCell['id']): void;
+  patternSold(playerId: string, patternId: CellPatternId): void;
 }
 
 export interface ClientToServerEvents {

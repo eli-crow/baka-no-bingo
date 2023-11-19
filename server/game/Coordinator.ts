@@ -27,14 +27,15 @@ export default class Coordinator {
 
   private createGame(): ServerGame {
     const game = new ServerGame(this.generateRoomCode());
+    const everyone = this.server.to(game.code);
     game.on('playerUpdated', player => {
-      this.server.to(game.code).emit('playerUpdated', player);
+      everyone.emit('playerUpdated', player);
     });
     game.on('manyPlayersUpdated', players => {
-      this.server.to(game.code).emit('manyPlayersUpdated', players);
+      everyone.emit('manyPlayersUpdated', players);
     });
     game.on('playerLeft', playerId => {
-      this.server.to(game.code).emit('playerLeft', playerId);
+      everyone.emit('playerLeft', playerId);
       if (game.isEmpty) {
         this.games.delete(game.code);
         this.socketIdToPlayerInfo.forEach((info, socketId) => {
@@ -44,8 +45,14 @@ export default class Coordinator {
         });
       }
     });
+    game.on('patternSold', (playerId, patternId) => {
+      everyone.emit('patternSold', playerId, patternId);
+    });
     game.on('proposedCell', (playerId, cell) => {
-      this.server.to(game.code).emit('proposedCell', playerId, cell);
+      everyone.emit('proposedCell', playerId, cell);
+    });
+    game.on('proposedCellDenied', cellId => {
+      this.server.in(game.code).emit('proposedCellDenied', cellId);
     });
     this.games.set(game.code.toLowerCase(), game);
     return game;
@@ -167,8 +174,7 @@ export default class Coordinator {
 
     socket.on('denyProposedCell', cellId => {
       const { game } = this.tryGetInfo(socket.id);
-      game.deactivateCellForAllPlayers(cellId);
-      this.server.in(game.code).emit('proposedCellDenied', cellId);
+      game.denyCell(cellId);
     });
   }
 

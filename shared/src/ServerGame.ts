@@ -20,6 +20,8 @@ export type ServerGameEvents = {
   manyPlayersUpdated(players: Player[]): void;
   playerLeft(playerId: Player['id']): void;
   proposedCell(playerId: Player['id'], cell: TropeCell): void;
+  proposedCellDenied(cellId: TropeCell['id']): void;
+  patternSold(playerId: Player['id'], patternId: CellPatternId): void;
 };
 
 export class ServerGame {
@@ -36,7 +38,9 @@ export class ServerGame {
     playerLeft: new Set(),
     playerUpdated: new Set(),
     proposedCell: new Set(),
+    proposedCellDenied: new Set(),
     manyPlayersUpdated: new Set(),
+    patternSold: new Set(),
   };
 
   constructor(code: string) {
@@ -64,6 +68,7 @@ export class ServerGame {
       player.score += pattern.score;
       player.board = replaceBoardPattern(player.board, pattern);
       this.emit('playerUpdated', player);
+      this.emit('patternSold', playerId, patternId);
     } else {
       throw new ActionNotAllowedError();
     }
@@ -94,7 +99,7 @@ export class ServerGame {
     }
   }
 
-  deactivateCellForAllPlayers(cellId: TropeCell['id']) {
+  denyCell(cellId: TropeCell['id']) {
     const updatedPlayers: Player[] = [];
     for (const player of this.players.values()) {
       const indexOfSelected = player.board.selectedIndices.indexOf(
@@ -109,6 +114,7 @@ export class ServerGame {
     }
 
     this.emit('manyPlayersUpdated', updatedPlayers);
+    this.emit('proposedCellDenied', cellId);
   }
 
   getData(): GameData {
