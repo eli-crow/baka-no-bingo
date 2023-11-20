@@ -36,12 +36,7 @@ const slots = defineSlots<{
       :data-animate="props.animate"
       :data-color="props.color"
     >
-      <Icon
-        v-if="props.icon"
-        class="icon"
-        :icon="props.icon"
-        :opacity="slots.default ? 0.25 : 1"
-      />
+      <Icon v-if="props.icon" class="icon" :icon="props.icon" />
       <div v-if="slots.default" class="content">
         <slot />
       </div>
@@ -123,25 +118,12 @@ const slots = defineSlots<{
   pointer-events: none;
 }
 
-/*
-.tile-inner.-text::after {
-  position: absolute;
-  content: "";
-  left: 50%;
-  top: 50%;
-  width: 4rem;
-  height: 4rem;
-  transform: translate(-50%, -50%);
-  background-color: var(--circle);
-  border-radius: 99999px;
-  pointer-events: none;
-  mix-blend-mode: darken;
-} */
-
 .tile-inner[data-color='yellow'] {
   --circle: var(--yellow);
   --ambient: var(--yellow);
   --ambient-dark: var(--yellow-dark);
+  --icon-color: var(--black);
+  --text-color: var(--black);
   border-image-source: url('@/assets/images/tile-yellow.svg');
 }
 
@@ -149,6 +131,8 @@ const slots = defineSlots<{
   --circle: var(--white);
   --ambient: var(--white);
   --ambient-dark: var(--gray-light);
+  --icon-color: var(--black);
+  --text-color: var(--black);
   border-image-source: url('@/assets/images/tile-white.svg');
 }
 
@@ -156,6 +140,7 @@ const slots = defineSlots<{
   --circle: var(--blue);
   --ambient: var(--blue-light);
   --ambient-dark: var(--blue);
+  --icon-color: var(--blue);
   border-image-source: url('@/assets/images/tile-light-blue.svg');
 }
 
@@ -163,6 +148,7 @@ const slots = defineSlots<{
   --circle: var(--yellow);
   --ambient: var(--yellow-light);
   --ambient-dark: var(--yellow);
+  --icon-color: var(--yellow);
   border-image-source: url('@/assets/images/tile-light-yellow.svg');
 }
 
@@ -170,6 +156,8 @@ const slots = defineSlots<{
   --circle: var(--blue);
   --ambient: var(--blue);
   --ambient-dark: var(--blue-dark);
+  --icon-color: var(--white);
+  --text-color: var(--white);
   border-image-source: url('@/assets/images/tile-blue.svg');
 }
 
@@ -177,19 +165,17 @@ const slots = defineSlots<{
   --circle: var(--red);
   --ambient: var(--red);
   --ambient-dark: var(--red-dark);
-  color: white;
+  --icon-color: var(--black);
+  --text-color: var(--white);
   border-image-source: url('@/assets/images/tile-red.svg');
-}
-
-.tile-inner[data-color='red'] .icon {
-  color: black;
 }
 
 .tile-inner[data-color='purple'] {
   --circle: var(--purple);
   --ambient: var(--purple);
   --ambient-dark: var(--purple-dark);
-  color: white;
+  --icon-color: var(--black);
+  --text-color: var(--white);
   border-image-source: url('@/assets/images/tile-purple.svg');
 }
 
@@ -200,11 +186,17 @@ const slots = defineSlots<{
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 4.5rem;
+  color: var(--icon-color, var(--black));
 }
 
 .content {
   position: relative;
   flex: 1 0 0;
   z-index: 1;
+  color: var(--text-color, var(--black));
+}
+
+.content :global(*) {
+  color: var(--text-color, var(--black));
 }
 </style>

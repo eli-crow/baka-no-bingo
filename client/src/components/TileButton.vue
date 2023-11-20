@@ -20,8 +20,8 @@ const slots = defineSlots<{
   <Tile
     class="TileButton"
     tag="button"
-    action
     type="button"
+    action
     :disabled="props.disabled"
     :icon="props.icon"
     :color="props.color"
@@ -36,6 +36,8 @@ const slots = defineSlots<{
 <style scoped>
 .TileButton {
   font-weight: 700;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
 .content {

@@ -43,7 +43,10 @@ function leave() {
     <PatternSellBar v-if="game.sellablePatternIds.length" />
     <PatternLegend v-else />
 
-    <PlayerPresence />
+    <div class="rivals">
+      <h2 class="rivals-title">Rivals</h2>
+      <PlayerPresence />
+    </div>
 
     <ProposedCell />
   </div>
@@ -120,6 +123,10 @@ function leave() {
 }
 
 .board-container {
+  padding: 1rem;
+}
+
+.rivals {
   padding: 1rem;
 }
 </style>

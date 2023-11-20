@@ -20,8 +20,11 @@ const specialThanksList = computed(() => {
 <template>
   <div class="HomePage">
     <header class="header">
-      <h1 class="title">Baka&nbsp;no Bingo</h1>
-      <p class="subtitle">Dumb bingo for the reluctant otaku.</p>
+      <img
+        class="logo"
+        src="@/assets/images/logo.svg"
+        alt="Baka no Bingo: Bingo for the reluctant Otaku"
+      />
     </header>
 
     <div class="tile-group-container">
@@ -34,7 +37,7 @@ const specialThanksList = computed(() => {
           <TileLink
             href="/host"
             color="blue-light"
-            class="button"
+            class="button-tile"
             :disabled="!game.canHost"
             :icon="circle"
           >
@@ -44,7 +47,7 @@ const specialThanksList = computed(() => {
           <TileLink
             href="/join"
             color="yellow-light"
-            class="button"
+            class="button-tile"
             :disabled="!game.canJoin"
             :icon="circle"
           >
@@ -73,7 +76,7 @@ const specialThanksList = computed(() => {
   align-self: center;
   grid-template:
     'header' auto
-    '.' 2rem
+    '.' 0.5rem
     'tiles' auto
     '.' 1rem
     'credits' 1fr
@@ -101,20 +104,10 @@ const specialThanksList = computed(() => {
   grid-area: header;
 }
 
-.title {
-  font: var(--font-title);
-  font-size: 5rem;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  font-weight: 900;
-  margin-top: 0;
-  margin-left: -0.045em;
-  margin-bottom: 1.5rem;
-}
-
-.subtitle {
-  font: var(--font-title);
-  font-weight: 600;
+.logo {
+  --overhang: 1.5rem;
+  width: calc(100% + var(--overhang) * 2);
+  margin-inline: calc(var(--overhang) * -1);
 }
 
 .tile-group-container {
@@ -152,42 +145,6 @@ const specialThanksList = computed(() => {
   grid-template-rows: 1fr 1fr 1fr;
 }
 
-.character {
-  font-weight: 700;
-  font-size: 5rem;
-}
-
-button.tile {
-  position: relative;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 700;
-  color: black;
-  text-decoration: none;
-}
-
-button.tile::after {
-  position: absolute;
-  content: '';
-  left: 50%;
-  top: 50%;
-  width: 4rem;
-  height: 4rem;
-  transform: translate(-50%, -50%);
-  background-color: var(--circle);
-  border-radius: 99999px;
-  pointer-events: none;
-  mix-blend-mode: darken;
-}
-
-:global(.button *) {
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: black;
-}
-
 .credits {
   grid-area: credits;
 }
@@ -195,6 +152,12 @@ button.tile::after {
 .byline {
   font-weight: 700;
   margin-bottom: 0.5rem;
+}
+
+.button-tile {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.09em;
 }
 
 .special-thanks {

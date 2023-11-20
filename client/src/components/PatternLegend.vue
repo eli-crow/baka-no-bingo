@@ -21,7 +21,7 @@ import PatternIcon from './PatternIcon.vue';
     </div>
     <div class="pattern">
       <PatternIcon class="pattern-icon" pattern-id="all" />
-      <div class="pattern-score">250</div>
+      <div class="pattern-score">500</div>
     </div>
   </div>
 </template>
@@ -34,6 +34,7 @@ import PatternIcon from './PatternIcon.vue';
   padding: 0 1rem;
   justify-content: space-between;
   gap: 1rem;
+  background-color: var(--yellow-dark);
 }
 
 .pattern {

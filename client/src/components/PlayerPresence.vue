@@ -32,8 +32,8 @@ const game = useClientGameState();
   grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
   grid-template-rows: 1fr;
   grid-auto-flow: column;
-  padding: 1rem 1rem;
   overflow-x: auto;
+  padding-top: 4px;
 }
 
 .item {

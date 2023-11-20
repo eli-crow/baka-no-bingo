@@ -23,7 +23,7 @@ export type CellPattern = {
 export const CELL_PATTERNS: Record<CellPatternId, CellPattern> = {
   all: {
     indices: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    score: 250,
+    score: 500,
     name: 'Baka no Bingo',
   },
   x: { indices: [0, 2, 4, 6, 8], score: 100, name: 'Ekkusu' },
