@@ -2,6 +2,7 @@ import { TropeCell } from './Cell.js';
 import { CellPatternId } from './CellPattern.js';
 import { Player, PlayerOptions } from './Player.js';
 import { GameData } from './ServerGame.js';
+import { ServerErrorName } from './errors/index.js';
 
 export interface ServerToClientEvents {
   playerJoined(otherPlayerData: Player): void;
@@ -13,50 +14,26 @@ export interface ServerToClientEvents {
   patternSold(playerId: string, patternId: CellPatternId): void;
 }
 
+type ClientGameInit = {
+  myPlayerId: Player['id'];
+  game: GameData;
+};
+
 export interface ClientToServerEvents {
-  host(
-    playerDataOptions: PlayerOptions | undefined,
-    ack?: (
-      response:
-        | { success: true; myPlayerId: Player['id']; game: GameData }
-        | { success: false }
-    ) => void
-  ): void;
+  host(playerDataOptions: PlayerOptions | undefined, ack?: Ack<ClientGameInit>): void;
+  join(roomCode: GameData['code'], playerDataOptions: PlayerOptions | undefined, ack?: Ack<ClientGameInit>): void;
+  rejoin(roomCode: GameData['code'], myPlayerId: Player['id'], ack?: Ack<ClientGameInit>): void;
 
-  join(
-    roomCode: GameData['code'],
-    playerDataOptions: PlayerOptions | undefined,
-    ack?: (
-      response:
-        | { success: true; myPlayerId: Player['id']; game: GameData }
-        | { success: false }
-    ) => void
-  ): void;
-
-  rejoin(
-    roomCode: GameData['code'],
-    myPlayerId: Player['id'],
-    ack?: (
-      response:
-        | { success: true; myPlayerId: Player['id']; game: GameData }
-        | { success: false }
-    ) => void
-  ): void;
-
-  leave(ack?: (response: { success: boolean }) => void): void;
-
-  sellPattern(
-    patternId: CellPatternId,
-    // ack?: Ack<void, 'cant' | 'noroom'>
-    ack?: (
-      response: { success: true } | { success: false; error: 'cant' | 'noroom' }
-    ) => void
-  ): void;
-
-  toggleCell(
-    index: number,
-    ack?: (response: { success: boolean }) => void
-  ): void;
-
+  leave(ack?: Ack): void;
+  sellPattern(patternId: CellPatternId, ack?: Ack): void;
+  toggleCell(index: number, ack?: Ack): void;
   denyProposedCell(cellId: TropeCell['id']): void;
 }
+
+type Payload = { [key: string]: unknown } | void;
+
+export type AckResponse<P extends Payload = void> =
+  | ({ success: true } & P)
+  | { success: false; error: ServerErrorName };
+
+type Ack<P extends Payload = void> = (response: AckResponse<P>) => void;

@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import BingoBoard3 from '@/components/BingoBoard3.vue';
 import Icon, { chevronLeft } from '@/components/Icon';
+import ModalTransition from '@/components/ModalTransition.vue';
 import PatternLegend from '@/components/PatternLegend.vue';
 import PatternSellBar from '@/components/PatternSellBar.vue';
 import PlayerPresence from '@/components/PlayerPresence.vue';
 import ProposedCell from '@/components/ProposedCell.vue';
 import Tile from '@/components/Tile.vue';
+import TileButton from '@/components/TileButton.vue';
+import TileLink from '@/components/TileLink.vue';
 import { useClientGameState } from '@/composables/createClientGameState';
 import router from '@/routes';
-import ScoreTile from './ScoreTile.vue';
 
 const game = useClientGameState();
 
@@ -22,18 +24,20 @@ function leave() {
   <div class="GamePage">
     <header class="header">
       <Tile class="room-tile" color="yellow">
-        <div class="room">
-          <button class="back" @click="leave">
-            <Icon :icon="chevronLeft" />
-          </button>
-          <p class="room-details">
-            <span class="room-title">Room</span>
-            <span class="room-id">{{ game.code }}</span>
-          </p>
+        <div class="header-content">
+          <div class="room">
+            <button class="back" @click="leave">
+              <Icon :icon="chevronLeft" />
+            </button>
+            <p class="room-details">
+              <span class="room-title">Room</span>
+              <span class="room-id">{{ game.code }}</span>
+            </p>
+          </div>
+          <TileLink href="/game/spin" color="yellow">Spin</TileLink>
+          <TileButton color="blue">Link</TileButton>
         </div>
       </Tile>
-
-      <ScoreTile class="score" />
     </header>
 
     <div class="board-container">
@@ -44,11 +48,16 @@ function leave() {
     <PatternLegend v-else />
 
     <div class="rivals">
-      <h2 class="rivals-title">Rivals</h2>
       <PlayerPresence />
     </div>
 
     <ProposedCell />
+
+    <Teleport to="body">
+      <ModalTransition>
+        <RouterView />
+      </ModalTransition>
+    </Teleport>
   </div>
 </template>
 
@@ -57,17 +66,24 @@ function leave() {
 }
 
 .header {
-  display: flex;
-  height: 80px;
-  position: relative;
-  margin-bottom: 1.5rem;
   --distance: 0;
+  display: flex;
+  position: relative;
+  margin-block-end: 1.5rem;
+}
+
+.header-content {
+  display: flex;
+  flex: 1 0 0;
+  padding: 1rem;
+  gap: 0.5rem;
 }
 
 .room-tile {
   display: flex;
   flex: 1 0 0;
-  margin-left: -8rem;
+  margin-inline: 1rem;
+  margin-block-start: 1rem;
 }
 
 .back {
@@ -85,8 +101,7 @@ function leave() {
 }
 
 .room {
-  padding: 12px;
-  padding-left: 8rem;
+  flex: 1 0 0;
   display: flex;
   align-items: center;
 }
@@ -108,11 +123,6 @@ function leave() {
   min-height: 0;
 }
 
-.score {
-  flex: 1 0 0;
-  margin-right: -8rem;
-}
-
 .room-id {
   display: block;
   margin: 0;
@@ -124,6 +134,7 @@ function leave() {
 
 .board-container {
   padding: 1rem;
+  padding-block-start: 0;
 }
 
 .rivals {

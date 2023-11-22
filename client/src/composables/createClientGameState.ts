@@ -14,8 +14,7 @@ import {
 import { InjectionKey, computed, inject, provide, ref } from 'vue';
 import { SocketState } from './createSocketState';
 
-const GAME_STATE_INJECTION_KEY: InjectionKey<ClientGameState> =
-  Symbol('gameState');
+const GAME_STATE_INJECTION_KEY: InjectionKey<ClientGameState> = Symbol('gameState');
 
 function createClientGameStateMachine() {
   const initial: ClientGame = { status: 'idle' };
@@ -70,9 +69,7 @@ export function createClientGameState(socket: SocketState) {
 
   const playersRankedByScore = computed(() => {
     if ('game' in machine.state) {
-      return Object.values(machine.state.game.players).sort(
-        (a, b) => b!.score - a!.score
-      ) as Player[];
+      return Object.values(machine.state.game.players).sort((a, b) => b!.score - a!.score) as Player[];
     } else {
       return [];
     }
@@ -164,13 +161,14 @@ export function createClientGameState(socket: SocketState) {
       return new Promise<void>((resolve, reject) => {
         machine.send({ type: 'rejoining' });
 
-        socket.emit('rejoin', myPlayerId, gameCode, ack => {
+        socket.emit('rejoin', gameCode, myPlayerId, ack => {
+          console.log(ack);
           if (ack.success) {
             _join(ack.myPlayerId, ack.game);
             resolve();
           } else {
             machine.send({ type: 'reset' });
-            reject();
+            reject(ack.error);
           }
         });
       });

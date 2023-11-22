@@ -195,8 +195,4 @@ const slots = defineSlots<{
   z-index: 1;
   color: var(--text-color, var(--black));
 }
-
-.content :global(*) {
-  color: var(--text-color, var(--black));
-}
 </style>

@@ -1,11 +1,7 @@
 import { replaceBoardPattern } from './Board.js';
 import { TropeCell } from './Cell.js';
-import {
-  CELL_PATTERNS,
-  CellPatternId,
-  matchesPatternId,
-} from './CellPattern.js';
-import { ActionNotAllowedError, PlayerNotFoundError } from './errors.js';
+import { CELL_PATTERNS, CellPatternId, matchesPatternId } from './CellPattern.js';
+import { ActionNotAllowedError, PlayerNotFoundError } from './errors/index.js';
 import { Player } from './Player.js';
 
 export type GameData = {
@@ -22,15 +18,17 @@ export type ServerGameEvents = {
   proposedCell(playerId: Player['id'], cell: TropeCell): void;
   proposedCellDenied(cellId: TropeCell['id']): void;
   patternSold(playerId: Player['id'], patternId: CellPatternId): void;
+  end(): void;
 };
+
+const DISCONNECTION_TIMEOUT_MS = 10_000;
+const END_TIMEOUT_MS = 5_000;
 
 export class ServerGame {
   readonly code: string;
   private readonly players = new Map<Player['id'], Player>();
-
-  get isEmpty() {
-    return this.players.size === 0;
-  }
+  private readonly disconnectingPlayers = new Map<Player['id'], NodeJS.Timeout>();
+  private endTimeout: NodeJS.Timeout | null = null;
 
   private readonly listeners: {
     [E in keyof ServerGameEvents]: Set<ServerGameEvents[E]>;
@@ -41,6 +39,7 @@ export class ServerGame {
     proposedCellDenied: new Set(),
     manyPlayersUpdated: new Set(),
     patternSold: new Set(),
+    end: new Set(),
   };
 
   constructor(code: string) {
@@ -50,11 +49,38 @@ export class ServerGame {
   addPlayer(player: Player) {
     this.players.set(player.id, player);
     this.emit('playerUpdated', player);
+
+    if (this.endTimeout) {
+      clearTimeout(this.endTimeout);
+      this.endTimeout = null;
+    }
   }
 
   removePlayer(playerId: Player['id']) {
     this.players.delete(playerId);
     this.emit('playerLeft', playerId);
+
+    if (this.players.size === 0) {
+      this.endTimeout = setTimeout(() => {
+        this.emit('end');
+      }, END_TIMEOUT_MS);
+    }
+  }
+
+  markPlayerDisconnecting(playerId: Player['id']) {
+    const timeout = setTimeout(() => {
+      this.disconnectingPlayers.delete(playerId);
+      this.removePlayer(playerId);
+    }, DISCONNECTION_TIMEOUT_MS);
+    this.disconnectingPlayers.set(playerId, timeout);
+  }
+
+  clearPlayerDisconnecting(playerId: Player['id']) {
+    const timeout = this.disconnectingPlayers.get(playerId);
+    if (timeout) {
+      clearTimeout(timeout);
+      this.disconnectingPlayers.delete(playerId);
+    }
   }
 
   hasPlayer(playerId: Player['id']) {
@@ -103,9 +129,7 @@ export class ServerGame {
     const updatedPlayers: Player[] = [];
     for (const player of this.players.values()) {
       const indexOfSelected = player.board.selectedIndices.indexOf(
-        player.board.cells.findIndex(
-          cell => cell.type === 'trope' && cell.id === cellId
-        )
+        player.board.cells.findIndex(cell => cell.type === 'trope' && cell.id === cellId)
       );
       if (indexOfSelected !== -1) {
         player.board.selectedIndices.splice(indexOfSelected, 1);
@@ -124,24 +148,15 @@ export class ServerGame {
     };
   }
 
-  on<T extends keyof ServerGameEvents>(
-    event: T,
-    listener: ServerGameEvents[T]
-  ) {
+  on<T extends keyof ServerGameEvents>(event: T, listener: ServerGameEvents[T]) {
     this.listeners[event].add(listener);
   }
 
-  off<T extends keyof ServerGameEvents>(
-    event: T,
-    listener: ServerGameEvents[T]
-  ) {
+  off<T extends keyof ServerGameEvents>(event: T, listener: ServerGameEvents[T]) {
     this.listeners[event].delete(listener);
   }
 
-  private emit<T extends keyof ServerGameEvents>(
-    event: T,
-    ...args: Parameters<ServerGameEvents[T]>
-  ) {
+  private emit<T extends keyof ServerGameEvents>(event: T, ...args: Parameters<ServerGameEvents[T]>) {
     const set = this.listeners[event];
     for (const listener of set) {
       // @ts-expect-error - the arguments are guaranteed to match from the function signature
@@ -149,7 +164,7 @@ export class ServerGame {
     }
   }
 
-  private tryGetPlayer(playerId: string) {
+  public tryGetPlayer(playerId: string) {
     const player = this.players.get(playerId);
     if (!player) throw new PlayerNotFoundError();
     return player;

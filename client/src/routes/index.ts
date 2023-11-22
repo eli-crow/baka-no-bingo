@@ -13,13 +13,18 @@ const router = createRouter({
       path: '/game',
       name: 'Game',
       component: () => import('./game/game.vue'),
-      beforeEnter: (to, from, next) => {
-        if (storage.playerId && storage.gameCode) {
-          next();
-        } else {
-          next('/');
+      beforeEnter: () => {
+        if (!(storage.playerId && storage.gameCode)) {
+          return '/';
         }
       },
+      children: [
+        {
+          path: 'spin',
+          name: 'Spin',
+          component: () => import('./spin.vue'),
+        },
+      ],
     },
     {
       path: '/host',
@@ -30,11 +35,6 @@ const router = createRouter({
       path: '/join',
       name: 'Join',
       component: () => import('./join.vue'),
-    },
-    {
-      path: '/anime',
-      name: 'Anime',
-      component: () => import('./anime.vue'),
     },
   ],
 });

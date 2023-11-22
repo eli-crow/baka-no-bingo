@@ -97,5 +97,6 @@ const bubble = createPatternBubbleState(props.player.id);
   left: -2rem;
   width: 10rem;
   z-index: 1;
+  pointer-events: none;
 }
 </style>

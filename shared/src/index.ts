@@ -6,5 +6,6 @@ export * from './Player.js';
 export * from './ServerGame.js';
 export * from './anime/index.js';
 export * from './code.js';
+export * from './errors/index.js';
 export * from './events.js';
 export * from './uuid.js';
